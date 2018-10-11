@@ -1,0 +1,15 @@
+parameters:
+  serviceConnection: ''
+
+steps:
+
+- task: Kubernetes@1
+  displayName: 'Delete namespace'
+  inputs:
+    connectionType: $(connectionType)
+    azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(azureResourceGroup)
+    kubernetesCluster: $(kubernetesCluster)
+    command: 'delete'
+    arguments: 'namespace $(namespace)'
+    outputFormat: 'name'
