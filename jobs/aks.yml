@@ -1,0 +1,41 @@
+#
+# Base AKS install.
+#
+parameters:
+  serviceConnection: ''
+
+jobs:
+- job: AKS
+  dependsOn: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    aksServicePrincipalId: $[dependencies.Keyvault.outputs['translateKeyvault.aksServicePrincipalId']]
+    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['translateKeyvault.aksServicePrincipalSecret']]
+  steps:
+  - template: ../steps/recreate-aks.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+
+- job: Traefik
+  dependsOn: AKS
+  condition: succeeded()
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/helm-init-client.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+  - template: ../steps/traefik.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+
+- job: Kured
+  dependsOn: AKS
+  condition: succeeded()
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/kured.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}

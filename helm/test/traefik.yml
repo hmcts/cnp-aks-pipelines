@@ -1,0 +1,13 @@
+imageTag: latest
+cpuLimit: 1000m
+memoryLimit: 100Mi
+service:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+rbac:
+  enabled: true
+dashboard:
+  enabled: true
+  domain: traefiktest.service.core-compute-saat.internal
+ssl:
+  enabled: true

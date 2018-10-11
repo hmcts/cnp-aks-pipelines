@@ -1,0 +1,107 @@
+parameters:
+  serviceConnection: ''
+
+steps:
+
+- task: AzureKeyVault@1
+  displayName: 'Get secrets from Keyvault'
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    keyVaultName: $(keyvaultName)
+    secretsFilter: 'jenkins-sp-subscription-id,jenkins-sp-tenant-id,jenkins-sp-id,jenkins-sp-secret'
+
+- task: HelmDeploy@0
+  displayName: 'Initialise Helm Client'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'init'
+    arguments: '--client-only'
+
+- task: HelmDeploy@0
+  displayName: 'Delete OSBA'
+  continueOnError: true
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: '${{ parameters.serviceConnection }}'
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'delete'
+    arguments: '--purge osba'
+
+- task: HelmDeploy@0
+  displayName: 'Delete Service Catalog'
+  continueOnError: true
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: '${{ parameters.serviceConnection }}'
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'delete'
+    arguments: '--purge catalog'
+
+- task: HelmDeploy@0
+  displayName: 'Add Service Catalog Helm Repo'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'repo'
+    arguments: 'add svc-cat https://svc-catalog-charts.storage.googleapis.com'
+
+- task: HelmDeploy@0
+  displayName: 'Install Kubernetes Service Catalog'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'install'
+    chartType: 'Name'
+    chartName: 'svc-cat/catalog'
+    namespace: 'catalog'
+    releaseName: 'catalog'
+    overrideValues: 'apiserver.storage.etcd.persistence.enabled=true,apiserver.healthcheck.enabled=false,controllerManager.healthcheck.enabled=false'
+
+- task: PowerShell@2
+  enabled: true
+  displayName: 'Wait for Service Catalog to be ready'
+  inputs:
+    targetType: 'inline'
+    script: 'Start-Sleep -Seconds 120'
+
+- task: HelmDeploy@0
+  displayName: 'Add OSBA Helm Repo'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'repo'
+    arguments: 'add azure https://kubernetescharts.blob.core.windows.net/azure'
+
+- task: HelmDeploy@0
+  displayName: 'Install OSBA'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'install'
+    chartType: 'Name'
+    chartName: 'azure/open-service-broker-azure'
+    namespace: 'osba'
+    releaseName: 'osba'
+    overrideValues: 'azure.subscriptionId=$(jenkins-sp-subscription-id),azure.tenantId=$(jenkins-sp-tenant-id),azure.clientId=$(jenkins-sp-id),azure.clientSecret=$(jenkins-sp-secret),modules.minStability=EXPERIMENTAL,logLevel=DEBUG'
+
+   

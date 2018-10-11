@@ -1,0 +1,13 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  kubectlConnectionType: 'Azure Resource Manager'
+  aksResourceGroup: 'cnp-aks-sandbox-rg'
+  clusterName: 'cnp-aks-sandbox-cluster'
+  keyvaultName: 'infra-vault-sandbox'
+  
+steps:
+- template: reinstall-service-catalog-template.yml
+  parameters:
+    serviceConnection: azurerm-sandbox

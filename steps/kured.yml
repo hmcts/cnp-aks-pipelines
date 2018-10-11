@@ -1,0 +1,16 @@
+parameters:
+  serviceConnection: ''
+
+steps:
+
+- task: Kubernetes@1
+  displayName: 'Installing Kured'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'apply'
+    arguments: '-f manifests/kured-ds.yaml'
+    outputFormat: 'name'

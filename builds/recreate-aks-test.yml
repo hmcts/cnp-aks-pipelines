@@ -1,0 +1,26 @@
+#
+# Build for the Sanbox Testing AKS Cluster
+#
+variables:
+  environment: 'test'
+  aksResourceGroup: 'timw-aks-rg'
+  subnetResourceGroup: 'timw-aks-rg'
+  subnetName: 'aks-subnet'
+  vnetName: 'test-vnet'
+  location: 'uksouth'
+  clusterName: 'timw-aks-cluster'
+  nodeCount: '1'
+  nodeDiskSize: '100'
+  vmSize: 'Standard_D4s_v3'
+  kubernetesVersion: '1.11.3'
+  keyvaultName: 'infra-vault-sandbox'
+  kubectlConnectionType: 'Azure Resource Manager'
+
+jobs:
+- template: ../jobs/keyvault-ci.yml
+  parameters:
+    serviceConnection: azurerm-sandbox
+
+- template: ../jobs/aks-ci.yml
+  parameters:
+    serviceConnection: azurerm-sandbox

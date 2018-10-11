@@ -1,0 +1,86 @@
+parameters:
+  serviceConnection: ''
+
+steps:
+- task: AzureCLI@1
+  displayName: 'Get subnet ID'
+  enabled: true
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      azresult=`az network vnet subnet show --name $(subnetName) --resource-group $(subnetResourceGroup) --vnet-name $(vnetName) --query id -otsv`
+      echo "##vso[task.setvariable variable=SUBNET_ID]$azresult"
+
+- script: echo $(SUBNET_ID)
+  displayName: 'echo subnet ID'
+
+- task: AzureCLI@1
+  displayName: 'Delete existing AKS cluster'
+  enabled: true
+  continueOnError: true # in case cluster doesn't exist
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az aks delete --name $(clusterName) --resource-group $(aksResourceGroup) --yes'
+    
+- task: AzureCLI@1
+  displayName: 'Create AKS cluster'
+  enabled: true
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptLocation: 'inlineScript'
+    inlineScript: >
+      az aks create
+      --resource-group $(aksResourceGroup)
+      --name $(clusterName)
+      --kubernetes-version $(kubernetesVersion)
+      --node-count $(nodeCount)
+      --node-vm-size $(vmSize)
+      --location $(location)
+      --network-plugin azure
+      --node-osdisk-size $(nodeDiskSize)
+      --vnet-subnet-id $(SUBNET_ID)
+      --generate-ssh-keys
+      --service-principal $(aksServicePrincipalId)
+      --client-secret $(aksServicePrincipalSecret)
+      --tags 'Team Name=CNP'
+
+# TODO send this to keyvault instead
+- script: cat /home/vsts/.ssh/id_rsa
+  displayName: Get SSH key
+
+- task: Kubernetes@1
+  displayName: 'Configure RBAC for Kubernetes Dashboard'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'create'
+    arguments: 'clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
+    outputFormat: 'name'
+
+- task: Kubernetes@1
+  displayName: 'Configure RBAC for Helm'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'create'
+    arguments: '-f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml'
+    outputFormat: 'name'
+
+- task: HelmDeploy@0
+  displayName: 'Install Tiller'
+  enabled: true
+  inputs:
+    connectionType: $(kubectlConnectionType)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: $(aksResourceGroup)
+    kubernetesCluster: $(clusterName)
+    command: 'init'
+    arguments: '--service-account tiller'

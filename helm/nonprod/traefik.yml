@@ -1,0 +1,14 @@
+imageTag: latest
+loadBalancerIP: 10.97.16.227
+cpuLimit: 1000m
+memoryLimit: 100Mi
+service:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+rbac:
+  enabled: true
+dashboard:
+  enabled: true
+  domain: traefik.service.core-compute-preview.internal
+ssl:
+  enabled: true
