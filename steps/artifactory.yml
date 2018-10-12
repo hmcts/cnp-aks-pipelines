@@ -4,18 +4,6 @@ parameters:
 steps:
 
 - task: Kubernetes@1
-  displayName: 'Create Artifactory Namespace'
-  enabled: true
-  inputs:
-    connectionType: $(kubectlConnectionType)
-    azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
-    command: 'create'
-    arguments: 'namespace artifactory'
-    outputFormat: 'name'
-
-- task: Kubernetes@1
   displayName: 'Install Artifactory'
   enabled: true
   inputs:
