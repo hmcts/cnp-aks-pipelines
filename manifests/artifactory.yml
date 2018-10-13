@@ -4,19 +4,6 @@ kind: Namespace
 metadata:
   name: artifactory
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: artifactory-disk
-  namespace: artifactory
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 1000Gi
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -24,7 +11,7 @@ metadata:
   namespace: artifactory
 spec:
   serviceName: "artifactory"
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: artifactory-oss
@@ -41,7 +28,7 @@ spec:
         - mountPath: "/var/opt/jfrog/artifactory"
           name: artifactory-data
       containers:
-      - image: docker.bintray.io/jfrog/artifactory-oss:6.4.1
+      - image: docker.bintray.io/jfrog/artifactory-oss:6.5.0
         name: artifactory-oss
         env:
           - name: EXTRA_JAVA_OPTIONS
@@ -49,21 +36,36 @@ spec:
         resources:
           requests:
             memory: "1024Mi"
-            cpu: "2000m"
+            cpu: "1000m"
           limits:
             memory: "8192Mi"
             cpu: "3000m"
         ports:
         - containerPort: 8081
           name: http
+        readinessProbe:
+          httpGet: 
+            port: 8081
+            path: / 
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 1
+          timeoutSeconds: 1
         imagePullPolicy: Always
         volumeMounts:
         - mountPath: "/var/opt/jfrog/artifactory"
           name: artifactory-data
-      volumes:
-        - name: artifactory-data
-          persistentVolumeClaim:
-            claimName: artifactory-disk
+  volumeClaimTemplates:
+  - metadata:
+      name: artifactory-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "managed-premium"
+      resources:
+        requests:
+          storage: 1000Gi
 ---
 #
 # Service
@@ -73,6 +75,8 @@ kind: Service
 metadata:
   name: artifactory-oss
   namespace: artifactory
+  annotations:
+    traefik.ingress.kubernetes.io/affinity: "true"
   labels:
     app: artifactory-oss
 spec:
@@ -81,5 +85,6 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 8081
+  clusterIP: None
   selector:
     app: artifactory-oss
