@@ -20,6 +20,16 @@ spec:
       labels:
         app: artifactory-oss
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - artifactory-oss
+            topologyKey: "kubernetes.io/hostname"
       initContainers:
       - name: artifactory-init
         image: hmcts/cnp-artifactory-init:0.1
