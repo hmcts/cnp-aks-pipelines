@@ -1,0 +1,29 @@
+parameters:
+  serviceConnection: ""
+
+steps:
+  - task: HelmDeploy@0
+    displayName: "BFA - Install MongoDB"
+    enabled: true
+    inputs:
+      connectionType: $(kubectlConnectionType)
+      azureSubscription: ${{ parameters.serviceConnection }}
+      azureResourceGroup: $(aksResourceGroup)
+      kubernetesCluster: $(clusterName)
+      command: "install"
+      chartType: "Name"
+      chartName: "stable/mongodb"
+      namespace: "jenkins-shared"
+      releaseName: "mongodb"
+
+  - task: Kubernetes@1
+    displayName: "BFA - Install ingress"
+    enabled: true
+    inputs:
+      connectionType: $(kubectlConnectionType)
+      azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
+      azureResourceGroup: $(aksResourceGroup)
+      kubernetesCluster: $(clusterName)
+      command: "apply"
+      arguments: "-f manifests/$(environment)/mongodb-ingress.yml"
+      outputFormat: "name"
