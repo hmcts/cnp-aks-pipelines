@@ -5,6 +5,7 @@ variables:
   azureSubscriptionEndpoint: 'azurerm-aks-nonprod'
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
+  registry: 'hmcts'
 
 
 jobs:
@@ -23,4 +24,3 @@ jobs:
     - template: ../steps/delete-acr-image.yml
       parameters:
         serviceConnection: azurerm-nonprod
-        registry: hmcts
