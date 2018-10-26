@@ -1,6 +1,7 @@
 ---
-pool:
+parameters:
   vmImage: 'Ubuntu 16.04'
+
 
 variables:
   connectionType: 'Azure Resource Manager'
@@ -8,7 +9,12 @@ variables:
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
 
-steps:
-- template: ../steps/kube-delete-namespace.yml
-  parameters:
-    serviceConnection: azurerm-nonprod
+
+jobs:
+  - job: 'Delete namespace'
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    steps:
+    - template: ../steps/kube-delete-namespace.yml
+      parameters:
+        serviceConnection: azurerm-nonprod
