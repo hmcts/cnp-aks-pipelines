@@ -16,4 +16,11 @@ jobs:
       parameters:
         serviceConnection: azurerm-nonprod
   
-  
+  - job: delete_acr_image
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - template: ../steps/delete-acr-image.yml
+      parameters:
+        serviceConnection: azurerm-nonprod
+        registry: hmcts
