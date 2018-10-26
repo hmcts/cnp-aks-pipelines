@@ -1,9 +1,7 @@
 ---
-parameters:
-  vmImage: 'Ubuntu 16.04'
-
 
 variables:
+  vmImage: 'Ubuntu 16.04'
   connectionType: 'Azure Resource Manager'
   azureSubscriptionEndpoint: 'azurerm-aks-nonprod'
   azureResourceGroup: 'cnp-aks-rg'
@@ -13,8 +11,10 @@ variables:
 jobs:
   - job: 'Delete namespace'
     pool:
-      vmImage: ${{ parameters.vmImage }}
+      vmImage: ${{ variables.vmImage }}
     steps:
     - template: ../steps/kube-delete-namespace.yml
       parameters:
         serviceConnection: azurerm-nonprod
+  
+  
