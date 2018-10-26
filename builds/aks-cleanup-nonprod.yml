@@ -5,7 +5,7 @@ variables:
   azureSubscriptionEndpoint: 'azurerm-aks-nonprod'
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
-  registry: 'hmcts'
+  containerRegistry: 'hmcts'
 
 
 jobs:
