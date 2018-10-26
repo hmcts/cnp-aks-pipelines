@@ -11,10 +11,9 @@ variables:
 jobs:
   - job: 'Delete namespace'
     pool:
-      vmImage: ${{ variables.vmImage }}
+      vmImage: $(vmImage)
     steps:
     - template: ../steps/kube-delete-namespace.yml
       parameters:
         serviceConnection: azurerm-nonprod
-  
   
