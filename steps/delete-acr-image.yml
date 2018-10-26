@@ -13,4 +13,4 @@ steps:
     inlineScript: |
       repository=`echo $(namespace) | sed 's/-pr-.*//'`
       tag=`echo $(namespace) | sed "s/$repository-//"`
-      az acr repository delete -n $(containerRegistry} --image "hmcts/$repository:$tag"
+      az acr repository delete -n $(containerRegistry) --image "hmcts/$repository:$tag"
