@@ -1,14 +1,26 @@
 ---
-pool:
-  vmImage: 'Ubuntu 16.04'
 
 variables:
   connectionType: 'Azure Resource Manager'
   azureSubscriptionEndpoint: 'azurerm-aks-nonprod'
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
+  containerRegistry: 'hmcts'
 
-steps:
-- template: ../steps/kube-delete-namespace.yml
-  parameters:
-    serviceConnection: azurerm-nonprod
+
+jobs:
+  - job: delete_namespace
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - template: ../steps/kube-delete-namespace.yml
+      parameters:
+        serviceConnection: azurerm-nonprod
+  
+  - job: delete_acr_image
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - template: ../steps/delete-acr-image.yml
+      parameters:
+        serviceConnection: azurerm-nonprod

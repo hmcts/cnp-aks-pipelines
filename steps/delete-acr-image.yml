@@ -1,0 +1,16 @@
+parameters:
+  serviceConnection: ''
+
+steps:
+
+- task: AzureCLI@1
+  displayName: 'Delete ACR image'
+  enabled: true
+  continueOnError: true # in case image has been deleted already
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      repository=`echo $(namespace) | sed 's/-pr-.*//'`
+      tag=`echo $(namespace) | sed "s/$repository-//"`
+      az acr repository delete -n $(containerRegistry) --image "hmcts/$repository:$tag" --yes
