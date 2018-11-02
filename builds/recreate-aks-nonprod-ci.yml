@@ -2,25 +2,29 @@
 # Build for the Nonprod Jenkins AKS Cluster
 #
 variables:
-  aksResourceGroup: 'cnp-aks-rg'
-  subnetResourceGroup: 'core-infra-preview'
-  subnetName: 'aks-subnet'
-  vnetName: 'core-infra-vnet-preview'
-  location: 'uksouth'
-  clusterName: 'cnp-aks-cluster'
-  nodeCount: '5'
-  nodeDiskSize: '100'
-  vmSize: 'Standard_D4s_v3'
-  kubernetesVersion: '1.11.3'
-  keyvaultName: 'infra-vault-nonprod'
-  kubectlConnectionType: 'Azure Resource Manager'
-  environment: 'nonprod'
+  aksResourceGroup: "cnp-aks-rg"
+  subnetResourceGroup: "core-infra-preview"
+  subnetName: "aks-subnet"
+  vnetName: "core-infra-vnet-preview"
+  location: "uksouth"
+  clusterName: "cnp-aks-cluster"
+  nodeCount: "5"
+  nodeDiskSize: "100"
+  vmSize: "Standard_D4s_v3"
+  kubernetesVersion: "1.11.3"
+  keyvaultName: "infra-vault-nonprod"
+  kubectlConnectionType: "Azure Resource Manager"
+  environment: "nonprod"
 
 jobs:
-- template: ../jobs/keyvault-ci.yml
-  parameters:
-    serviceConnection: azurerm-nonprod
-    
-- template: ../jobs/aks-ci.yml
-  parameters:
-    serviceConnection: azurerm-nonprod
+  - template: ../jobs/keyvault-ci.yml
+    parameters:
+      serviceConnection: azurerm-nonprod
+
+  - template: ../jobs/aks.yml
+    parameters:
+      serviceConnection: azurerm-nonprod
+
+  - template: ../jobs/aks-ci.yml
+    parameters:
+      serviceConnection: azurerm-nonprod

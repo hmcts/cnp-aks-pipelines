@@ -2,29 +2,25 @@
 # Job template for Jenkins AKS Clusters. Includes extras such as Service Catalog
 #
 parameters:
-  serviceConnection: ''
+  serviceConnection: ""
 
 jobs:
-- template: aks.yml
-  parameters:
-    serviceConnection: ${{ parameters.serviceConnection }}
-
-- job: ServiceCatalog
-  dependsOn:
-  - Keyvault
-  - AKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  variables:
-    svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalSubscriptionId']]
-    svcatServicePrincipalId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalId']]
-    svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalSecret']]
-    svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalTenantId']]
-  steps:
-  - template: ../steps/helm-init-client.yml
-    parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-  - template: ../steps/service-catalog.yml
-    parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
+  - job: ServiceCatalog
+    dependsOn:
+      - Keyvault
+      - AKS
+    condition: succeeded()
+    pool:
+      vmImage: "Ubuntu 16.04"
+    variables:
+      svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalSubscriptionId']]
+      svcatServicePrincipalId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalId']]
+      svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalSecret']]
+      svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalTenantId']]
+    steps:
+      - template: ../steps/helm-init-client.yml
+        parameters:
+          serviceConnection: ${{ parameters.serviceConnection }}
+      - template: ../steps/service-catalog.yml
+        parameters:
+          serviceConnection: ${{ parameters.serviceConnection }}

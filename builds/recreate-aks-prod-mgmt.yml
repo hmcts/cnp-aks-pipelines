@@ -2,29 +2,29 @@
 # Build for the Sanbox Jenkins AKS Cluster
 #
 variables:
-  environment: "mgmt-sandbox"
+  environment: "mgmt-prod"
   aksResourceGroup: "cnp-aks-mgmt-rg"
-  subnetResourceGroup: "mgmt-infra-sandbox"
+  subnetResourceGroup: "mgmt-infra-prod"
   subnetName: "aks"
-  vnetName: "mgmt-infra-sandbox"
+  vnetName: "mgmt-infra-prod"
   location: "uksouth"
-  clusterName: "cnp-aks-mgmt-sandbox-cluster"
+  clusterName: "cnp-aks-mgmt-prod-cluster"
   nodeCount: "3"
   nodeDiskSize: "100"
   vmSize: "Standard_D4s_v3"
   kubernetesVersion: "1.11.3"
-  keyvaultName: "infra-vault-sandbox"
+  keyvaultName: "infra-vault-prod"
   kubectlConnectionType: "Azure Resource Manager"
 
 jobs:
   - template: ../jobs/keyvault-mgmt.yml
     parameters:
-      serviceConnection: azurerm-sandbox
+      serviceConnection: azurerm-prod
 
   - template: ../jobs/aks.yml
     parameters:
-      serviceConnection: azurerm-sandbox
+      serviceConnection: azurerm-prod
 
   - template: ../jobs/aks-mgmt.yml
     parameters:
-      serviceConnection: azurerm-sandbox
+      serviceConnection: azurerm-prod
