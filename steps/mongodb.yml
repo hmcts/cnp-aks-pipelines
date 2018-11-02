@@ -25,5 +25,5 @@ steps:
       azureResourceGroup: $(aksResourceGroup)
       kubernetesCluster: $(clusterName)
       command: "apply"
-      arguments: "-f manifests/$(environment)/mongodb-ingress.yml"
+      arguments: "-f manifests/$(environment)/mongodb-service.yml"
       outputFormat: "name"
