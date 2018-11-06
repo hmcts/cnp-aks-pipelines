@@ -1,0 +1,26 @@
+#
+# Build for the HMCTS Demo Jenkins AKS Cluster
+#
+variables:
+  aksResourceGroup: 'cnp-aks-rg'
+  subnetResourceGroup: 'core-infra-hmctsdemo'
+  subnetName: 'aks-subnet'
+  vnetName: 'core-infra-vnet-hmctsdemo'
+  location: 'uksouth'
+  clusterName: 'cnp-aks-cluster'
+  nodeCount: '5'
+  nodeDiskSize: '100'
+  vmSize: 'Standard_D4s_v3'
+  kubernetesVersion: '1.11.3'
+  keyvaultName: 'infra-vault-hmctsdemo'
+  kubectlConnectionType: 'Azure Resource Manager'
+  environment: 'hmctsdemo'
+
+jobs:
+- template: ../jobs/keyvault-ci.yml
+  parameters:
+    serviceConnection: azurerm-hmctsdemo
+    
+- template: ../jobs/aks-ci.yml
+  parameters:
+    serviceConnection: azurerm-hmctsdemo
