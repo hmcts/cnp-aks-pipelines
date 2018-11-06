@@ -1,5 +1,5 @@
 #
-# Build for the Nonprod Jenkins AKS Cluster
+# Build for the HMCTS Demo Jenkins AKS Cluster
 #
 variables:
   aksResourceGroup: 'cnp-aks-rg'
