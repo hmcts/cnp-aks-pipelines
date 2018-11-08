@@ -20,13 +20,13 @@ jobs:
         parameters:
           serviceConnection: ${{ parameters.serviceConnection }}
 
-  - job: MongoDB
+  - job: Build failure analzyer
     dependsOn:
       - AKS
     condition: succeeded()
     pool:
       vmImage: "Ubuntu 16.04"
     steps:
-      - template: ../steps/mongodb.yml
+      - template: ../steps/build-failure-analyzer.yml
         parameters:
           serviceConnection: ${{ parameters.serviceConnection }}
