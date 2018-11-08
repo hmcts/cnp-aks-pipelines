@@ -9,6 +9,6 @@ jobs:
     pool:
       vmImage: "Ubuntu 16.04"
     steps:
-      - template: ../../steps/build-failure-analyzer.yml.yml
+      - template: ../../steps/build-failure-analyzer.yml
         parameters:
           serviceConnection: ${{ parameters.serviceConnection }}
