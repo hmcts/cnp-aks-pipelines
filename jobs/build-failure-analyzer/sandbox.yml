@@ -7,7 +7,7 @@ variables:
   clusterName: "cnp-aks-mgmt-sandbox-cluster"
   keyvaultName: "infra-vault-sandbox"
 
-steps:
+jobs:
   - template: template.yml
     parameters:
       serviceConnection: azurerm-sandbox
