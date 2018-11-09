@@ -9,6 +9,17 @@ steps:
       keyVaultName: $(keyvaultName)
       secretsFilter: "bfa-root-password,bfa-user-password"
 
+  - task: HelmDeploy@1
+    displayName: "Initialise Helm Client"
+    enabled: true
+    inputs:
+      connectionType: $(kubectlConnectionType)
+      azureSubscription: ${{ parameters.serviceConnection }}
+      azureResourceGroup: $(aksResourceGroup)
+      kubernetesCluster: $(clusterName)
+      command: "init"
+      arguments: "--client-only"
+
   - task: HelmDeploy@0
     displayName: "BFA - Install MongoDB"
     enabled: true
