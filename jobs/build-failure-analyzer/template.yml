@@ -1,12 +1,10 @@
 #
-# Job template for Management AKS Clusters.
+# Job template for Build failure analyzer
 #
 parameters:
   serviceConnection: ""
 
 steps:
-  - job: Build failure analzyer
-    steps:
-      - template: ../../steps/build-failure-analyzer.yml
-        parameters:
-          serviceConnection: ${{ parameters.serviceConnection }}
+  - template: ../../steps/build-failure-analyzer.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}

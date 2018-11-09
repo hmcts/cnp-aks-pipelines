@@ -2,31 +2,20 @@
 # Job template for Management AKS Clusters.
 #
 parameters:
-  serviceConnection: ""
+  serviceConnection: ''
 
 jobs:
-  - template: aks.yml
+- template: aks.yml
+  parameters:
+    serviceConnection: ${{ parameters.serviceConnection }}
+
+- job: Artifactory
+  dependsOn:
+  - AKS
+  condition: succeeded()
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/artifactory.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
-
-  - job: Artifactory
-    dependsOn:
-      - AKS
-    condition: succeeded()
-    pool:
-      vmImage: "Ubuntu 16.04"
-    steps:
-      - template: ../steps/artifactory.yml
-        parameters:
-          serviceConnection: ${{ parameters.serviceConnection }}
-
-  - job: Build failure analzyer
-    dependsOn:
-      - AKS
-    condition: succeeded()
-    pool:
-      vmImage: "Ubuntu 16.04"
-    steps:
-      - template: ../steps/build-failure-analyzer.yml
-        parameters:
-          serviceConnection: ${{ parameters.serviceConnection }}
