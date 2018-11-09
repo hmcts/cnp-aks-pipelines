@@ -2,7 +2,7 @@ parameters:
   serviceConnection: ""
 
 steps:
-  - task: AzureKeyVault@0
+  - task: AzureKeyVault@1
     displayName: "Get secrets from Keyvault"
     inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
@@ -20,7 +20,7 @@ steps:
       command: "init"
       arguments: "--client-only"
 
-  - task: HelmDeploy@1
+  - task: HelmDeploy@0
     displayName: "BFA - Install MongoDB"
     enabled: true
     inputs:
