@@ -4,10 +4,8 @@
 parameters:
   serviceConnection: ""
 
-jobs:
+steps:
   - job: Build failure analzyer
-    pool:
-      vmImage: "Ubuntu 16.04"
     steps:
       - template: ../../steps/build-failure-analyzer.yml
         parameters:
