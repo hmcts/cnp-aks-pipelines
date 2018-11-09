@@ -9,7 +9,7 @@ steps:
       keyVaultName: $(keyvaultName)
       secretsFilter: "bfa-root-password,bfa-user-password"
 
-  - task: HelmDeploy@1
+  - task: HelmDeploy@0
     displayName: "Initialise Helm Client"
     enabled: true
     inputs:
@@ -20,7 +20,7 @@ steps:
       command: "init"
       arguments: "--client-only"
 
-  - task: HelmDeploy@0
+  - task: HelmDeploy@1
     displayName: "BFA - Install MongoDB"
     enabled: true
     inputs:
