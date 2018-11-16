@@ -3,12 +3,12 @@
 #
 variables:
   environment: 'test'
-  aksResourceGroup: 'timw-aks-rg'
-  subnetResourceGroup: 'timw-aks-rg'
+  aksResourceGroup: 'cnp-test-aks-rg'
+  subnetResourceGroup: 'cnp-test-aks-rg'
   subnetName: 'aks-subnet'
   vnetName: 'test-vnet'
   location: 'uksouth'
-  clusterName: 'timw-aks-cluster'
+  clusterName: 'cnp-test-cluster'
   nodeCount: '1'
   nodeDiskSize: '100'
   vmSize: 'Standard_D4s_v3'
