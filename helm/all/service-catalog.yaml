@@ -1,0 +1,24 @@
+apiserver:
+  resources:
+    requests:
+      cpu: 150m
+      memory: 40Mi
+    limits:
+      cpu: 200m
+      memory: 100Mi
+  storage:
+    etcd:
+      persistence:
+        enabled: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 100m
+          memory: 150Mi
+  healthcheck:
+    enabled: false
+controllerManager:
+  healthcheck:
+    enabled: false

@@ -1,0 +1,26 @@
+name: Upgrade Kubernetes Service Catalog
+trigger: none
+jobs:
+- job: UpgradeServiceCatalog
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/helm-init-client.yml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+
+  - task: HelmDeploy@0
+    displayName: 'Upgrade Kubernetes Service Catalog'
+    inputs:
+      connectionType: $(kubectlConnectionType)
+      azureSubscription: $(serviceConnection)
+      azureResourceGroup: $(aksResourceGroup)
+      kubernetesCluster: $(aksClusterName)
+      command: 'upgrade'
+      chartType: 'Name'
+      chartName: 'svc-cat/catalog'
+      namespace: 'catalog'
+      releaseName: 'catalog'
+      valueFile: '../helm/all/service-catalog.yaml'
