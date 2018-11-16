@@ -48,4 +48,4 @@ jobs:
       chartName: 'svc-cat/catalog'
       namespace: 'catalog'
       releaseName: 'catalog'
-      valueFile: '../helm/all/service-catalog.yaml'
+      valueFile: 'helm/all/service-catalog.yaml'
