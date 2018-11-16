@@ -41,4 +41,4 @@ jobs:
       azureSubscription: ${{ parameters.serviceConnection }}
       azureResourceGroup: ${{ parameters.aksResourceGroup }}
       kubernetesCluster: ${{ parameters.aksClusterName }}
-      arguments: 'upgrade catalog svc-cat/catalog --dry-run -f values.yaml'
+      arguments: 'upgrade catalog svc-cat/catalog --dry-run -f ../helm/all/service-catalog.yaml'
