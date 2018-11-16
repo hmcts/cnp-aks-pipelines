@@ -1,4 +1,4 @@
-name: Upgrade Kubernetes Service Catalog (Sandbox)
+name: Upgrade Kubernetes Service Catalog (Nonprod)
 trigger: none
 jobs:
 - template: ../../jobs/upgrade-service-catalog.yaml
