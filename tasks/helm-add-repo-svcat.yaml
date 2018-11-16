@@ -12,5 +12,5 @@ steps:
     azureSubscription: ${{ parameters.serviceConnection }}
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
-    command: 'add'
-    arguments: 'svc-cat https://svc-catalog-charts.storage.googleapis.com'
+    command: 'repo'
+    arguments: 'add svc-cat https://svc-catalog-charts.storage.googleapis.com'
