@@ -41,9 +41,4 @@ jobs:
       azureSubscription: ${{ parameters.serviceConnection }}
       azureResourceGroup: ${{ parameters.aksResourceGroup }}
       kubernetesCluster: ${{ parameters.aksClusterName }}
-      command: 'upgrade'
-      chartType: 'Name'
-      chartName: 'svc-cat/catalog'
-      namespace: 'catalog'
-      releaseName: 'catalog'
-      valueFile: '../helm/all/service-catalog.yaml'
+      arguments: 'upgrade catalog svc-cat/catalog --dry-run -f values.yaml'
