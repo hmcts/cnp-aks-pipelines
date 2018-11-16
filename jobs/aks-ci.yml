@@ -7,7 +7,7 @@ parameters:
   aksClusterName: ''
   environment: ''
   aksParametersFile: ''
-  
+
 jobs:
 - template: aks.yml
   parameters:
@@ -25,10 +25,10 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   variables:
-    svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalSubscriptionId']]
-    svcatServicePrincipalId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalId']]
-    svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalSecret']]
-    svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['translateKeyvault.svcatServicePrincipalTenantId']]
+    svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSubscriptionId']]
+    svcatServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalId']]
+    svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
+    svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
   steps:
   - template: ../steps/helm-init-client.yml
     parameters:

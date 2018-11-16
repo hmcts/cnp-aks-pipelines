@@ -14,8 +14,8 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   variables:
-    aksServicePrincipalId: $[dependencies.Keyvault.outputs['translateKeyvault.aksServicePrincipalId']]
-    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['translateKeyvault.aksServicePrincipalSecret']]
+    aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
+    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
   - template: ../steps/recreate-aks.yml
     parameters:
