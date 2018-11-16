@@ -32,7 +32,7 @@ jobs:
       azureSubscription: ${{ parameters.serviceConnection }}
       azureResourceGroup: ${{ parameters.aksResourceGroup }}
       kubernetesCluster: ${{ parameters.aksClusterName }}
-      command: 'repo update'
+      arguments: 'repo update'
 
   - task: HelmDeploy@0
     displayName: 'Upgrade Kubernetes Service Catalog'
