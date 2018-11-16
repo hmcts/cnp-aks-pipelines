@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "aksClusterName": {
+          "type": "String"
+      },
+      "aksVnetName": {
+          "type": "String"
+      },
+      "aksSubnetName": {
+        "type": "String"
+      },
+      "servicePrincipalId": {
+        "type": "String"
+      },
+      "servicePrincipalSecret": {
+          "type": "String"
+      }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "comments": "Generalized from resource: '/subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourcegroups/cnp-aks-rg/providers/Microsoft.ContainerService/managedClusters/cnp-aks-cluster'.",
+          "type": "Microsoft.ContainerService/managedClusters",
+          "name": "[parameters('aksClusterName')]",
+          "apiVersion": "2018-03-31",
+          "location": "uksouth",
+          "tags": {
+              "Team Name": "CNP"
+          },
+          "scale": null,
+          "properties": {
+              "kubernetesVersion": "1.11.3",
+              "dnsPrefix": "cnp-aks-cl-cnp-aks-rg-1c4f07",
+              "agentPoolProfiles": [
+                  {
+                      "name": "nodepool1",
+                      "count": 1,
+                      "vmSize": "Standard_D4s_v3",
+                      "osDiskSizeGB": 100,
+                      "storageProfile": "ManagedDisks",
+                      "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('aksVnetName'), parameters('aksSubnetName'))]",
+                      "maxPods": 30,
+                      "osType": "Linux"
+                  }
+              ],
+              "linuxProfile": {
+                  "adminUsername": "azureuser",
+                  "ssh": {
+                      "publicKeys": [
+                          {
+                              "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqR1v0fYAvUGPlL8tjjeiGPxmUWC8JRsq1RxOCqjEFX1cpitI5AGw4fUCpykaH/SJ3GFFKH8xC3h0ypmn7bFPOS25J/ihKo0lk4gnGKJCE/esKG3nNxRabaUuWg1haxde8bhIG1fKBB9F8wScKzGSXfrihsH5JJJ4ITke5zs2BdNU2ygqm98b5vY+PekZKPIFLKFRQIFkW5H5bm7/0wwbCmvYGF65Jx9/wJW7FM1cfWD/9ScLGYL3iub+rQXqumBbbd4bYhdJvUek/QwIEgTTJCNXv97GpZr/KsWd/6YP2WzjSMy7SdTuBGgyVgaQCEMCBbY9XX+FfN6gY6Txw4/GB"
+                          }
+                      ]
+                  }
+              },
+              "servicePrincipalProfile": {
+                  "clientId": "[parameters('servicePrincipalId')]",
+                  "secret": "[parameters('servicePrincipalSecret')]"
+              },
+              "enableRBAC": true,
+              "networkProfile": {
+                  "networkPlugin": "azure",
+                  "serviceCidr": "10.0.0.0/16",
+                  "dnsServiceIP": "10.0.0.10",
+                  "dockerBridgeCidr": "172.17.0.1/16"
+              }
+          },
+          "dependsOn": []
+      }
+  ]
+}

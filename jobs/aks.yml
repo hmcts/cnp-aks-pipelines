@@ -3,6 +3,10 @@
 #
 parameters:
   serviceConnection: ''
+  aksResourceGroup: ''
+  aksClusterName: ''
+  aksParametersFile: ''
+  environment: ''
 
 jobs:
 - job: AKS
@@ -16,7 +20,9 @@ jobs:
   - template: ../steps/recreate-aks.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
-
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksParametersFile: ${{ parameters.aksParametersFile }}
+      
 - job: Traefik
   dependsOn: AKS
   condition: succeeded()
@@ -26,9 +32,15 @@ jobs:
   - template: ../steps/helm-init-client.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
+
   - template: ../steps/traefik.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
+      environment: ${{ parameters.environment }}
 
 - job: Kured
   dependsOn: AKS

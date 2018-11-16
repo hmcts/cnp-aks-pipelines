@@ -3,11 +3,19 @@
 #
 parameters:
   serviceConnection: ''
-
+  aksResourceGroup: ''
+  aksClusterName: ''
+  environment: ''
+  aksParametersFile: ''
+  
 jobs:
 - template: aks.yml
   parameters:
     serviceConnection: ${{ parameters.serviceConnection }}
+    aksResourceGroup: ${{ parameters.aksResourceGroup }}
+    aksClusterName: ${{ parameters.aksClusterName }}
+    environment: ${{ parameters.environment }}
+    aksParametersFile: ${{ parameters.aksParametersFile }}
 
 - job: ServiceCatalog
   dependsOn:
@@ -25,6 +33,11 @@ jobs:
   - template: ../steps/helm-init-client.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
+
   - template: ../steps/service-catalog.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}

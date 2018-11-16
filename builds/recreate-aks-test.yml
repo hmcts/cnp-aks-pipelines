@@ -15,6 +15,7 @@ variables:
   kubernetesVersion: '1.11.4'
   keyvaultName: 'infra-vault-sandbox'
   kubectlConnectionType: 'Azure Resource Manager'
+  aksParametersFile: 'test.json'
 
 jobs:
 - template: ../jobs/keyvault-ci.yml
@@ -24,3 +25,7 @@ jobs:
 - template: ../jobs/aks-ci.yml
   parameters:
     serviceConnection: azurerm-sandbox
+    aksResourceGroup: $(aksResourceGroup)
+    aksClusterName: $(clusterName)
+    environment: $(environment)
+    aksParametersFile: $(aksParametersFile)
