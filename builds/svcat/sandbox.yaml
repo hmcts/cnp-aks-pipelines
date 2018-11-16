@@ -1,7 +1,7 @@
 name: Upgrade Kubernetes Service Catalog (Sandbox)
 trigger: none
 jobs:
-- template: ../jobs/upgrade-service-catalog.yaml
+- template: ../../jobs/upgrade-service-catalog.yaml
   parameters:
     serviceConnection: 'azurerm-sandbox'
     aksResourceGroup: 'cnp-aks-sandbox-rg'
