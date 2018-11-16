@@ -11,6 +11,12 @@ jobs:
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
 
+  - template: ../tasks/helm-add-repo-svcat.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+
   - task: HelmDeploy@0
     displayName: 'Upgrade Kubernetes Service Catalog'
     inputs:

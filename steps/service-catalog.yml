@@ -1,33 +1,29 @@
 parameters:
   serviceConnection: ''
+  aksResourceGroup: ''
+  aksClusterName: ''
 
 steps:
-
-- task: HelmDeploy@0
-  displayName: 'Add Service Catalog Helm Repo'
-  enabled: true
-  inputs:
-    connectionType: $(kubectlConnectionType)
-    azureSubscription: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
-    command: 'repo'
-    arguments: 'add svc-cat https://svc-catalog-charts.storage.googleapis.com'
+- template: ../tasks/helm-add-repo-svcat.yaml
+  parameters:
+    serviceConnection: ${{ parameters.serviceConnection }}
+    aksResourceGroup: ${{ parameters.aksResourceGroup }}
+    aksClusterName: ${{ parameters.aksClusterName }}
 
 - task: HelmDeploy@0
   displayName: 'Install Kubernetes Service Catalog'
   enabled: true
   inputs:
-    connectionType: $(kubectlConnectionType)
+    connectionType: 'Azure Resource Manager'
     azureSubscription: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'install'
     chartType: 'Name'
     chartName: 'svc-cat/catalog'
     namespace: 'catalog'
     releaseName: 'catalog'
-    overrideValues: 'apiserver.storage.etcd.persistence.enabled=true,apiserver.healthcheck.enabled=false,controllerManager.healthcheck.enabled=false'
+    valueFile: '../helm/all/service-catalog.yaml'
 
 - task: PowerShell@2
   enabled: true
@@ -40,10 +36,10 @@ steps:
   displayName: 'Add OSBA Helm Repo'
   enabled: true
   inputs:
-    connectionType: $(kubectlConnectionType)
+    connectionType: 'Azure Resource Manager'
     azureSubscription: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'repo'
     arguments: 'add azure https://kubernetescharts.blob.core.windows.net/azure'
 
@@ -51,10 +47,10 @@ steps:
   displayName: 'Install OSBA'
   enabled: true
   inputs:
-    connectionType: $(kubectlConnectionType)
+    connectionType: 'Azure Resource Manager'
     azureSubscription: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'install'
     chartType: 'Name'
     chartName: 'azure/open-service-broker-azure'
