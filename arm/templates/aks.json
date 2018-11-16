@@ -5,6 +5,9 @@
       "aksClusterName": {
           "type": "String"
       },
+      "kubernetesVersion": {
+        "type": "String"
+      },
       "aksVnetName": {
           "type": "String"
       },
@@ -31,7 +34,7 @@
           },
           "scale": null,
           "properties": {
-              "kubernetesVersion": "1.11.3",
+              "kubernetesVersion": "[parameters('kubernetesVersion')]",
               "dnsPrefix": "cnp-aks-cl-cnp-aks-rg-1c4f07",
               "agentPoolProfiles": [
                   {

@@ -5,6 +5,9 @@
       "aksClusterName": {
           "value": "cnp-test-cluster"
       },
+      "kubernetesVersion": {
+        "value": "1.11.4"
+      },
       "aksVnetName": {
           "value": "test-vnet"
       },
