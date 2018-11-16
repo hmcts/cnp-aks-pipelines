@@ -1,0 +1,9 @@
+name: Upgrade Kubernetes Service Catalog (Sandbox)
+trigger: none
+jobs:
+- template: jobs/upgrade-service-catalog.yaml
+  parameters:
+    serviceConnection: 'azurerm-nonprod'
+    aksResourceGroup: 'cnp-aks-rg'
+    aksClusterName: 'cnp-aks-cluster'
+    
