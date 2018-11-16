@@ -33,7 +33,7 @@ jobs:
       azureResourceGroup: ${{ parameters.aksResourceGroup }}
       kubernetesCluster: ${{ parameters.aksClusterName }}
       command: 'upgrade'
-      arguments: '--dry-run'
+      #arguments: '--dry-run'
       chartType: 'Name'
       chartName: 'svc-cat/catalog'
       namespace: 'catalog'
