@@ -12,6 +12,6 @@ steps:
     resourceGroupName: ${{ parameters.aksResourceGroup }}
     location: 'UK South'
     templateLocation: 'Linked artifact'
-    csmFile: '../arm/templates/aks.json'
-    csmParametersFile: '../arm/parameters/aks/${{ parameters.aksParametersFile }}'
+    csmFile: 'arm/templates/aks.json'
+    csmParametersFile: 'arm/parameters/aks/${{ parameters.aksParametersFile }}'
     overrideParameters: '-aksServicePrincipalId $(aksServicePrincipalId) -aksServicePrincipalSecret $(aksServicePrincipalSecret)'
