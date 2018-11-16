@@ -32,7 +32,8 @@ jobs:
       azureSubscription: ${{ parameters.serviceConnection }}
       azureResourceGroup: ${{ parameters.aksResourceGroup }}
       kubernetesCluster: ${{ parameters.aksClusterName }}
-      arguments: 'repo update'
+      command: 'repo'
+      arguments: 'update'
 
   - task: HelmDeploy@0
     displayName: 'Upgrade Kubernetes Service Catalog'
@@ -41,4 +42,10 @@ jobs:
       azureSubscription: ${{ parameters.serviceConnection }}
       azureResourceGroup: ${{ parameters.aksResourceGroup }}
       kubernetesCluster: ${{ parameters.aksClusterName }}
-      arguments: 'upgrade catalog svc-cat/catalog --dry-run -f ../helm/all/service-catalog.yaml'
+      command: 'upgrade'
+      arguments: '--dry-run'
+      chartType: 'Name'
+      chartName: 'svc-cat/catalog'
+      namespace: 'catalog'
+      releaseName: 'catalog'
+      valueFile: '../helm/all/service-catalog.yaml'
