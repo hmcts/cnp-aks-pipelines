@@ -12,7 +12,7 @@ variables:
   nodeCount: '1'
   nodeDiskSize: '100'
   vmSize: 'Standard_D4s_v3'
-  kubernetesVersion: '1.11.3'
+  kubernetesVersion: '1.11.4'
   keyvaultName: 'infra-vault-sandbox'
   kubectlConnectionType: 'Azure Resource Manager'
 
