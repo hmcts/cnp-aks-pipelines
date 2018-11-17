@@ -22,7 +22,7 @@ jobs:
   parameters:
     serviceConnection: azurerm-sandbox
 
-- template: ../jobs/deploy-aks.yml
+- template: ../jobs/deploy-aks.yaml
   parameters:
     serviceConnection: azurerm-sandbox
     aksResourceGroup: $(aksResourceGroup)
