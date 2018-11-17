@@ -13,7 +13,7 @@ steps:
     azureSubscription: ${{ parameters.serviceConnection }}
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
-    command: 'install'
+    command: 'upgrade'
     chartType: 'Name'
     chartName: 'stable/traefik'
     namespace: 'kube-system'
