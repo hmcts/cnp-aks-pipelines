@@ -4,7 +4,7 @@ parameters:
   aksClusterName: ''
 
 jobs:
-- job: InstallTraefik
+- job: InstallKured
   dependsOn: DeployAKS
   condition: succeeded()
   pool:
