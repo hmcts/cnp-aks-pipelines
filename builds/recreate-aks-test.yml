@@ -104,7 +104,7 @@ jobs:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
-  - template: ../jobs/install-kured.yaml
+  - template: ../tasks/kured.yaml
     parameters:
       serviceConnection: azurerm-sandbox
       aksResourceGroup: $(aksResourceGroup)
