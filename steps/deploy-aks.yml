@@ -1,6 +1,7 @@
 parameters:
   serviceConnection: ''
   aksResourceGroup: ''
+  aksClusterName: ''
   aksParametersFile: ''
 
 steps:
@@ -16,10 +17,10 @@ steps:
   inputs:
     connectionType: $(kubectlConnectionType)
     azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
-    command: 'create'
-    arguments: 'clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard'
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
+    command: 'apply'
+    arguments: '-f manifests/dashboard-rbac.yaml'
     outputFormat: 'name'
 
 - task: Kubernetes@1
@@ -28,8 +29,8 @@ steps:
   inputs:
     connectionType: $(kubectlConnectionType)
     azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'create'
     arguments: '-f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml'
     outputFormat: 'name'
@@ -40,7 +41,7 @@ steps:
   inputs:
     connectionType: $(kubectlConnectionType)
     azureSubscription: ${{ parameters.serviceConnection }}
-    azureResourceGroup: $(aksResourceGroup)
-    kubernetesCluster: $(clusterName)
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'init'
     arguments: '--service-account tiller'

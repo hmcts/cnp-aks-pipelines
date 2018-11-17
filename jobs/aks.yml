@@ -17,10 +17,11 @@ jobs:
     aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
-  - template: ../steps/recreate-aks.yml
+  - template: ../steps/deploy-aks.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
       aksParametersFile: ${{ parameters.aksParametersFile }}
       
 - job: Traefik
