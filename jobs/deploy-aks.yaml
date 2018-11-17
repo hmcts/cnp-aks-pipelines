@@ -19,7 +19,7 @@ jobs:
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
 
-  - template: ../steps/deploy-aks.yml
+  - template: ../steps/deploy-aks.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
