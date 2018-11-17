@@ -14,7 +14,6 @@ steps:
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'upgrade'
-    arguments: '--install'
     chartType: 'Name'
     chartName: 'stable/traefik'
     namespace: 'kube-system'
