@@ -4,23 +4,19 @@ parameters:
   aksClusterName: ''
 
 jobs:
-- job: UpgradeServiceCatalog
+- job: InstallTraefik
+  dependsOn: DeployAKS
+  condition: succeeded()
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/configure-helm.yml
+  - template: ../steps/configure-helm.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
 
-  - template: ../tasks/helm-add-repo-svcat.yaml
-    parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
-
-  - template: ../tasks/install-service-catalog.yaml
+  - template: ../tasks/kured.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}

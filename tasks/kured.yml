@@ -2,9 +2,8 @@ parameters:
   serviceConnection: ''
 
 steps:
-
 - task: Kubernetes@1
-  displayName: 'Installing Kured'
+  displayName: 'Install or Upgrade Kured'
   enabled: true
   inputs:
     connectionType: $(kubectlConnectionType)

@@ -22,10 +22,29 @@ jobs:
   parameters:
     serviceConnection: azurerm-sandbox
 
-- template: ../jobs/aks-ci.yml
+- template: ../jobs/deploy-aks.yml
   parameters:
     serviceConnection: azurerm-sandbox
     aksResourceGroup: $(aksResourceGroup)
     aksClusterName: $(clusterName)
     environment: $(environment)
     aksParametersFile: $(aksParametersFile)
+
+- template: ../jobs/install-traefik.yaml
+  parameters:
+    serviceConnection: azurerm-sandbox
+    aksResourceGroup: $(aksResourceGroup)
+    aksClusterName: $(clusterName)
+    environment: $(environment)
+
+- template: ../jobs/install-service-catalog.yaml
+  parameters:
+    serviceConnection: azurerm-sandbox
+    aksResourceGroup: $(aksResourceGroup)
+    aksClusterName: $(clusterName)
+
+- template: ../jobs/install-kured.yaml
+  parameters:
+    serviceConnection: azurerm-sandbox
+    aksResourceGroup: $(aksResourceGroup)
+    aksClusterName: $(clusterName)

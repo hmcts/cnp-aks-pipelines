@@ -35,12 +35,6 @@ steps:
     arguments: '-f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml'
     outputFormat: 'name'
 
-- task: HelmInstaller@0
-  displayName: 'Install Helm 2.11.0'
-  inputs:
-      helmVersion: "2.11.0"
-      installKubectl: false
-
 - task: HelmDeploy@0
   displayName: 'Install Tiller'
   enabled: true

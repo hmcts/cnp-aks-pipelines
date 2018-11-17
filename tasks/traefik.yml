@@ -6,7 +6,7 @@ parameters:
 
 steps:
 - task: HelmDeploy@0
-  displayName: 'Install Traefik'
+  displayName: 'Install or Upgrade Traefik'
   enabled: true
   inputs:
     connectionType: $(kubectlConnectionType)

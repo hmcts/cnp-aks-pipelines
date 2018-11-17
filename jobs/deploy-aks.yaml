@@ -1,15 +1,11 @@
-#
-# Base AKS install.
-#
 parameters:
   serviceConnection: ''
   aksResourceGroup: ''
   aksClusterName: ''
   aksParametersFile: ''
-  environment: ''
 
 jobs:
-- job: AKS
+- job: DeployAKS
   dependsOn: Keyvault
   pool:
     vmImage: 'Ubuntu 16.04'
@@ -29,13 +25,3 @@ jobs:
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
       aksParametersFile: ${{ parameters.aksParametersFile }}
-
-- job: Kured
-  dependsOn: AKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - template: ../steps/kured.yml
-    parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
