@@ -8,13 +8,14 @@ variables:
   subnetName: 'aks-subnet'
   vnetName: 'test-vnet'
   location: 'uksouth'
-  clusterName: 'cnp-test-cluster'
+  aksClusterName: 'cnp-test-cluster'
   nodeCount: '1'
   nodeDiskSize: '100'
   vmSize: 'Standard_D4s_v3'
   kubernetesVersion: '1.11.4'
   keyvaultName: 'infra-vault-sandbox'
   kubectlConnectionType: 'Azure Resource Manager'
+  serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'test.json'
 
 jobs:
@@ -24,7 +25,7 @@ jobs:
   steps:
   - template: ../steps/keyvault-ci.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
+      serviceConnection: $(serviceConnection)
 
 - job: DeployAKS
   dependsOn: Keyvault
@@ -36,15 +37,15 @@ jobs:
   steps:
   - template: ../steps/configure-helm.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
   - template: ../steps/deploy-aks.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
-      aksParametersFile: ${{ parameters.aksParametersFile }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      aksParametersFile: $(aksParametersFile)
 
 - job: InstallTraefik
   dependsOn: DeployAKS
@@ -54,14 +55,14 @@ jobs:
   steps:
   - template: ../steps/configure-helm.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
   - template: ../tasks/traefik.yaml
     parameters:
-      serviceConnection: azurerm-sandbox
+      serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(clusterName)
+      aksClusterName: $(aksClusterName)
       environment: $(environment)
 
 - job: InstallKured
@@ -72,14 +73,14 @@ jobs:
   steps:
   - template: ../steps/configure-helm.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
   - template: ../tasks/kured.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
 
 - job: InstallServiceCatalog
   dependsOn:
@@ -96,16 +97,16 @@ jobs:
   steps:
   - template: ../steps/configure-helm.yaml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
   - template: ../steps/service-catalog.yml
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
   - template: ../tasks/kured.yaml
     parameters:
-      serviceConnection: azurerm-sandbox
+      serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(clusterName)
+      aksClusterName: $(aksClusterName)
