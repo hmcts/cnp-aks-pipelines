@@ -57,7 +57,7 @@ jobs:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
-  - template: ../jobs/traefik.yaml
+  - template: ../tasks/traefik.yaml
     parameters:
       serviceConnection: azurerm-sandbox
       aksResourceGroup: $(aksResourceGroup)
