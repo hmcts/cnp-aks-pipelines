@@ -31,7 +31,7 @@ steps:
     azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
-    command: 'create'
+    command: 'apply'
     arguments: '-f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml'
     outputFormat: 'name'
 
