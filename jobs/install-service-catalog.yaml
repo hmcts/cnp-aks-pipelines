@@ -17,7 +17,7 @@ jobs:
     svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
     svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
   steps:
-  - template: ../steps/configure-helm.yml
+  - template: ../steps/configure-helm.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
