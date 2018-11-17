@@ -6,7 +6,7 @@ parameters:
 
 jobs:
 - job: InstallTraefik
-  dependsOn: AKS
+  dependsOn: DeployAKS
   condition: succeeded()
   pool:
     vmImage: 'Ubuntu 16.04'
@@ -17,7 +17,7 @@ jobs:
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
 
-  - template: ../steps/traefik.yaml
+  - template: ../tasks/traefik.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
