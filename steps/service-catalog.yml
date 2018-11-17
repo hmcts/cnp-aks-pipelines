@@ -10,20 +10,11 @@ steps:
     aksResourceGroup: ${{ parameters.aksResourceGroup }}
     aksClusterName: ${{ parameters.aksClusterName }}
 
-- task: HelmDeploy@0
-  displayName: 'Install Kubernetes Service Catalog'
-  enabled: true
-  inputs:
-    connectionType: 'Azure Resource Manager'
-    azureSubscription: ${{ parameters.serviceConnection }}
-    azureResourceGroup: ${{ parameters.aksResourceGroup }}
-    kubernetesCluster: ${{ parameters.aksClusterName }}
-    command: 'install'
-    chartType: 'Name'
-    chartName: 'svc-cat/catalog'
-    namespace: 'catalog'
-    releaseName: 'catalog'
-    valueFile: 'helm/all/service-catalog.yaml'
+- template: ../tasks/install-service-catalog.yaml
+  parameters:
+    serviceConnection: ${{ parameters.serviceConnection }}
+    aksResourceGroup: ${{ parameters.aksResourceGroup }}
+    aksClusterName: ${{ parameters.aksClusterName }}
 
 - task: PowerShell@2
   enabled: true

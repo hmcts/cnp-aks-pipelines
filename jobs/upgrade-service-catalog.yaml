@@ -25,17 +25,8 @@ jobs:
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
 
-  - task: HelmDeploy@0
-    displayName: 'Upgrade Kubernetes Service Catalog'
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: ${{ parameters.serviceConnection }}
-      azureResourceGroup: ${{ parameters.aksResourceGroup }}
-      kubernetesCluster: ${{ parameters.aksClusterName }}
-      command: 'upgrade'
-      #arguments: '--dry-run'
-      chartType: 'Name'
-      chartName: 'svc-cat/catalog'
-      namespace: 'catalog'
-      releaseName: 'catalog'
-      valueFile: 'helm/all/service-catalog.yaml'
+  - template: ../tasks/install-service-catalog.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
