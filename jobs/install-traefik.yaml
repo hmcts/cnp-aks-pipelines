@@ -17,7 +17,7 @@ jobs:
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
 
-  - template: $(Build.SourcesDirectory)/tasks/traefik.yaml
+  - template: ../tasks/traefik.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
