@@ -1,15 +1,6 @@
-#
-# Gets Keyvault secrets and maps them to variables expected by subsequent jobs
-#
-# For builds creating a CI (Jenkins) cluster
-#
-parameters:
-  serviceConnection: ''
+  parameters:
+    serviceConnection: ''
 
-jobs:
-- job: Keyvault
-  pool:
-    vmImage: 'Ubuntu 16.04'
   steps:
   - task: AzureKeyVault@1
     displayName: 'Get secrets from Keyvault'
