@@ -4,7 +4,6 @@
 variables:
   environment: 'test'
   aksResourceGroup: 'cnp-test-aks-rg'
-  subnetResourceGroup: 'cnp-test-aks-rg'
   aksClusterName: 'cnp-test-cluster'
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
