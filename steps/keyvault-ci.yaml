@@ -1,12 +1,13 @@
   parameters:
     serviceConnection: ''
+    keyvaultName: ''
 
   steps:
   - task: AzureKeyVault@1
     displayName: 'Get secrets from Keyvault'
     inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
-      keyVaultName: $(keyvaultName)
+      keyVaultName: ${{ parameters.keyvaultName }}
       secretsFilter: 'aks-sp-id,aks-sp-secret,jenkins-sp-subscription-id,jenkins-sp-tenant-id,jenkins-sp-id,jenkins-sp-secret'      
 
   - script: |

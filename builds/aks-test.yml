@@ -5,16 +5,8 @@ variables:
   environment: 'test'
   aksResourceGroup: 'cnp-test-aks-rg'
   subnetResourceGroup: 'cnp-test-aks-rg'
-  subnetName: 'aks-subnet'
-  vnetName: 'test-vnet'
-  location: 'uksouth'
   aksClusterName: 'cnp-test-cluster'
-  nodeCount: '1'
-  nodeDiskSize: '100'
-  vmSize: 'Standard_D4s_v3'
-  kubernetesVersion: '1.11.4'
   keyvaultName: 'infra-vault-sandbox'
-  kubectlConnectionType: 'Azure Resource Manager'
   serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'test.json'
 
@@ -26,6 +18,7 @@ jobs:
   - template: ../steps/keyvault-ci.yaml
     parameters:
       serviceConnection: $(serviceConnection)
+      keyvaultName: $(keyvaultName)
 
 - job: DeployAKS
   dependsOn: Keyvault
