@@ -8,6 +8,9 @@
         "kubernetesVersion": {
             "type": "String"
         },
+        "nodeCount": {
+            "type": "int"
+        },
         "aksVnetName": {
             "type": "String"
         },
@@ -42,7 +45,7 @@
                 "agentPoolProfiles": [
                     {
                         "name": "nodepool1",
-                        "count": 1,
+                        "count": "[parameters('nodeCount')]",
                         "vmSize": "Standard_D4s_v3",
                         "osDiskSizeGB": 100,
                         "storageProfile": "ManagedDisks",
