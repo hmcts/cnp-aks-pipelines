@@ -1,13 +1,13 @@
 #
-# Build for the Sandbox Testing AKS Cluster
+# Build for the Nonprod CI AKS Cluster
 #
 variables:
-  environment: 'test'
-  aksResourceGroup: 'cnp-test-aks-rg'
-  aksClusterName: 'cnp-test-cluster'
-  keyvaultName: 'infra-vault-sandbox'
-  serviceConnection: 'azurerm-sandbox'
-  aksParametersFile: 'test.json'
+  environment: 'nonprod'
+  aksResourceGroup: 'cnp-aks-rg'
+  aksClusterName: 'cnp-aks-cluster'
+  keyvaultName: 'infra-vault-nonprod'
+  serviceConnection: 'azurerm-nonprod'
+  aksParametersFile: 'nonprod.json'
 
 jobs:
 - job: Keyvault

@@ -1,5 +1,5 @@
 #
-# Build for the Sanbox Testing AKS Cluster
+# Build for the Sandbox CI AKS Cluster
 #
 variables:
   environment: 'sandbox'

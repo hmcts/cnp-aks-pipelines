@@ -23,7 +23,7 @@
         "dnsPrefix": {
             "type": "String"
         },
-        "publicSshKey": {
+        "sshPublicKey": {
             "type": "String"
         },
         "servicePrincipalId": {
@@ -65,7 +65,7 @@
                     "ssh": {
                         "publicKeys": [
                             {
-                                "keyData": "[parameters('publicSshKey')]"
+                                "keyData": "[parameters('sshPublicKey')]"
                             }
                         ]
                     }
