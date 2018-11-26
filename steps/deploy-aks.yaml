@@ -44,4 +44,4 @@ steps:
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'init'
-    arguments: '--service-account tiller'
+    arguments: '--service-account tiller --tiller-image gcr.io/kubernetes-helm/tiller:v2.11.0'
