@@ -9,7 +9,7 @@ steps:
   displayName: 'Install or Upgrade Traefik'
   enabled: true
   inputs:
-    connectionType: $(kubectlConnectionType)
+    connectionType: 'Azure Resource Manager'
     azureSubscription: ${{ parameters.serviceConnection }}
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
