@@ -11,7 +11,7 @@ variables:
   nodeCount: '5'
   nodeDiskSize: '100'
   vmSize: 'Standard_D4s_v3'
-  kubernetesVersion: '1.11.3'
+  kubernetesVersion: '1.11.4'
   keyvaultName: 'infra-vault-hmctsdemo'
   kubectlConnectionType: 'Azure Resource Manager'
   environment: 'hmctsdemo'
