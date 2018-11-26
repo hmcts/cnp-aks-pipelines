@@ -11,6 +11,9 @@
       "nodeCount": {
         "value": 3
       },
+      "aksVnetResourceGroup": {
+        "value": "core-infra-saat"
+      },
       "aksVnetName": {
           "value": "core-infra-vnet-saat"
       },

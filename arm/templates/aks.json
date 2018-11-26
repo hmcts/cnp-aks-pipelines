@@ -11,6 +11,9 @@
         "nodeCount": {
             "type": "int"
         },
+        "aksVnetResourceGroup": {
+            "type": "String"
+        },
         "aksVnetName": {
             "type": "String"
         },
@@ -52,7 +55,7 @@
                         "vmSize": "Standard_D4s_v3",
                         "osDiskSizeGB": 100,
                         "storageProfile": "ManagedDisks",
-                        "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('aksVnetName'), parameters('aksSubnetName'))]",
+                        "vnetSubnetID": "[resourceId(parameters('aksVnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aksVnetName'), parameters('aksSubnetName'))]",
                         "maxPods": 30,
                         "osType": "Linux"
                     }

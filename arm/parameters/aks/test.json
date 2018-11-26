@@ -11,6 +11,9 @@
       "nodeCount": {
         "value": 1
       },
+      "aksVnetResourceGroup": {
+        "value": "cnp-test-aks-rg"
+      },
       "aksVnetName": {
           "value": "test-vnet"
       },
