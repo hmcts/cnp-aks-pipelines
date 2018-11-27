@@ -46,10 +46,6 @@ steps:
       --client-secret $(aksServicePrincipalSecret)
       --tags 'Team Name=CNP'
 
-# TODO send this to keyvault instead
-- script: cat /home/vsts/.ssh/id_rsa
-  displayName: Get SSH key
-
 - task: Kubernetes@1
   displayName: 'Configure RBAC for Kubernetes Dashboard'
   enabled: true
