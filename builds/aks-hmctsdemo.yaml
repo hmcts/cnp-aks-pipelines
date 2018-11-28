@@ -1,6 +1,8 @@
 #
 # Build for the Sandbox CI AKS Cluster
 #
+name: HMCTSDEMO AKS Pipeline
+trigger: none
 variables:
   environment: 'hmctsdemo'
   aksResourceGroup: 'k8-hmctsdemo'

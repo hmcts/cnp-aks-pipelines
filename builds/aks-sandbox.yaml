@@ -1,6 +1,8 @@
 #
 # Build for the Sandbox CI AKS Cluster
 #
+name: Sandbox AKS Pipeline
+trigger: none
 variables:
   environment: 'sandbox'
   aksResourceGroup: 'cnp-aks-sandbox-rg'

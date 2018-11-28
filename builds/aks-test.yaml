@@ -1,6 +1,8 @@
 #
 # Build for the Sandbox Testing AKS Cluster
 #
+name: Test AKS Pipeline
+trigger: none
 variables:
   environment: 'test'
   aksResourceGroup: 'cnp-test-aks-rg'
