@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "aksClusterName": {
+          "value": "cnp-aks-sandbox-cluster"
+      },
+      "kubernetesVersion": {
+        "value": "1.11.4"
+      },
+      "nodeCount": {
+        "value": 3
+      },
+      "aksVnetResourceGroup": {
+        "value": "core-infra-saat"
+      },
+      "aksVnetName": {
+          "value": "core-infra-vnet-saat"
+      },
+      "aksSubnetName": {
+          "value": "aks-subnet"
+      },
+      "dnsPrefix": {
+        "value": "cnp-aks-sa-cnp-aks-sandbox--bf308a"
+      },
+      "sshPublicKey": {
+        "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6qKMRBtNvHN/H+t1qUwI6WPnJYcezkF16BPricsL6AaDKE78p+cVPte6u516S69WkvS+wZc32JHF4gnCmHmTGuqhn2P///BEw5QffI8aVuNHRbGwLvLMH8GMX6WUhCxa2XSKiCm1v3owpDoIyZyhANz/+UxvFcWtbY3GYZcGLAbT4OGkpyF3BLwOxvcyYJ/l3JR1BDPUayavzzZwQEtPS9jxAbPy+C70a2EwSBv49jb79j1Qu/xrMuNkhQTzEYgMQh/e6OhkHVX/ZWaOplchRjStpqrkGQ/SQRvp+BtZf6dh6eXNtQYTBfuHkdnhvAnr1VFF6H+6/m649qYPf6nZb"
+      },
+      "servicePrincipalId": {
+        "value": ""
+      },
+      "servicePrincipalSecret": {
+          "value": ""
+      }
+    }
+}

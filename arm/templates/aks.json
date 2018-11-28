@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aksClusterName": {
+            "type": "String"
+        },
+        "kubernetesVersion": {
+            "type": "String"
+        },
+        "nodeCount": {
+            "type": "int"
+        },
+        "aksVnetResourceGroup": {
+            "type": "String"
+        },
+        "aksVnetName": {
+            "type": "String"
+        },
+        "aksSubnetName": {
+            "type": "String"
+        },
+        "dnsPrefix": {
+            "type": "String"
+        },
+        "sshPublicKey": {
+            "type": "String"
+        },
+        "servicePrincipalId": {
+            "type": "String"
+        },
+        "servicePrincipalSecret": {
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourcegroups/cnp-aks-rg/providers/Microsoft.ContainerService/managedClusters/cnp-aks-cluster'.",
+            "type": "Microsoft.ContainerService/managedClusters",
+            "name": "[parameters('aksClusterName')]",
+            "apiVersion": "2018-03-31",
+            "location": "uksouth",
+            "tags": {
+                "Team Name": "CNP"
+            },
+            "scale": null,
+            "properties": {
+                "kubernetesVersion": "[parameters('kubernetesVersion')]",
+                "dnsPrefix": "[parameters('dnsPrefix')]",
+                "agentPoolProfiles": [
+                    {
+                        "name": "nodepool1",
+                        "count": "[parameters('nodeCount')]",
+                        "vmSize": "Standard_D4s_v3",
+                        "osDiskSizeGB": 100,
+                        "storageProfile": "ManagedDisks",
+                        "vnetSubnetID": "[resourceId(parameters('aksVnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aksVnetName'), parameters('aksSubnetName'))]",
+                        "maxPods": 30,
+                        "osType": "Linux"
+                    }
+                ],
+                "linuxProfile": {
+                    "adminUsername": "azureuser",
+                    "ssh": {
+                        "publicKeys": [
+                            {
+                                "keyData": "[parameters('sshPublicKey')]"
+                            }
+                        ]
+                    }
+                },
+                "servicePrincipalProfile": {
+                    "clientId": "[parameters('servicePrincipalId')]",
+                    "secret": "[parameters('servicePrincipalSecret')]"
+                },
+                "enableRBAC": true,
+                "networkProfile": {
+                    "networkPlugin": "azure",
+                    "serviceCidr": "10.0.0.0/16",
+                    "dnsServiceIP": "10.0.0.10",
+                    "dockerBridgeCidr": "172.17.0.1/16"
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}

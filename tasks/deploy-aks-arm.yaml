@@ -1,0 +1,17 @@
+parameters:
+  serviceConnection: ''
+  aksResourceGroup: ''
+  aksParametersFile: ''
+
+steps:
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Deploy AKS Cluster'
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: ${{ parameters.aksResourceGroup }}
+    location: 'UK South'
+    templateLocation: 'Linked artifact'
+    csmFile: 'arm/templates/aks.json'
+    csmParametersFile: 'arm/parameters/aks/${{ parameters.aksParametersFile }}'
+    overrideParameters: '-servicePrincipalId $(aksServicePrincipalId) -servicePrincipalSecret $(aksServicePrincipalSecret)'
