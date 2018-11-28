@@ -5,7 +5,7 @@ apiserver:
       memory: 40Mi
     limits:
       cpu: 200m
-      memory: 100Mi
+      memory: 300Mi
   storage:
     etcd:
       persistence:
