@@ -15,8 +15,8 @@ apiserver:
           cpu: 100m
           memory: 100Mi
         limits:
-          cpu: 100m
-          memory: 150Mi
+          cpu: 200m
+          memory: 300Mi
   healthcheck:
     enabled: false
 controllerManager:
