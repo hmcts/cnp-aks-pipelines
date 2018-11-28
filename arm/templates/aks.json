@@ -8,6 +8,9 @@
         "kubernetesVersion": {
             "type": "String"
         },
+        "vmSize": {
+            "type": "String"
+        },
         "nodeCount": {
             "type": "int"
         },
@@ -52,7 +55,7 @@
                     {
                         "name": "nodepool1",
                         "count": "[parameters('nodeCount')]",
-                        "vmSize": "Standard_D4s_v3",
+                        "vmSize": "[parameters('vmSize')]",
                         "osDiskSizeGB": 100,
                         "storageProfile": "ManagedDisks",
                         "vnetSubnetID": "[resourceId(parameters('aksVnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aksVnetName'), parameters('aksSubnetName'))]",

@@ -8,6 +8,9 @@
       "kubernetesVersion": {
         "value": "1.11.4"
       },
+      "vmSize": {
+        "value": "Standard_D4s_v3"
+      },
       "nodeCount": {
         "value": 10
       },
