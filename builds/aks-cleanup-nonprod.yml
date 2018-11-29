@@ -7,7 +7,6 @@ variables:
   kubernetesCluster: 'cnp-aks-cluster'
   containerRegistry: 'hmcts'
 
-
 jobs:
   - job: delete_namespace
     pool:
@@ -24,3 +23,25 @@ jobs:
     - template: ../steps/delete-acr-image.yml
       parameters:
         serviceConnection: azurerm-nonprod
+
+  - job: delete_helm_release
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - task: HelmInstaller@0
+      displayName: 'Install Helm 2.11.0'
+      inputs:
+          helmVersion: "2.11.0"
+          installKubectl: false
+
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release'
+      continueOnError: true # TODO In case of manifest deployment instead, remove when Helm is used exclusively
+      inputs:
+        azureSubscription:  ${{ parameters.serviceConnection }}
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group ${{ parameters.aksResourceGroup }} --name ${{ parameters.kubernetesCluster }}
+          helm init --client-only
+          helm delete --purge $(namespace)
+
