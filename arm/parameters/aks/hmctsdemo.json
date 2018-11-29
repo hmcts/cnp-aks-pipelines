@@ -27,7 +27,7 @@
         "value": "k8-cluster-k8-hmctsdemo-d025fe"
       },
       "sshPublicKey": {
-        "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3c70HEpYLjsXjoSJJC70N4ivyGmPdXU8+4aEawkN5ogKlY+FomfAQ72P8R+BwwRC/Qthu0Z11fHjva0NZJHRt1ESvIGmI/mpzShi04YfJyWpGBwSN0QCmenoTi4pS9Tse2GFvc3EcOh1MUXStyfSy8auL0ZAotFpJ0DKKd0ldRMtPjviw7FRSwgFD85Dzn4vUOzBCR5jWJHYcoq/xhtte/mAEeia72OsQq8oVt/1PVvIoSaQmByaTJXf3BoNXHKXGYwbRyESctF2xFUwFdWwU065E7WGrTTsLD3MskdRVrAf9JlcsP3k9816jKvRKgVdQTUYWoUikQDM02qNjFHr9 james@James-Work-Laptop\n"
+        "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQUQqqlVvn3oD9Ky0NP2VvcjpabUCU6KvccrQ3cvjeR3B1iW6nuiruwv7OTdga1Hwb6JnsTCoHWjNvwwHFoDuah0mT+lDvlPJoNolM3KwS/tjA7bh2XiOm0HCY0oJxTbUg0oLRIVTQYwqhfNdTPPOI5I53AGoX59awSC7UIKsGEyK3uyUx6VP/QX/kIgwUV3CIum4uSXpKISVXoBMfuP0uEEJ4XHd7lMkeLkPDZGpCd1fqiXWmHvhQbmnHslTapLHwu1MvuO9jPt35tJ+uWbdMP7gcTEyNe9yG4g/Mkxo2UpTP2Bzm+IuhmTRhPi+f8PJPtskMvioLne1E9zasrt2z"
       },
       "servicePrincipalId": {
         "value": ""
