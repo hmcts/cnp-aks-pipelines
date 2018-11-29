@@ -30,8 +30,8 @@ jobs:
     - task: HelmInstaller@0
       displayName: 'Install Helm 2.11.0'
       inputs:
-          helmVersion: "2.11.0"
-          installKubectl: false
+        helmVersion: "2.11.0"
+        installKubectl: false
 
     - task: AzureCLI@1
       displayName: 'Helm Delete Release'
