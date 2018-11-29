@@ -2,7 +2,6 @@
 
 variables:
   connectionType: 'Azure Resource Manager'
-  azureSubscriptionEndpoint: 'azurerm-aks-nonprod'
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
   containerRegistry: 'hmcts'
@@ -38,7 +37,7 @@ jobs:
       displayName: 'Helm Delete Release'
       continueOnError: true # TODO In case of manifest deployment instead, remove when Helm is used exclusively
       inputs:
-        azureSubscription:  ${{ parameters.serviceConnection }}
+        azureSubscription:  'azurerm-nonprod'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group ${{ parameters.aksResourceGroup }} --name ${{ parameters.kubernetesCluster }}
