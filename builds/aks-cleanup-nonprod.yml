@@ -40,7 +40,7 @@ jobs:
         azureSubscription:  'azurerm-nonprod'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az aks get-credentials --resource-group $(aksResourceGroup) --name $(kubernetesCluster)
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
           helm init --client-only
           helm delete --purge $(namespace)
 
