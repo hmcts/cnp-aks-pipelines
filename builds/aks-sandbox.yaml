@@ -10,7 +10,8 @@ variables:
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'sandbox.json'
-
+  helmVersion: '2.11.0'
+  
 jobs:
 - job: Keyvault
   pool:
@@ -91,11 +92,6 @@ jobs:
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
   - template: ../steps/service-catalog.yml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-  - template: ../tasks/kured.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)

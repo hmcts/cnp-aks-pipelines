@@ -10,7 +10,8 @@ variables:
   keyvaultName: 'infra-vault-nonprod'
   serviceConnection: 'azurerm-nonprod'
   aksParametersFile: 'nonprod.json'
-
+  helmVersion: '2.11.0'
+  
 jobs:
 - job: Keyvault
   pool:
@@ -44,11 +45,12 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/configure-helm.yaml
+  - template: ../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
   - template: ../tasks/traefik.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -62,11 +64,6 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/configure-helm.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
   - template: ../tasks/kured.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -86,17 +83,13 @@ jobs:
     svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
     svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
   steps:
-  - template: ../steps/configure-helm.yaml
+  - template: ../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
   - template: ../steps/service-catalog.yml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-  - template: ../tasks/kured.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
