@@ -2,9 +2,14 @@ parameters:
   serviceConnection: ''
   aksResourceGroup: ''
   aksClusterName: ''
-
+  helmVersion: ''
+  
 steps:
-- template: ../tasks/helm-installer.yaml
+- task: HelmInstaller@0
+  displayName: 'Install Helm ${{ parameters.helmVersion }}'
+  inputs:
+      helmVersion: ${{ parameters.helmVersion }}
+      installKubectl: false
 
 - task: HelmDeploy@0
   displayName: 'Initialise Helm Client'

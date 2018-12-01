@@ -2,27 +2,9 @@ parameters:
   serviceConnection: ''
   aksResourceGroup: ''
   aksClusterName: ''
-  aksParametersFile: ''
+  helmVersion: ''
 
 steps:
-- template: ../tasks/deploy-aks-arm.yaml
-  parameters:
-    serviceConnection: ${{ parameters.serviceConnection }}
-    aksResourceGroup: ${{ parameters.aksResourceGroup }}
-    aksParametersFile: ${{ parameters.aksParametersFile }}
-
-- task: Kubernetes@1
-  displayName: 'Configure RBAC for Kubernetes Dashboard'
-  enabled: true
-  inputs:
-    connectionType: 'Azure Resource Manager'
-    azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
-    azureResourceGroup: ${{ parameters.aksResourceGroup }}
-    kubernetesCluster: ${{ parameters.aksClusterName }}
-    command: 'apply'
-    arguments: '-f manifests/dashboard-rbac.yaml'
-    outputFormat: 'name'
-
 - task: Kubernetes@1
   displayName: 'Configure RBAC for Helm'
   enabled: true
@@ -44,4 +26,4 @@ steps:
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'init'
-    arguments: '--service-account tiller --tiller-image gcr.io/kubernetes-helm/tiller:v2.11.0'
+    arguments: '--service-account tiller --tiller-image gcr.io/kubernetes-helm/tiller:v${{ parameters.helmVersion }}'
