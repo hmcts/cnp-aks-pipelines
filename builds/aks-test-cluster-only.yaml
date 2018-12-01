@@ -4,9 +4,7 @@
 name: Test AKS Pipeline
 trigger: none
 variables:
-  environment: 'test'
   aksResourceGroup: 'cnp-test-aks-rg'
-  aksClusterName: 'cnp-test-cluster'
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'test.json'
@@ -20,8 +18,8 @@ jobs:
   - task: AzureKeyVault@1
     displayName: 'Get AKS Service Principal Secrets from Keyvault'
     inputs:
-      azureSubscription: ${{ parameters.serviceConnection }}
-      keyVaultName: ${{ parameters.keyvaultName }}
+      azureSubscription: $(serviceConnection)
+      keyVaultName: $(keyvaultName)
       secretsFilter: 'aks-sp-id,aks-sp-secret'
   - template: ../tasks/deploy-aks-arm.yaml
     parameters:
