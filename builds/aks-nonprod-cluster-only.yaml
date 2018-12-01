@@ -23,6 +23,7 @@ jobs:
 
 - job: DeployAKS
   dependsOn: Keyvault
+  timeoutInMinutes: 240
   pool:
     vmImage: 'Ubuntu 16.04'
   variables:
