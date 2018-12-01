@@ -7,7 +7,7 @@ variables:
   aksResourceGroup: 'cnp-test-aks-rg'
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
-  aksParametersFile: 'test.json'
+  aksParametersFile: 'arm/parameters/aks/test.json'
 
 jobs:
 - job: DeployAKS

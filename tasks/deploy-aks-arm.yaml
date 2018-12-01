@@ -15,5 +15,5 @@ steps:
     location: 'UK South'
     templateLocation: 'Linked artifact'
     csmFile: 'arm/templates/aks.json'
-    csmParametersFile: 'arm/parameters/aks/${{ parameters.aksParametersFile }}'
+    csmParametersFile: '${{ parameters.aksParametersFile }}'
     overrideParameters: '-servicePrincipalId ${{ parameters.aksServicePrincipalId }} -servicePrincipalSecret ${{ parameters.aksServicePrincipalSecret }}'
