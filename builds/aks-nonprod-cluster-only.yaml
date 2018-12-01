@@ -1,0 +1,38 @@
+#
+# Build for the Nonprod CI AKS Cluster Only (no apps)
+#
+name: Nonprod AKS Pipeline
+trigger: none
+variables:
+  environment: 'nonprod'
+  aksResourceGroup: 'cnp-aks-rg'
+  aksClusterName: 'cnp-aks-cluster'
+  keyvaultName: 'infra-vault-nonprod'
+  serviceConnection: 'azurerm-nonprod'
+  aksParametersFile: 'nonprod.json'
+
+jobs:
+- job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/keyvault-ci.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      keyvaultName: $(keyvaultName)
+
+- job: DeployAKS
+  dependsOn: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
+    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
+  steps:
+  - template: ../tasks/helm-installer.yaml
+  - template: ../steps/deploy-aks.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      aksParametersFile: $(aksParametersFile)

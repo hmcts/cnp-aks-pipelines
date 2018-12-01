@@ -12,7 +12,7 @@
         "value": "Standard_D4s_v3"
       },
       "nodeCount": {
-        "value": 28
+        "value": 31
       },
       "aksVnetResourceGroup": {
         "value": "core-infra-preview"
