@@ -6,7 +6,7 @@
           "value": "cnp-aks-sandbox-cluster"
       },
       "kubernetesVersion": {
-        "value": "1.11.4"
+        "value": "1.11.5"
       },
       "vmSize": {
         "value": "Standard_B4ms"
