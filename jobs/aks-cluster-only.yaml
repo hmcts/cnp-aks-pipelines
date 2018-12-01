@@ -12,8 +12,8 @@ jobs:
   - task: AzureKeyVault@1
     displayName: 'Get AKS Service Principal Secrets from Keyvault'
     inputs:
-      azureSubscription: $(serviceConnection)
-      keyVaultName: $(keyvaultName)
+      azureSubscription: ${{ parameters.serviceConnection }}
+      keyVaultName: ${{ parameters.keyvaultName }}
       secretsFilter: 'aks-sp-id,aks-sp-secret'
   - template: ../tasks/deploy-aks-arm.yaml
     parameters:
