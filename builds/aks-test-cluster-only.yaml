@@ -1,0 +1,32 @@
+#
+# Build for the Sandbox Testing AKS Cluster
+#
+name: Test AKS Pipeline
+trigger: none
+variables:
+  environment: 'test'
+  aksResourceGroup: 'cnp-test-aks-rg'
+  aksClusterName: 'cnp-test-cluster'
+  keyvaultName: 'infra-vault-sandbox'
+  serviceConnection: 'azurerm-sandbox'
+  aksParametersFile: 'test.json'
+
+jobs:
+- job: DeployAKS
+  pool:
+    vmImage: 'Ubuntu 16.04'
+    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
+  steps:
+  - task: AzureKeyVault@1
+    displayName: 'Get AKS Service Principal Secrets from Keyvault'
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      keyVaultName: ${{ parameters.keyvaultName }}
+      secretsFilter: 'aks-sp-id,aks-sp-secret'
+  - template: ../tasks/deploy-aks-arm.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksParametersFile: $(aksParametersFile)
+      aksServicePrincipalId: $(aks-sp-id)
+      aksServicePrincipalSecret: $(aks-sp-secret)

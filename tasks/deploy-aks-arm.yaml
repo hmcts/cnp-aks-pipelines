@@ -2,6 +2,8 @@ parameters:
   serviceConnection: ''
   aksResourceGroup: ''
   aksParametersFile: ''
+  aksServicePrincipalId: ''
+  aksServicePrincipalSecret: ''
 
 steps:
 - task: AzureResourceGroupDeployment@2
@@ -14,4 +16,4 @@ steps:
     templateLocation: 'Linked artifact'
     csmFile: 'arm/templates/aks.json'
     csmParametersFile: 'arm/parameters/aks/${{ parameters.aksParametersFile }}'
-    overrideParameters: '-servicePrincipalId $(aksServicePrincipalId) -servicePrincipalSecret $(aksServicePrincipalSecret)'
+    overrideParameters: '-servicePrincipalId ${{ parameters.aksServicePrincipalId }} -servicePrincipalSecret ${{ parameters.aksServicePrincipalSecret }}'
