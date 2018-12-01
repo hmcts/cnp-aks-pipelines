@@ -6,7 +6,7 @@
           "value": "cnp-aks-cluster"
       },
       "kubernetesVersion": {
-        "value": "1.11.2"
+        "value": "1.11.5"
       },
       "vmSize": {
         "value": "Standard_D4s_v3"
