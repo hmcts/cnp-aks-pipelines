@@ -1,0 +1,38 @@
+#
+# Upgrade or install Sandbox CI cluster only (no apps)
+#
+name: Sandbox AKS Pipeline (cluster only)
+trigger: none
+variables:
+  environment: 'sandbox'
+  aksResourceGroup: 'cnp-aks-sandbox-rg'
+  aksClusterName: 'cnp-aks-sandbox-cluster'
+  keyvaultName: 'infra-vault-sandbox'
+  serviceConnection: 'azurerm-sandbox'
+  aksParametersFile: 'sandbox.json'
+
+jobs:
+- job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/keyvault-ci.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      keyvaultName: $(keyvaultName)
+
+- job: DeployAKS
+  dependsOn: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
+    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
+  steps:
+  - template: ../tasks/helm-installer.yaml
+  - template: ../steps/deploy-aks.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      aksParametersFile: $(aksParametersFile)
