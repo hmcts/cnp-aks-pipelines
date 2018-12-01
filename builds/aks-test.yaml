@@ -9,7 +9,7 @@ variables:
   aksClusterName: 'cnp-test-cluster'
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
-  aksParametersFile: 'test.json'
+  aksParametersFile: 'arm/parameters/aks/test.json'
   helmVersion: '2.11.0'
 
 jobs:
