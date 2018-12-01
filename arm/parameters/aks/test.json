@@ -6,13 +6,13 @@
           "value": "cnp-test-cluster"
       },
       "kubernetesVersion": {
-        "value": "1.11.4"
+        "value": "1.11.5"
       },
       "vmSize": {
-        "value": "Standard_B4ms"
+        "value": "Standard_B2ms"
       },
       "nodeCount": {
-        "value": 1
+        "value": 2
       },
       "aksVnetResourceGroup": {
         "value": "cnp-test-aks-rg"
