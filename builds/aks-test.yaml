@@ -55,7 +55,7 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/configure-helm.yaml
+  - template: ../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
