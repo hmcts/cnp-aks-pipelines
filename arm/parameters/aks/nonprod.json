@@ -9,7 +9,7 @@
         "value": "1.11.5"
       },
       "vmSize": {
-        "value": "Standard_D4s_v3"
+        "value": "Standard_B4ms"
       },
       "nodeCount": {
         "value": 31

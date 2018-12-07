@@ -30,13 +30,24 @@ jobs:
     aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
-  - template: ../tasks/helm-installer.yaml
-  - template: ../steps/deploy-aks.yaml
+  - template: ../tasks/deploy-aks-arm.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksParametersFile: $(aksParametersFile)
+      aksServicePrincipalId: $(aksServicePrincipalId)
+      aksServicePrincipalSecret: $(aksServicePrincipalSecret)
+  - template: ../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
-      aksParametersFile: $(aksParametersFile)
+      helmVersion: $(helmVersion)
+  - template: ../tasks/dashboard-rbac.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
 
 - job: InstallTraefik
   dependsOn: DeployAKS
@@ -44,11 +55,12 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/configure-helm.yaml
+  - template: ../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
   - template: ../tasks/traefik.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -62,11 +74,6 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/configure-helm.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
   - template: ../tasks/kured.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -86,11 +93,12 @@ jobs:
     svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
     svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
   steps:
-  - template: ../steps/configure-helm.yaml
+  - template: ../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
   - template: ../steps/service-catalog.yml
     parameters:
       serviceConnection: $(serviceConnection)

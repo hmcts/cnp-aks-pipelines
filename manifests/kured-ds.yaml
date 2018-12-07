@@ -48,6 +48,8 @@ spec:
             - --lock-annotation=weave.works/kured-node-lock
             - --period=24h
             - --reboot-sentinel=/var/run/reboot-required
+            - --slack-hook-url=https://hooks.slack.com/services/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
+            - --slack-username=cnp-aks-sandbox-cluster
           env:
             - name: KURED_NODE_ID
               valueFrom:
