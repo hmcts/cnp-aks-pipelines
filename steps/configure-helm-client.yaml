@@ -9,6 +9,7 @@ steps:
   displayName: 'Install Helm ${{ parameters.helmVersion }}'
   inputs:
       helmVersion: ${{ parameters.helmVersion }}
+      checkLatestHelmVersion: false
       installKubectl: false
 
 - task: HelmDeploy@0
