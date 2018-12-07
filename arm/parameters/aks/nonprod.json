@@ -27,7 +27,7 @@
         "value": "cnp-aks-cl-cnp-aks-rg-1c4f07"
       },
       "sshPublicKey": {
-        "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqR1v0fYAvUGPlL8tjjeiGPxmUWC8JRsq1RxOCqjEFX1cpitI5AGw4fUCpykaH/SJ3GFFKH8xC3h0ypmn7bFPOS25J/ihKo0lk4gnGKJCE/esKG3nNxRabaUuWg1haxde8bhIG1fKBB9F8wScKzGSXfrihsH5JJJ4ITke5zs2BdNU2ygqm98b5vY+PekZKPIFLKFRQIFkW5H5bm7/0wwbCmvYGF65Jx9/wJW7FM1cfWD/9ScLGYL3iub+rQXqumBbbd4bYhdJvUek/QwIEgTTJCNXv97GpZr/KsWd/6YP2WzjSMy7SdTuBGgyVgaQCEMCBbY9XX+FfN6gY6Txw4/GB"
+        "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcEzLBwPV771KC/iRQtmJaQwMpOR6YhWnKpId7eIgfNV1N0ww0vCur8hZSb4XZKkJr7NUQjAzgLvbS774QmxUYw+lfGfJpsnrXY4nakugJqK9fK3MFJ4lK3YPwHrjzFLlLZ+aVvGGxVh2YB4+ZlutojT/Wu/wL8kCk+IFm4YR7VXObXsaq4Izv0pdt0N/zq2gn59Tn042PwPaE7+rsqgkr8lSIWdHFbGD4PvndS4+fqdHGe0VhedUkbijLd8ikcK/haOXe4RTP13EYjCgyzY93LaQ4JCJyoI3FQS6ttkFR20k/KbBtL02s6+FcS8zF6zdoOSgg1eL8FM3wCMfhNuUN"
       },
       "servicePrincipalId": {
         "value": ""
