@@ -74,11 +74,28 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../tasks/kured.yaml
+  - task: AzureKeyVault@1
+    displayName: 'Get secrets from Keyvault'
+    inputs:
+      azureSubscription: $(serviceConnection)
+      keyVaultName: $(keyvaultName)
+      secretsFilter: 'kured-slack-webhook-url'
+  - template: ../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
+  - task: AzureCLI@1
+    displayName: 'Configure Helm for ACR'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az configure --defaults acr=$(acrName)
+        az acr helm repo add --name $(acrName)
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
+        helm upgrade kured $(acrName)/kured --install --set slackWebhookUrl=$(kured-slack-webhook-url),slackUsername=$(aksClusterName)
 
 - job: InstallServiceCatalog
   dependsOn:
