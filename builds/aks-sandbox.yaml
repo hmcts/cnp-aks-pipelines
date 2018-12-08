@@ -11,7 +11,8 @@ variables:
   serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'sandbox.json'
   helmVersion: '2.11.0'
-  
+  acrName: hmcts
+
 jobs:
 - job: Keyvault
   pool:
