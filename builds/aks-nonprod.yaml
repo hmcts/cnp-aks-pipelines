@@ -10,7 +10,7 @@ variables:
   keyvaultName: 'infra-vault-nonprod'
   serviceConnection: 'azurerm-nonprod'
   aksParametersFile: 'nonprod.json'
-  helmVersion: '2.11.0'
+  helmVersion: '2.12.0'
   
 jobs:
 - job: Keyvault
