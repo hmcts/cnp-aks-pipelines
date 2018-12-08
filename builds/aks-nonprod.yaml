@@ -9,7 +9,7 @@ variables:
   aksClusterName: 'cnp-aks-cluster'
   keyvaultName: 'infra-vault-nonprod'
   serviceConnection: 'azurerm-nonprod'
-  aksParametersFile: 'nonprod.json'
+  aksParametersFile: 'arm/parameters/aks/nonprod.json'
   helmVersion: '2.12.0'
   
 jobs:
