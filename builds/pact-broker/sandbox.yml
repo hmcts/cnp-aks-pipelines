@@ -2,12 +2,13 @@ pool:
   vmImage: "Ubuntu 16.04"
 
 variables:
+  serviceConnection: azurerm-sandbox
   kubectlConnectionType: "Azure Resource Manager"
   aksResourceGroup: "cnp-aks-mgmt-rg"
   clusterName: "cnp-aks-mgmt-sandbox-cluster"
   keyvaultName: "infra-vault-sandbox"
+  ingressHost: pact-broker.service.core-compute-saat.internal
+  helmVersion: '2.12.0'
 
 steps:
-  - template: template.yml
-    parameters:
-      serviceConnection: azurerm-sandbox
+  - template: ../../jobs/install-pact-broker.yml

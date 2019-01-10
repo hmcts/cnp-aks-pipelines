@@ -2,12 +2,14 @@ pool:
   vmImage: "Ubuntu 16.04"
 
 variables:
+  serviceConnection: azurerm-prod
   kubectlConnectionType: "Azure Resource Manager"
   aksResourceGroup: "cnp-aks-mgmt-rg"
   clusterName: "cnp-aks-mgmt-prod-cluster"
   keyvaultName: "infra-vault-prod"
+  ingressHost: chart-pact-broker.service.core-compute-preview.internal
+  helmVersion: '2.12.0'
 
 steps:
-  - template: template.yml
-    parameters:
-      serviceConnection: azurerm-prod
+  - template: ../../jobs/install-pact-broker.yml
+      
