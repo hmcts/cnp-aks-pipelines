@@ -1,3 +1,6 @@
+name: Install Pact Broker (prod)
+trigger: none
+
 pool:
   vmImage: "Ubuntu 16.04"
 
@@ -11,5 +14,5 @@ variables:
   helmVersion: '2.12.0'
 
 steps:
-  - template: ../../jobs/install-pact-broker.yml
+  - template: ../../steps/install-pact-broker.yml
       
