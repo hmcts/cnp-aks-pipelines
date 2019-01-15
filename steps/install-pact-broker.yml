@@ -1,0 +1,29 @@
+steps:
+  - task: AzureKeyVault@1
+    displayName: "Get secrets from Keyvault"
+    inputs:
+      azureSubscription: $(serviceConnection)
+      keyVaultName: $(keyvaultName)
+      secretsFilter: "pact-db-password,pact-db-user"
+
+  - template: ../steps/configure-helm-client.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(clusterName)
+      helmVersion: $(helmVersion)
+
+  - task: HelmDeploy@0
+    displayName: "Pact Broker - Install"
+    enabled: true
+    inputs:
+      connectionType: $(kubectlConnectionType)
+      azureSubscription: $(serviceConnection)
+      azureResourceGroup: $(aksResourceGroup)
+      kubernetesCluster: $(clusterName)
+      command: "install"
+      chartType: "Name"
+      chartName: "hmcts/pact-broker"
+      namespace: "pact-broker"
+      releaseName: "pact-broker"
+      overrideValues: "postgresql.postgresqlPassword=$(pact-db-password),postgresql.postgresqlUsername=$(pact-db-user),ingressHost=$(ingressHost)"
