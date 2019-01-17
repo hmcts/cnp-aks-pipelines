@@ -14,6 +14,6 @@ steps:
       for repo in $REPOSITORIES
       do
         printf "Deleting dangling images for $repo\n"
-        az acr repository show-manifests --name $REGISTRY --repository $repo  --query "[?!(tags[?'*'])].digest" -o tsv \
-          | xargs -I% az acr repository delete --name $REGISTRY --image $repo@% --yes
+        az acr repository show-manifests --name ${{ parameters.acrName }} --repository $repo  --query "[?!(tags[?'*'])].digest" -o tsv \
+          | xargs -I% az acr repository delete --name ${{ parameters.acrName }} --image $repo@% --yes
       done
