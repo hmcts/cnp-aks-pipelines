@@ -1,5 +1,5 @@
 parameters:
-  azureSubscription: ''
+  serviceConnection: ''
   acrName: ''
   acrResourceGroup: ''
 
@@ -7,7 +7,7 @@ steps:
 - task: AzureCLI@1
   displayName: 'Delete dangling image layers'
   inputs:
-    azureSubscription:  ${{ parameters.azureSubscription }}
+    azureSubscription:  ${{ parameters.serviceConnection }}
     scriptLocation: 'inlineScript'
     inlineScript: |
       REPOSITORIES=$(az acr repository list --name ${{ parameters.acrName }} --resource-group ${{ parameters.acrResourceGroup }} -o tsv)
