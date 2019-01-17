@@ -3,6 +3,7 @@ parameters:
   acrName: ''
   acrResourceGroup: ''
 
+steps:
 - task: AzureCLI@1
   displayName: 'Delete dangling image layers'
   inputs:
