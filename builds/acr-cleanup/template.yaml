@@ -7,7 +7,7 @@ jobs:
 - job: ACR_Cleanup
   pool:
     vmImage: 'Ubuntu 16.04'
-  timeoutInMinutes: 180
+  timeoutInMinutes: 600
   steps:
   - task: AzureCLI@1
     displayName: 'Delete dangling image layers'
