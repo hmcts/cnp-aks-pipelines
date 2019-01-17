@@ -13,5 +13,5 @@ steps:
       REPOSITORIES=$(az acr repository list --name ${{ parameters.acrName }} --resource-group ${{ parameters.acrResourceGroup }} -o tsv)
       for repo in $REPOSITORIES
       do
-        printf $repo
+        printf "$repo\n"
       done
