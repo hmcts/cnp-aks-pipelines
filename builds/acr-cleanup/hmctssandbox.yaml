@@ -1,15 +1,12 @@
 name: ACR Cleanup (hmctssandbox)
 trigger: none
 
-pool:
-  vmImage: "Ubuntu 16.04"
-
 variables:
   serviceConnection: azurerm-sandbox
   acrName: "hmctssandbox"
   acrResourceGroup: "cnp-acr-rg"
 
-steps:
+jobs:
   - template: template.yaml
     parameters:
       serviceConnection: $(serviceConnection)
