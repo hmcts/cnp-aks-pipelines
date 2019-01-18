@@ -1,0 +1,14 @@
+name: ACR Cleanup (hmcts)
+trigger: none
+
+variables:
+  serviceConnection: azurerm-nonprod
+  acrName: "hmcts"
+  acrResourceGroup: "cnp-acr-rg"
+
+jobs:
+  - template: template.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      acrName: $(acrName)
+      acrResourceGroup: $(acrResourceGroup)

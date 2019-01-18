@@ -1,0 +1,14 @@
+name: ACR Cleanup (hmctssandbox)
+trigger: none
+
+variables:
+  serviceConnection: azurerm-sandbox
+  acrName: "hmctssandbox"
+  acrResourceGroup: "cnp-acr-rg"
+
+jobs:
+  - template: template.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      acrName: $(acrName)
+      acrResourceGroup: $(acrResourceGroup)
