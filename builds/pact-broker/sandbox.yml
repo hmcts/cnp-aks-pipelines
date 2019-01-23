@@ -10,8 +10,8 @@ variables:
   aksResourceGroup: "cnp-aks-mgmt-rg"
   clusterName: "cnp-aks-mgmt-sandbox-cluster"
   keyvaultName: "infra-vault-sandbox"
-  ingressHost: pact-broker.service.core-compute-saat.internal
-  resourceGroup: "pact-broker-mgmt"
+  ingressHost: sandbox-pact-broker.platform.hmcts.net
+  resourceGroup: "pact-broker-sandbox-mgmt"
   helmVersion: '2.12.0'
 
 steps:
