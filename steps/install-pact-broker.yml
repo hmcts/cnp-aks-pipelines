@@ -26,4 +26,5 @@ steps:
       chartName: "hmcts/pact-broker"
       namespace: "pact-broker"
       releaseName: "pact-broker"
+      arguments: "--timeout 900"
       overrideValues: "resourceGroup=$(resourceGroup),ingressHost=$(ingressHost)"
