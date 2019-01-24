@@ -6,6 +6,8 @@ pool:
 
 variables:
   serviceConnection: azurerm-sandbox
+  acrServiceConnection: azurerm-nonprod
+  acrName: hmcts
   kubectlConnectionType: "Azure Resource Manager"
   aksResourceGroup: "cnp-aks-mgmt-rg"
   clusterName: "cnp-aks-mgmt-sandbox-cluster"
