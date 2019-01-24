@@ -6,6 +6,13 @@ steps:
       aksClusterName: $(clusterName)
       helmVersion: $(helmVersion)
 
+  - task: AzureCLI@1
+    displayName: 'Configure Helm for ACR'
+    inputs:
+      azureSubscription: $(acrServiceConnection)
+      scriptLocation: 'inlineScript'
+      inlineScript: az acr helm repo add --name $(acrName)
+
   - task: HelmDeploy@0
     displayName: "Pact Broker - Install"
     enabled: true
