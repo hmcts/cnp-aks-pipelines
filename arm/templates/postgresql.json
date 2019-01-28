@@ -12,20 +12,6 @@
       },
       "location": {
         "type":"string",
-        "allowedValues":[
-          "East Asia",
-          "East US 2",
-          "East US",
-          "Japan East",
-          "Japan West",
-          "North Central US",
-          "North Europe",
-          "South Central US",
-          "Southeast Asia",
-          "West Europe",
-          "West US",
-          "UK South"
-        ],
         "defaultValue":"UK South"
       },
       "serverName": {
@@ -35,7 +21,7 @@
       },
       "skuCapacity": {
         "type":"string",
-        "defaultValue": 2
+        "defaultValue": "2"
       },
       "skuFamily": {
         "type":"string",
@@ -46,20 +32,6 @@
       },
       "skuName": {
         "type":"string",
-        "allowedValues":[
-          "B_Gen5_1",
-          "B_Gen5_2",
-          "GP_Gen5_2",
-          "GP_Gen5_4",
-          "GP_Gen5_8",
-          "GP_Gen5_16",
-          "GP_Gen5_32",
-          "MO_Gen5_2",
-          "MO_Gen5_4",
-          "MO_Gen5_8",
-          "MO_Gen5_16",
-          "MO_Gen5_32"
-        ],
         "defaultValue":"GP_Gen5_2"
       },
       "skuSizeMB": {
@@ -68,25 +40,15 @@
       },
       "skuTier": {
         "type":"string",
-        "allowedValues":[
-          "Basic",
-          "GeneralPurpose",
-          "MemoryOptimized"
-        ],
         "defaultValue":"GeneralPurpose"
       },
       "version": {
         "type":"string",
-        "allowedValues":[
-          "9.5",
-          "9.6",
-          "10"
-        ],
-        "defaultValue":"9.6"
+        "defaultValue":"10"
       },
       "backupRetentionDays": {
         "type": "string",
-        "defaultValue": 7
+        "defaultValue": "7"
       },
       "geoRedundantBackup": {
         "type": "string",
