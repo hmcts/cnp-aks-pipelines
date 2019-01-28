@@ -68,10 +68,12 @@
         "type": "string"
       },
       "charset": {
-        "type": "string"
+        "type": "string",
+        "defaultValue": "utf8"
       },
       "collation": {
-        "type": "string"
+        "type": "string",
+        "defaultValue": "en_GB"
       },
       "dbRules": {
         "type": "string"
