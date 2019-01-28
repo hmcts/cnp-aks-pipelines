@@ -5,7 +5,7 @@
     "administratorLogin": {
       "value": ""
     },
-    "administratorPassword": {
+    "administratorLoginPassword": {
       "value": ""
     },
     "serverName": {

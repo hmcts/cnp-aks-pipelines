@@ -16,4 +16,4 @@ steps:
     templateLocation: 'Linked artifact'
     csmFile: 'arm/templates/postgresql.json'
     csmParametersFile: '${{ parameters.postgresqlParametersFile }}'
-    overrideParameters: '-administratorLogin ${{ parameters.pactDbUser }} -administratorPassword ${{ parameters.pactDbPassword }}'
+    overrideParameters: '-administratorLogin ${{ parameters.pactDbUser }} -administratorLoginPassword ${{ parameters.pactDbPassword }}'
