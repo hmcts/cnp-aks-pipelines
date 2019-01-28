@@ -144,6 +144,6 @@
       }
     ],
     "variables": {
-        "dbRules": "[parameters('dbRules')]"
+        "dbRules": "[base64ToJson(base64(parameters('dbRules')))]"
     }
 }
