@@ -10,7 +10,7 @@ steps:
   displayName: 'Deploy Postgresql DB'
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
-    action: 'Create Or Update Postgresql DB'
+    action: 'Create Or Update Resource Group'
     resourceGroupName: ${{ parameters.resourceGroup }}
     location: 'UK South'
     templateLocation: 'Linked artifact'
