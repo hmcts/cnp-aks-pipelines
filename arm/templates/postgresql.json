@@ -84,7 +84,7 @@
     },
     "resources": [
       {
-        "apiVersion": "2017-12-01-preview",
+        "apiVersion": "2017-12-01",
         "kind": "",
         "location": "[parameters('location')]",
         "name": "[parameters('serverName')]",
@@ -97,7 +97,8 @@
             "storageMB": "[parameters('skuSizeMB')]",
             "backupRetentionDays": "[int(parameters('backupRetentionDays'))]",
             "geoRedundantBackup": "[parameters('geoRedundantBackup')]"
-          }
+          },
+          "createMode": "Default"
         },
         "sku": {
           "name": "[parameters('skuName')]",
@@ -114,7 +115,7 @@
           {
             "name": "[parameters('dbName')]",
             "type": "databases",
-            "apiVersion": "2017-12-01-preview",
+            "apiVersion": "2017-12-01",
             "properties": {
               "charset": "[parameters('charset')]",
               "collation": "[parameters('collation')]"
@@ -127,7 +128,7 @@
       },
       {
         "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
-        "apiVersion": "2017-12-01-preview",
+        "apiVersion": "2017-12-01",
         "dependsOn": [
           "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
         ],
