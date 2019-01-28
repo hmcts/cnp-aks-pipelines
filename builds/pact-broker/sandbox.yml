@@ -1,9 +1,6 @@
 name: Install Pact Broker (sandbox)
 trigger: none
 
-pool:
-  vmImage: "Ubuntu 16.04"
-
 variables:
   serviceConnection: azurerm-sandbox
   acrServiceConnection: azurerm-nonprod
@@ -21,9 +18,10 @@ variables:
   postgresqlDatabase: "pact"
   postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
 
-
 jobs:
 - job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
   steps:
   - template: ../steps/keyvault-ci.yaml
     parameters:
@@ -32,6 +30,8 @@ jobs:
 
 - job: DeployPactBroker
   dependsOn: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
   variables:
     pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
     pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
