@@ -15,6 +15,50 @@ variables:
   ingressHost: sandbox-pact-broker.platform.hmcts.net
   resourceGroup: "pact-broker-sandbox-mgmt"
   helmVersion: '2.12.0'
+  tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  subscriptionId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  postgresqlHost: "pact-broker-mgmt-sandbox.postgres.database.azure.com"
+  postgresqlDatabase: "pact"
+  postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
 
-steps:
+
+jobs:
+- job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/keyvault-ci.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      keyvaultName: $(keyvaultName)
+
+- job: DeployPactBroker
+  dependsOn: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
+    pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
+  steps:
+  - template: ../../tasks/deploy-postgresql-arm.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      resourceGroup: $(resourceGroup)
+      postgresqlParametersFile: $(postgresqlParametersFile)
+      pactDbUser: $(pactDbUser)
+      pactDbPassword: $(pactDbPassword)
   - template: ../../steps/install-pact-broker.yml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      acrServiceConnection: $(acrServiceConnection)
+      acrName: $(acrName)
+      kubectlConnectionType: $(kubectlConnectionType)
+      aksResourceGroup: $(aksResourceGroup)
+      clusterName: $(clusterName)
+      keyvaultName: $(keyvaultName)
+      ingressHost: $(ingressHost)
+      resourceGroup: $(resourceGroup)
+      helmVersion: $(helmVersion)
+      postgresqlParametersFile: $(postgresqlParametersFile)
+      tenantId: $(tenantId)
+      subscriptionId: $(subscriptionId)

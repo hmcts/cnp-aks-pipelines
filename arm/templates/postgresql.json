@@ -1,0 +1,179 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "administratorLogin": {
+        "type": "string",
+        "minLength":1,
+        "maxLength":16
+      },
+      "administratorLoginPassword": {
+        "type": "securestring"
+      },
+      "location": {
+        "type":"string",
+        "allowedValues":[
+          "East Asia",
+          "East US 2",
+          "East US",
+          "Japan East",
+          "Japan West",
+          "North Central US",
+          "North Europe",
+          "South Central US",
+          "Southeast Asia",
+          "West Europe",
+          "West US",
+          "UK South"
+        ],
+        "defaultValue":"UK South"
+      },
+      "serverName": {
+        "type": "string",
+        "minLength":2,
+        "maxLength":63
+      },
+      "skuCapacity": {
+        "type":"string",
+        "defaultValue": 2
+      },
+      "skuFamily": {
+        "type":"string",
+        "allowedValues":[
+          "Gen5"
+        ],
+        "defaultValue":"Gen5"
+      },
+      "skuName": {
+        "type":"string",
+        "allowedValues":[
+          "B_Gen5_1",
+          "B_Gen5_2",
+          "GP_Gen5_2",
+          "GP_Gen5_4",
+          "GP_Gen5_8",
+          "GP_Gen5_16",
+          "GP_Gen5_32",
+          "MO_Gen5_2",
+          "MO_Gen5_4",
+          "MO_Gen5_8",
+          "MO_Gen5_16",
+          "MO_Gen5_32"
+        ],
+        "defaultValue":"GP_Gen5_2"
+      },
+      "skuSizeMB": {
+        "type":"string",
+        "defaultValue":"51200"
+      },
+      "skuTier": {
+        "type":"string",
+        "allowedValues":[
+          "Basic",
+          "GeneralPurpose",
+          "MemoryOptimized"
+        ],
+        "defaultValue":"GeneralPurpose"
+      },
+      "version": {
+        "type":"string",
+        "allowedValues":[
+          "9.5",
+          "9.6",
+          "10"
+        ],
+        "defaultValue":"9.6"
+      },
+      "backupRetentionDays": {
+        "type": "string",
+        "defaultValue": 7
+      },
+      "geoRedundantBackup": {
+        "type": "string",
+        "defaultValue": "Enabled"
+      },
+      "sslEnforcement": {
+        "type": "string",
+        "defaultValue": "Enabled"
+      },
+      "env": {
+        "type": "string",
+        "metadata": {
+          "description": "The tag"
+        }
+      },
+      "dbName": {
+        "type": "string"
+      },
+      "charset": {
+        "type": "string"
+      },
+      "collation": {
+        "type": "string"
+      },
+      "dbRules": {
+        "type": "string"
+      }
+    },
+    "resources": [
+      {
+        "apiVersion": "2017-12-01-preview",
+        "kind": "",
+        "location": "[parameters('location')]",
+        "name": "[parameters('serverName')]",
+        "properties": {
+          "version": "[parameters('version')]",
+          "administratorLogin": "[parameters('administratorLogin')]",
+          "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+          "sslEnforcement": "[parameters('sslEnforcement')]",
+          "storageProfile": {
+            "storageMB": "[parameters('skuSizeMB')]",
+            "backupRetentionDays": "[int(parameters('backupRetentionDays'))]",
+            "geoRedundantBackup": "[parameters('geoRedundantBackup')]"
+          }
+        },
+        "sku": {
+          "name": "[parameters('skuName')]",
+          "tier": "[parameters('skuTier')]",
+          "capacity": "[parameters('skuCapacity')]",
+          "size": "[parameters('skuSizeMB')]",
+          "family": "[parameters('skuFamily')]"
+        },
+        "type": "Microsoft.DBforPostgreSQL/servers",
+        "resources":[
+          {
+            "name": "[parameters('dbName')]",
+            "type": "databases",
+            "apiVersion": "2017-12-01-preview",
+            "properties": {
+              "charset": "[parameters('charset')]",
+              "collation": "[parameters('collation')]"
+            },
+            "dependsOn": [
+              "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
+        "apiVersion": "2017-12-01-preview",
+        "dependsOn": [
+          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+        ],
+        "name": "[concat(parameters('serverName'), '/', variables('dbRules')[copyIndex()].rule_name)]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "ignoreMissingVnetServiceEndpoint": true,
+          "virtualNetworkSubnetId": "[variables('dbRules')[copyIndex()].subnet_id]"
+        },
+        "copy": {
+          "name": "storagecopy",
+          "count": "[length(variables('dbRules'))]"
+        }
+      }
+    ],
+    "variables": {
+        "dbRules": "[base64ToJson(parameters('dbRules'))]"
+    }
+}
