@@ -9,7 +9,7 @@
       "value": ""
     },
     "serverName": {
-      "value": "pact-broker-mgmt-sandbox.postgres.database.azure.com"
+      "value": "pact-broker-mgmt-sandbox"
     },
     "env": {
       "value": "mgmt-sandbox"
