@@ -17,6 +17,7 @@ variables:
   postgresqlHost: "pact-broker-mgmt-sandbox.postgres.database.azure.com"
   postgresqlDatabase: "pact"
   postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
+  installPostgresql: false
 
 jobs:
 - job: Keyvault
@@ -43,6 +44,7 @@ jobs:
       postgresqlParametersFile: $(postgresqlParametersFile)
       pactDbUser: $(pactDbUser)
       pactDbPassword: $(pactDbPassword)
+      enabled: $(installPostgresql)
   - template: ../../steps/install-pact-broker.yml
     parameters:
       serviceConnection: $(serviceConnection)
