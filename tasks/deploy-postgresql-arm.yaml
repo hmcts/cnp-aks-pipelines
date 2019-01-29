@@ -4,12 +4,12 @@ parameters:
   postgresqlParametersFile: ''
   pactDbUser: ''
   pactDbPassword: ''
-  enabled: false
+  installPostgresql: false
 
 steps:
 - task: AzureResourceGroupDeployment@2
   displayName: 'Deploy Postgresql DB'
-  enabled: ${{ parameters.enabled }}
+  enabled: ${{ parameters.installPostgresql }}
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     action: 'Create Or Update Resource Group'
