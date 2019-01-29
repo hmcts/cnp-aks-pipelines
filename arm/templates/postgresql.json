@@ -130,7 +130,7 @@
             "dependsOn": [
               "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
             ],
-            "name": "[concat(parameters('serverName'), '/', variables('dbRules').rule_name)]",
+            "name": "[variables('dbRules').rule_name)]",
             "location": "[parameters('location')]",
             "properties": {
               "ignoreMissingVnetServiceEndpoint": true,
