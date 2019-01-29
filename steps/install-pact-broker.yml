@@ -23,14 +23,13 @@ steps:
       kubernetesCluster: $(clusterName)
       command: "install"
       chartType: "Name"
-      chartName: "pact-broker"
+      chartName: "hmcts/pact-broker"
       namespace: "pact-broker"
       releaseName: "pact-broker"
       arguments: "--timeout 300"
-      overrideValues: >-
-        resourceGroup=$(resourceGroup),
-        ingressHost=$(ingressHost),
-        tenantId=$(tenantId),
-        subscriptionId=$(subscriptionId),
-        postgresqlHost=$(postgresqlHost),
-        postgresqlDatabase=$(postgresqlDatabase)
+      overrideValues: "resourceGroup=$(resourceGroup),\
+        ingressHost=$(ingressHost),\
+        tenantId=$(tenantId),\
+        subscriptionId=$(subscriptionId),\
+        postgresqlHost=$(postgresqlHost),\
+        postgresqlDatabase=$(postgresqlDatabase)"
