@@ -128,7 +128,7 @@
         "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
         "apiVersion": "2017-12-01",
         "dependsOn": [
-          "[resourceId('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+          "[resourceId('Microsoft.DBforPostgreSQL/servers/databases', parameters('dbName'))]"
         ],
         "name": "[concat(parameters('serverName'), '/', variables('dbRules').rule_name)]",
         "location": "[parameters('location')]",
