@@ -113,18 +113,6 @@
 	    }
       },
       {
-        "name": "[concat(parameters('serverName'), '/', parameters('dbName'))]",
-        "type": "Microsoft.DBforPostgreSQL/servers/databases",
-        "apiVersion": "2017-12-01",
-        "properties": {
-          "charset": "[parameters('charset')]",
-          "collation": "[parameters('collation')]"
-        },
-        "dependsOn": [
-          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
-        ]
-      },
-      {
         "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
         "apiVersion": "2017-12-01",
         "dependsOn": [
