@@ -44,7 +44,7 @@ jobs:
       postgresqlParametersFile: $(postgresqlParametersFile)
       pactDbUser: $(pactDbUser)
       pactDbPassword: $(pactDbPassword)
-      enabled: $(installPostgresql)
+      enabled: false
   - template: ../../steps/install-pact-broker.yml
     parameters:
       serviceConnection: $(serviceConnection)
