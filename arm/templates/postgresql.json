@@ -69,11 +69,11 @@
       },
       "charset": {
         "type": "string",
-        "defaultValue": "utf8"
+        "defaultValue": "UTF8"
       },
       "collation": {
         "type": "string",
-        "defaultValue": "en_GB"
+        "defaultValue": "en_GB.UTF8"
       },
       "dbRules": {
         "type": "string"
@@ -123,6 +123,19 @@
         "dependsOn": [
           "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
         ]
+      },
+      {
+        "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
+        "apiVersion": "2017-12-01",
+        "dependsOn": [
+          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+        ],
+        "name": "[concat(parameters('serverName'), '/', variables('dbRules').rule_name)]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "ignoreMissingVnetServiceEndpoint": true,
+          "virtualNetworkSubnetId": "[variables('dbRules').subnet_id]"
+        }
       }
     ],
     "variables": {
