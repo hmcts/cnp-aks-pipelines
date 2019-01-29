@@ -123,25 +123,25 @@
             "dependsOn": [
               "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
             ]
-          }
+          },
+          {
+            "type": "virtualNetworkRules",
+            "apiVersion": "2017-12-01",
+            "dependsOn": [
+              "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+            ],
+            "name": "[concat(parameters('serverName'), '/', variables('dbRules')[copyIndex()].rule_name)]",
+            "location": "[parameters('location')]",
+            "properties": {
+              "ignoreMissingVnetServiceEndpoint": true,
+              "virtualNetworkSubnetId": "[variables('dbRules')[copyIndex()].subnet_id]"
+            },
+            "copy": {
+              "name": "storagecopy",
+              "count": "[length(variables('dbRules'))]"
+            }
+          }    
         ]
-      },
-      {
-        "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
-        "apiVersion": "2017-12-01",
-        "dependsOn": [
-          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
-        ],
-        "name": "[concat(parameters('serverName'), '/', variables('dbRules')[copyIndex()].rule_name)]",
-        "location": "[parameters('location')]",
-        "properties": {
-          "ignoreMissingVnetServiceEndpoint": true,
-          "virtualNetworkSubnetId": "[variables('dbRules')[copyIndex()].subnet_id]"
-        },
-        "copy": {
-          "name": "storagecopy",
-          "count": "[length(variables('dbRules'))]"
-        }
       }
     ],
     "variables": {
