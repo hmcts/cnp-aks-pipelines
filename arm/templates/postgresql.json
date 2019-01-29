@@ -134,11 +134,7 @@
             "location": "[parameters('location')]",
             "properties": {
               "ignoreMissingVnetServiceEndpoint": true,
-              "virtualNetworkSubnetId": "[variables('dbRules')[copyIndex()].subnet_id]"
-            },
-            "copy": {
-              "name": "storagecopy",
-              "count": "[length(variables('dbRules'))]"
+              "virtualNetworkSubnetId": "[variables('dbRules').subnet_id]"
             }
           }    
         ]
