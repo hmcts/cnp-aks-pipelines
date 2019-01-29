@@ -121,14 +121,14 @@
           "collation": "[parameters('collation')]"
         },
         "dependsOn": [
-          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+          "[concat('Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/', variables('dbRules').rule_name))]"
         ]
       },
       {
         "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
         "apiVersion": "2017-12-01",
         "dependsOn": [
-          "[concat('Microsoft.DBforPostgreSQL/servers/databases/', parameters('serverName'), '/', parameters('dbName'))]"
+          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
         ],
         "name": "[concat(parameters('serverName'), '/', variables('dbRules').rule_name)]",
         "location": "[parameters('location')]",
