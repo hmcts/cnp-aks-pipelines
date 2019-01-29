@@ -113,10 +113,22 @@
 	    }
       },
       {
+        "name": "[concat(parameters('serverName'), '/', parameters('dbName'))]",
+        "type": "Microsoft.DBforPostgreSQL/servers/databases",
+        "apiVersion": "2017-12-01",
+        "properties": {
+          "charset": "[parameters('charset')]",
+          "collation": "[parameters('collation')]"
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+        ]
+      },
+      {
         "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
         "apiVersion": "2017-12-01",
         "dependsOn": [
-          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+          "[resourceId('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
         ],
         "name": "[concat(parameters('serverName'), '/', variables('dbRules').rule_name)]",
         "location": "[parameters('location')]",
