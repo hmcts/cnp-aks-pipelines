@@ -121,7 +121,7 @@
           "collation": "[parameters('collation')]"
         },
         "dependsOn": [
-          "[concat('Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/', variables('dbRules').rule_name))]"
+          "[concat('Microsoft.DBforPostgreSQL/servers/virtualNetworkRules/', variables('dbRules').rule_name)]"
         ]
       },
       {
