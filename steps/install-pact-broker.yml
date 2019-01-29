@@ -23,7 +23,7 @@ steps:
       kubernetesCluster: $(clusterName)
       command: "install"
       chartType: "Name"
-      chartName: "hmcts/pact-broker"
+      chartName: "pact-broker"
       namespace: "pact-broker"
       releaseName: "pact-broker"
       arguments: "--timeout 300"
