@@ -13,7 +13,7 @@ variables:
   resourceGroup: "pact-broker-mgmt-sandbox"
   helmVersion: '2.12.0'
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
-  subscriptionId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  subscriptionId: "bf308a5c-0624-4334-8ff8-8dca9fd43783"
   postgresqlHost: "pact-broker-mgmt-sandbox.postgres.database.azure.com"
   postgresqlDatabase: "pact"
   postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
