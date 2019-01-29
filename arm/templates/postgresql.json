@@ -113,7 +113,7 @@
 	    },
         "resources":[
           {
-            "name": "[parameters('dbName')]",
+            "name": "[concat(parameters('serverName'), parameters('dbName'))]",
             "type": "databases",
             "apiVersion": "2017-12-01",
             "properties": {
@@ -130,7 +130,7 @@
             "dependsOn": [
               "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
             ],
-            "name": "[variables('dbRules').rule_name]",
+            "name": "[concat(parameters('serverName'), variables('dbRules').rule_name)]",
             "location": "[parameters('location')]",
             "properties": {
               "ignoreMissingVnetServiceEndpoint": true,
