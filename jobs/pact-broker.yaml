@@ -14,6 +14,7 @@ parameters:
   postgresqlHost: ''
   postgresqlDatabase: ''
   postgresqlParametersFile: ''
+  installPostgresql: false
 
 jobs:
 - job: Keyvault
@@ -40,7 +41,7 @@ jobs:
       postgresqlParametersFile: ${{ parameters.postgresqlParametersFile }}
       pactDbUser: $(pactDbUser)
       pactDbPassword: $(pactDbPassword)
-      installPostgresql: false
+      installPostgresql: ${{ parameters.installPostgresql }}
   - template: ../steps/install-pact-broker.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}

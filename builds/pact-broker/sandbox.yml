@@ -18,6 +18,7 @@ variables:
   postgresqlDatabase: "pact"
   postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
   postgresqlServerName: "pact-broker-mgmt-sandbox"
+  installPostgresql: false
 
 jobs:
 - template: ../../jobs/pact-broker.yaml
@@ -38,3 +39,4 @@ jobs:
     postgresqlDatabase: $(postgresqlDatabase)
     postgresqlParametersFile: $(postgresqlParametersFile)
     postgresqlServerName: $(postgresqlServerName)
+    installPostgresql: $(installPostgresql)
