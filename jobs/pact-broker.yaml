@@ -20,7 +20,7 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../../steps/keyvault-ci.yaml
+  - template: ../steps/keyvault-ci.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       keyvaultName: ${{ parameters.keyvaultName }}
