@@ -36,6 +36,7 @@ jobs:
   variables:
     pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
     pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
+    installPostgresql: $(installPostgresql)
   steps:
   - template: ../../tasks/deploy-postgresql-arm.yaml
     parameters:
