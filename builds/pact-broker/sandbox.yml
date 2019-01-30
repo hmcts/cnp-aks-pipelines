@@ -19,44 +19,20 @@ variables:
   postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
 
 jobs:
-- job: Keyvault
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - template: ../../steps/keyvault-ci.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      keyvaultName: $(keyvaultName)
-
-- job: DeployPactBroker
-  dependsOn: Keyvault
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  variables:
-    pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
-    pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
-  steps:
-  - template: ../../tasks/deploy-postgresql-arm.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      resourceGroup: $(resourceGroup)
-      postgresqlParametersFile: $(postgresqlParametersFile)
-      pactDbUser: $(pactDbUser)
-      pactDbPassword: $(pactDbPassword)
-  - template: ../../steps/install-pact-broker.yml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      acrServiceConnection: $(acrServiceConnection)
-      acrName: $(acrName)
-      kubectlConnectionType: $(kubectlConnectionType)
-      aksResourceGroup: $(aksResourceGroup)
-      clusterName: $(clusterName)
-      keyvaultName: $(keyvaultName)
-      ingressHost: $(ingressHost)
-      resourceGroup: $(resourceGroup)
-      helmVersion: $(helmVersion)
-      postgresqlParametersFile: $(postgresqlParametersFile)
-      tenantId: $(tenantId)
-      subscriptionId: $(subscriptionId)
-      postgresqlHost: $(postgresqlHost)
-      postgresqlDatabase: $(postgresqlDatabase)
+- template: ../../jobs/pact-broker.yaml
+  parameters:
+    serviceConnection: $(serviceConnection)
+    acrServiceConnection: $(acrServiceConnection)
+    acrName: $(acrName)
+    kubectlConnectionType: $(kubectlConnectionType)
+    aksResourceGroup: $(aksResourceGroup)
+    clusterName: $(clusterName)
+    keyvaultName: $(keyvaultName)
+    ingressHost: $(ingressHost)
+    resourceGroup: $(resourceGroup)
+    helmVersion: $(helmVersion)
+    tenantId: $(tenantId)
+    subscriptionId: $(subscriptionId)
+    postgresqlHost: $(postgresqlHost)
+    postgresqlDatabase: $(postgresqlDatabase)
+    postgresqlParametersFile: $(postgresqlParametersFile)
