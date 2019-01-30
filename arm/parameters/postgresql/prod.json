@@ -1,0 +1,27 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "administratorLogin": {
+      "value": ""
+    },
+    "administratorLoginPassword": {
+      "value": ""
+    },
+    "serverName": {
+      "value": "pact-broker-mgmt"
+    },
+    "env": {
+      "value": "mgmt-prod"
+    },
+    "dbName": {
+      "value": "pact"
+    },
+    "dbRules": {
+      "value": "{'rule_name': 'mgmt-prod', 'subnet_id': '/subscriptions/8999dec3-0104-4a27-94ee-6588559729d1/resourceGroups/mgmt-infra-prod/providers/Microsoft.Network/virtualNetworks/mgmt-infra-prod/subnets/aks'}"
+    },
+    "teamName": {
+      "value": "Software Engineering"
+    }
+  }
+}

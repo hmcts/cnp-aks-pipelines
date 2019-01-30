@@ -17,6 +17,7 @@ variables:
   postgresqlHost: "pact-broker-mgmt-sandbox.postgres.database.azure.com"
   postgresqlDatabase: "pact"
   postgresqlParametersFile: 'arm/parameters/postgresql/sandbox.json'
+  postgresqlServerName: "pact-broker-mgmt-sandbox"
 
 jobs:
 - template: ../../jobs/pact-broker.yaml
@@ -36,3 +37,4 @@ jobs:
     postgresqlHost: $(postgresqlHost)
     postgresqlDatabase: $(postgresqlDatabase)
     postgresqlParametersFile: $(postgresqlParametersFile)
+    postgresqlServerName: $(postgresqlServerName)

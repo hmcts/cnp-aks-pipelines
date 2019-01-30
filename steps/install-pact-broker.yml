@@ -32,4 +32,5 @@ steps:
         tenantId=$(tenantId),\
         subscriptionId=$(subscriptionId),\
         postgresqlHost=$(postgresqlHost),\
-        postgresqlDatabase=$(postgresqlDatabase)"
+        postgresqlDatabase=$(postgresqlDatabase),\
+        postgresqlServerName=$(postgresqlServerName)"
