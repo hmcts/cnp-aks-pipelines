@@ -4,8 +4,7 @@
     "parameters": {
       "administratorLogin": {
         "type": "string",
-        "minLength":1,
-        "maxLength":16
+        "minLength":2
       },
       "administratorLoginPassword": {
         "type": "securestring"
