@@ -40,6 +40,7 @@ jobs:
       postgresqlParametersFile: ${{ parameters.postgresqlParametersFile }}
       pactDbUser: $(pactDbUser)
       pactDbPassword: $(pactDbPassword)
+      installPostgresql: false
   - template: ../steps/install-pact-broker.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
