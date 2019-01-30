@@ -38,4 +38,3 @@ jobs:
     postgresqlDatabase: $(postgresqlDatabase)
     postgresqlParametersFile: $(postgresqlParametersFile)
     postgresqlServerName: $(postgresqlServerName)
-    installPostgresql: false
