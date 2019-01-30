@@ -33,14 +33,14 @@ jobs:
     pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
     pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
   steps:
-  - template: ../../tasks/deploy-postgresql-arm.yaml
+  - template: ../tasks/deploy-postgresql-arm.yaml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       resourceGroup: ${{ parameters.resourceGroup }}
       postgresqlParametersFile: ${{ parameters.postgresqlParametersFile }}
       pactDbUser: $(pactDbUser)
       pactDbPassword: $(pactDbPassword)
-  - template: ../../steps/install-pact-broker.yml
+  - template: ../steps/install-pact-broker.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       acrServiceConnection: ${{ parameters.acrServiceConnection }}
