@@ -8,7 +8,7 @@ parameters:
 steps:
 - task: AzureResourceGroupDeployment@2
   displayName: 'Deploy Postgresql DB'
-  enabled: $(installPostgresql)
+  continueOnError: true
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     action: 'Create Or Update Resource Group'
