@@ -1,9 +1,6 @@
 name: Install Pact Broker (prod)
 trigger: none
 
-pool:
-  vmImage: "Ubuntu 16.04"
-
 variables:
   serviceConnection: azurerm-prod
   acrServiceConnection: azurerm-nonprod
@@ -14,8 +11,31 @@ variables:
   keyvaultName: "infra-vault-prod"
   ingressHost: pact-broker.platform.hmcts.net
   resourceGroup: "pact-broker-mgmt"
-  helmVersion: '2.12.0'
+  helmVersion: '2.11.0'
+  tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  subscriptionId: "8999dec3-0104-4a27-94ee-6588559729d1"
+  postgresqlHost: "pact-broker-mgmt.postgres.database.azure.com"
+  postgresqlDatabase: "pact"
+  postgresqlParametersFile: 'arm/parameters/postgresql/prod.json'
+  postgresqlServerName: "pact-broker-mgmt"
 
-steps:
-  - template: ../../steps/install-pact-broker.yml
-      
+jobs:
+- template: ../../jobs/pact-broker.yaml
+  parameters:
+    serviceConnection: $(serviceConnection)
+    acrServiceConnection: $(acrServiceConnection)
+    acrName: $(acrName)
+    kubectlConnectionType: $(kubectlConnectionType)
+    aksResourceGroup: $(aksResourceGroup)
+    clusterName: $(clusterName)
+    keyvaultName: $(keyvaultName)
+    ingressHost: $(ingressHost)
+    resourceGroup: $(resourceGroup)
+    helmVersion: $(helmVersion)
+    tenantId: $(tenantId)
+    subscriptionId: $(subscriptionId)
+    postgresqlHost: $(postgresqlHost)
+    postgresqlDatabase: $(postgresqlDatabase)
+    postgresqlParametersFile: $(postgresqlParametersFile)
+    postgresqlServerName: $(postgresqlServerName)
+    installPostgresql: false

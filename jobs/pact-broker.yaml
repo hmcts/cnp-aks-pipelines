@@ -1,0 +1,61 @@
+parameters:
+  serviceConnection: ''
+  acrServiceConnection: ''
+  acrName: ''
+  kubectlConnectionType: ''
+  aksResourceGroup: ''
+  clusterName: ''
+  keyvaultName: ''
+  ingressHost: ''
+  resourceGroup: ''
+  helmVersion: ''
+  tenantId: ''
+  subscriptionId: ''
+  postgresqlHost: ''
+  postgresqlDatabase: ''
+  postgresqlParametersFile: ''
+  installPostgresql: false
+
+jobs:
+- job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/keyvault-pact.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      keyvaultName: ${{ parameters.keyvaultName }}
+
+- job: DeployPactBroker
+  dependsOn: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
+    pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
+  steps:
+  - template: ../tasks/deploy-postgresql-arm.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      resourceGroup: ${{ parameters.resourceGroup }}
+      postgresqlParametersFile: ${{ parameters.postgresqlParametersFile }}
+      pactDbUser: $(pactDbUser)
+      pactDbPassword: $(pactDbPassword)
+      installPostgresql: ${{ parameters.installPostgresql }}
+  - template: ../steps/install-pact-broker.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      acrServiceConnection: ${{ parameters.acrServiceConnection }}
+      acrName: ${{ parameters.acrName }}
+      kubectlConnectionType: ${{ parameters.kubectlConnectionType }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      clusterName: ${{ parameters.clusterName }}
+      keyvaultName: ${{ parameters.keyvaultName }}
+      ingressHost: ${{ parameters.ingressHost }}
+      resourceGroup: ${{ parameters.resourceGroup }}
+      helmVersion: ${{ parameters.helmVersion }}
+      postgresqlParametersFile: ${{ parameters.postgresqlParametersFile }}
+      tenantId: ${{ parameters.tenantId }}
+      subscriptionId: ${{ parameters.subscriptionId }}
+      postgresqlHost: ${{ parameters.postgresqlHost }}
+      postgresqlDatabase: ${{ parameters.postgresqlDatabase }}

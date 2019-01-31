@@ -1,0 +1,143 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "administratorLogin": {
+        "type": "string",
+        "minLength":2
+      },
+      "administratorLoginPassword": {
+        "type": "securestring"
+      },
+      "location": {
+        "type":"string",
+        "defaultValue":"UK South"
+      },
+      "serverName": {
+        "type": "string",
+        "minLength":2,
+        "maxLength":63
+      },
+      "skuCapacity": {
+        "type":"string",
+        "defaultValue": "2"
+      },
+      "skuFamily": {
+        "type":"string",
+        "allowedValues":[
+          "Gen5"
+        ],
+        "defaultValue":"Gen5"
+      },
+      "skuName": {
+        "type":"string",
+        "defaultValue":"GP_Gen5_2"
+      },
+      "skuSizeMB": {
+        "type":"string",
+        "defaultValue":"51200"
+      },
+      "skuTier": {
+        "type":"string",
+        "defaultValue":"GeneralPurpose"
+      },
+      "version": {
+        "type":"string",
+        "defaultValue":"10"
+      },
+      "backupRetentionDays": {
+        "type": "string",
+        "defaultValue": "7"
+      },
+      "geoRedundantBackup": {
+        "type": "string",
+        "defaultValue": "Enabled"
+      },
+      "sslEnforcement": {
+        "type": "string",
+        "defaultValue": "Enabled"
+      },
+      "env": {
+        "type": "string",
+        "metadata": {
+          "description": "The tag"
+        }
+      },
+      "dbName": {
+        "type": "string"
+      },
+      "charset": {
+        "type": "string",
+        "defaultValue": "UTF8"
+      },
+      "collation": {
+        "type": "string",
+        "defaultValue": "en_GB.UTF8"
+      },
+      "dbRules": {
+        "type": "string"
+      },
+      "teamName": {
+        "type": "string"
+      }
+    },
+    "resources": [
+      {
+        "apiVersion": "2017-12-01",
+        "kind": "",
+        "location": "[parameters('location')]",
+        "name": "[parameters('serverName')]",
+        "properties": {
+          "version": "[parameters('version')]",
+          "administratorLogin": "[parameters('administratorLogin')]",
+          "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+          "sslEnforcement": "[parameters('sslEnforcement')]",
+          "storageProfile": {
+            "storageMB": "[parameters('skuSizeMB')]",
+            "backupRetentionDays": "[int(parameters('backupRetentionDays'))]",
+            "geoRedundantBackup": "[parameters('geoRedundantBackup')]"
+          },
+          "createMode": "Default"
+        },
+        "sku": {
+          "name": "[parameters('skuName')]",
+          "tier": "[parameters('skuTier')]",
+          "capacity": "[parameters('skuCapacity')]",
+          "size": "[parameters('skuSizeMB')]",
+          "family": "[parameters('skuFamily')]"
+        },
+        "type": "Microsoft.DBforPostgreSQL/servers",
+        "tags": {
+	        "Team Name": "[parameters('teamName')]"
+	    }
+      },
+      {
+        "name": "[concat(parameters('serverName'), '/', parameters('dbName'))]",
+        "type": "Microsoft.DBforPostgreSQL/servers/databases",
+        "apiVersion": "2017-12-01",
+        "properties": {
+          "charset": "[parameters('charset')]",
+          "collation": "[parameters('collation')]"
+        },
+        "dependsOn": [
+          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+        ]
+      },
+      {
+        "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
+        "apiVersion": "2017-12-01",
+        "dependsOn": [
+          "[concat('Microsoft.DBforPostgreSQL/servers/', parameters('serverName'))]"
+        ],
+        "name": "[concat(parameters('serverName'), '/', variables('dbRules').rule_name)]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "ignoreMissingVnetServiceEndpoint": true,
+          "virtualNetworkSubnetId": "[variables('dbRules').subnet_id]"
+        }
+      }
+    ],
+    "variables": {
+        "dbRules": "[base64ToJson(base64(parameters('dbRules')))]"
+    }
+}

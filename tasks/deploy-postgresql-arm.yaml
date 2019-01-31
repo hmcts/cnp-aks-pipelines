@@ -1,0 +1,22 @@
+parameters:
+  serviceConnection: ''
+  resourceGroup: ''
+  postgresqlParametersFile: ''
+  pactDbUser: ''
+  pactDbPassword: ''
+  installPostgresql: false
+
+steps:
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Deploy Postgresql DB'
+  enabled: ${{ parameters.installPostgresql }}
+  continueOnError: true
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: ${{ parameters.resourceGroup }}
+    location: 'UK South'
+    templateLocation: 'Linked artifact'
+    csmFile: 'arm/templates/postgresql.json'
+    csmParametersFile: '${{ parameters.postgresqlParametersFile }}'
+    overrideParameters: '-administratorLogin ${{ parameters.pactDbUser }} -administratorLoginPassword ${{ parameters.pactDbPassword }}'

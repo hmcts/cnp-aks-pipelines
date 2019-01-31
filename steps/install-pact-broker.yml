@@ -21,9 +21,16 @@ steps:
       azureSubscription: $(serviceConnection)
       azureResourceGroup: $(aksResourceGroup)
       kubernetesCluster: $(clusterName)
-      command: "install"
+      command: "upgrade"
       chartType: "Name"
       chartName: "hmcts/pact-broker"
       namespace: "pact-broker"
       releaseName: "pact-broker"
-      overrideValues: "resourceGroup=$(resourceGroup),ingressHost=$(ingressHost)"
+      arguments: "--install --timeout 300"
+      overrideValues: "resourceGroup=$(resourceGroup),\
+        ingressHost=$(ingressHost),\
+        tenantId=$(tenantId),\
+        subscriptionId=$(subscriptionId),\
+        postgresqlHost=$(postgresqlHost),\
+        postgresqlDatabase=$(postgresqlDatabase),\
+        postgresqlServerName=$(postgresqlServerName)"
