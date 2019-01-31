@@ -6,10 +6,10 @@
           "value": "cnp-test-cluster"
       },
       "vmSize": {
-        "value": "Standard_B8ms"
+        "value": "Standard_B2ms"
       },
       "nodeCount": {
-        "value": 1
+        "value": 2
       },
       "maxPods": {
         "value": 50

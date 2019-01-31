@@ -5,14 +5,14 @@
       "aksClusterName": {
           "value": "cnp-aks-cluster"
       },
-      "kubernetesVersion": {
-        "value": "1.11.5"
-      },
       "vmSize": {
-        "value": "Standard_D4s_v3"
+        "value": "Standard_B4ms"
       },
       "nodeCount": {
-        "value": 1
+        "value": 20
+      },
+      "maxPods": {
+        "value": 50
       },
       "aksVnetResourceGroup": {
         "value": "core-infra-preview"
