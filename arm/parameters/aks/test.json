@@ -5,14 +5,11 @@
       "aksClusterName": {
           "value": "cnp-test-cluster"
       },
-      "kubernetesVersion": {
-        "value": "1.11.5"
-      },
       "vmSize": {
-        "value": "Standard_B2ms"
+        "value": "Standard_B8ms"
       },
       "nodeCount": {
-        "value": 2
+        "value": 1
       },
       "maxPods": {
         "value": 50

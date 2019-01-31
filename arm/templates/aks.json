@@ -6,16 +6,19 @@
             "type": "String"
         },
         "kubernetesVersion": {
-            "type": "String"
+            "type": "String",
+            "defaultValue": "1.11.5"
         },
         "vmSize": {
-            "type": "String"
+            "type": "String",
+            "defaultValue": "Standard_B4ms"
         },
         "nodeCount": {
             "type": "int"
         },
         "maxPods": {
-            "type": "int"
+            "type": "int",
+            "defaultValue": "30"
         },
         "aksVnetResourceGroup": {
             "type": "String"
