@@ -2,6 +2,6 @@ jobs:
 - job:
   pool:
     vmImage: 'Ubuntu 16.04'
-  container: microsoft/azure-cli:latest
+  container: ubuntu:16.04
   steps:
-  - script: az --version
+  - script: printenv
