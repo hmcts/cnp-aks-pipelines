@@ -66,10 +66,7 @@
                         "storageProfile": "ManagedDisks",
                         "vnetSubnetID": "[resourceId(parameters('aksVnetResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('aksVnetName'), parameters('aksSubnetName'))]",
                         "maxPods": "[parameters('maxPods')]",
-                        "osType": "Linux",
-                        "enableAutoScaling": true,
-                        "maxCount": 3,
-                        "minCount": 1
+                        "osType": "Linux"
                     }
                 ],
                 "linuxProfile": {
