@@ -4,4 +4,4 @@ jobs:
     vmImage: 'Ubuntu 16.04'
   container: microsoft/azure-cli:latest
   steps:
-  - script: printenv
+  - script: az --version
