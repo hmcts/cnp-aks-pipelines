@@ -8,3 +8,10 @@ jobs:
     aksResourceGroup: cnp-test-aks-rg
     aksClusterName: cnp-test-cluster
     aksParametersFile: arm/parameters/aks/test.json
+- template: ../jobs/enable-cluster-autoscaler.yaml
+ # parameters:
+ #   serviceConnection: azurerm-sandbox
+ #   keyvaultName: infra-vault-sandbox
+ #   aksResourceGroup: cnp-test-aks-rg
+ #   aksClusterName: cnp-test-cluster
+ #   aksParametersFile: arm/parameters/aks/test.json
