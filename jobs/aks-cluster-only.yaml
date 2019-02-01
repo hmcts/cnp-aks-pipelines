@@ -25,10 +25,10 @@ jobs:
       aksParametersFile: ${{ parameters.aksParametersFile }}
       aksServicePrincipalId: $(aks-sp-id)
       aksServicePrincipalSecret: $(aks-sp-secret)
-  - template: ../tasks/enable-aks-autoscaler.yaml
-    parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      aksClusterName: ${{ parameters.aksClusterName }}
-      minCount: ${{ parameters.minNodeCount }}
-      maxCount: ${{ parameters.maxNodeCount }}
+ # - template: ../tasks/enable-aks-autoscaler.yaml
+ #   parameters:
+ #     serviceConnection: ${{ parameters.serviceConnection }}
+ #     aksResourceGroup: ${{ parameters.aksResourceGroup }}
+ #     aksClusterName: ${{ parameters.aksClusterName }}
+ #     minCount: ${{ parameters.minNodeCount }}
+ #     maxCount: ${{ parameters.maxNodeCount }}
