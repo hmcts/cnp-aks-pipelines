@@ -31,13 +31,39 @@ jobs:
     aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
-  - template: ../tasks/deploy-aks-arm.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksParametersFile: $(aksParametersFile)
-      aksServicePrincipalId: $(aksServicePrincipalId)
-      aksServicePrincipalSecret: $(aksServicePrincipalSecret)
+  - task: AzureCLI@1
+    displayName: 'Install AKS with Azure CLI'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        sudo apt-get install --only-upgrade azure-cli
+        az extension add --name aks-preview
+        az aks create \
+          --resource-group cnp-aks-rg \
+          --name cnp-aks-cluster \
+          --kubernetes-version 1.12.4 \
+          --node-count 3 \
+          --node-vm-size Standard_B4ms \
+          --location uksouth \
+          --network-plugin azure \
+          --node-osdisk-size 100 \
+          --vnet-subnet-id '/subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/core-infra-preview/providers/Microsoft.Network/virtualNetworks/core-infra-vnet-preview/subnets/aks-subnet' \
+          --ssh-key-value 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcEzLBwPV771KC/iRQtmJaQwMpOR6YhWnKpId7eIgfNV1N0ww0vCur8hZSb4XZKkJr7NUQjAzgLvbS774QmxUYw+lfGfJpsnrXY4nakugJqK9fK3MFJ4lK3YPwHrjzFLlLZ+aVvGGxVh2YB4+ZlutojT/Wu/wL8kCk+IFm4YR7VXObXsaq4Izv0pdt0N/zq2gn59Tn042PwPaE7+rsqgkr8lSIWdHFbGD4PvndS4+fqdHGe0VhedUkbijLd8ikcK/haOXe4RTP13EYjCgyzY93LaQ4JCJyoI3FQS6ttkFR20k/KbBtL02s6+FcS8zF6zdoOSgg1eL8FM3wCMfhNuUN' \
+          --service-principal (aksServicePrincipalId) \
+          --client-secret $(aksServicePrincipalSecret) \
+          --enable-vmss \
+          --min-count 3 \
+          --max-count 50 \
+          --max-pods 50 \
+          --tags 'Team Name=CNP'
+ # - template: ../tasks/deploy-aks-arm.yaml
+ #   parameters:
+ #     serviceConnection: $(serviceConnection)
+ #     aksResourceGroup: $(aksResourceGroup)
+ #     aksParametersFile: $(aksParametersFile)
+ #     aksServicePrincipalId: $(aksServicePrincipalId)
+ #     aksServicePrincipalSecret: $(aksServicePrincipalSecret)
   - template: ../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
