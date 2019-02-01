@@ -9,10 +9,7 @@
         "value": "Standard_B2ms"
       },
       "nodeCount": {
-        "value": 2
-      },
-      "maxPods": {
-        "value": 50
+        "value": 1
       },
       "aksVnetResourceGroup": {
         "value": "cnp-test-aks-rg"
