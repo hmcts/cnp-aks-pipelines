@@ -34,10 +34,9 @@ jobs:
   - task: AzureCLI@1
     displayName: 'Install AKS with Azure CLI'
     inputs:
-      azureSubscription: azurerm-nonprod
+      azureSubscription: azurerm-sandbox
       scriptLocation: 'inlineScript'
       inlineScript: |
-        sudo apt-get install --only-upgrade azure-cli
         az extension add --name aks-preview
         az aks create \
           --resource-group cnp-test-aks-rg \
