@@ -55,8 +55,8 @@ jobs:
           --enable-vmss \
           --enable-cluster-autoscaler \
           --min-count 3 \
-          --max-count 50 \
-          --max-pods 50 \
+          --max-count 35 \
+          --max-pods 100 \
           --tags 'Team Name=CNP'
 #  - template: ../tasks/deploy-aks-arm.yaml
 #    parameters:
