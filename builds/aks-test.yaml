@@ -52,6 +52,7 @@ jobs:
           --service-principal $(aksServicePrincipalId) \
           --client-secret $(aksServicePrincipalSecret) \
           --enable-vmss \
+          --enable-cluster-autoscaler \
           --min-count 3 \
           --max-count 50 \
           --max-pods 50 \

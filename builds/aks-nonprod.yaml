@@ -37,7 +37,6 @@ jobs:
       azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
       inlineScript: |
-        sudo apt-get install --only-upgrade azure-cli
         az extension add --name aks-preview
         az aks create \
           --resource-group cnp-aks-rg \
@@ -53,6 +52,7 @@ jobs:
           --service-principal $(aksServicePrincipalId) \
           --client-secret $(aksServicePrincipalSecret) \
           --enable-vmss \
+          --enable-cluster-autoscaler \
           --min-count 3 \
           --max-count 50 \
           --max-pods 50 \
