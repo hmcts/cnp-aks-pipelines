@@ -1,7 +1,9 @@
 imageTag: latest
-loadBalancerIP: 10.97.16.227
+
+# If this doesn't work (i.e. the IP is taken), then comment out, let it get assigned dynamically and register in Consul manually
+loadBalancerIP: 10.97.17.51
 cpuLimit: 1000m
-memoryLimit: 100Mi
+memoryLimit: 300Mi
 service:
   annotations:
     service.beta.kubernetes.io/azure-load-balancer-internal: "true"
