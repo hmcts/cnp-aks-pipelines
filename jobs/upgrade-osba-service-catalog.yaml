@@ -16,7 +16,7 @@ jobs:
       aksClusterName: ${{ parameters.aksClusterName }}
       helmVersion: ${{ parameters.helmVersion }}
 
-  - template: ../steps/service-catalog.yaml
+  - template: ../steps/service-catalog.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
