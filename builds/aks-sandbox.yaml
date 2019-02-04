@@ -90,7 +90,7 @@ jobs:
   - task: AzureCLI@1
     displayName: 'Configure Helm for ACR'
     inputs:
-      azureSubscription: azurerm-nonprod
+      azureSubscription: $(serviceConnection)
       scriptLocation: 'inlineScript'
       inlineScript: |
         az configure --defaults acr=$(acrName)
