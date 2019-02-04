@@ -1,0 +1,9 @@
+name: Upgrade OSBA (Sandbox)
+trigger: none
+jobs:
+- template: ../../jobs/upgrade-osba-service-catalog.yaml
+  parameters:
+    serviceConnection: 'azurerm-sandbox'
+    aksResourceGroup: 'cnp-aks-sandbox-rg'
+    aksClusterName: 'cnp-aks-sandbox-cluster'
+    helmVersion: '2.12.0'

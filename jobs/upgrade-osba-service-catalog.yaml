@@ -1,0 +1,23 @@
+parameters:
+  serviceConnection: ''
+  aksResourceGroup: ''
+  aksClusterName: ''
+  helmVersion: ''
+
+jobs:
+- job: UpgradeServiceCatalog
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/configure-helm-client.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
+      helmVersion: ${{ parameters.helmVersion }}
+
+  - template: ../steps/service-catalog.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
