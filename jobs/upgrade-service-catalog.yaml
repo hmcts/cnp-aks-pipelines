@@ -2,6 +2,7 @@ parameters:
   serviceConnection: ''
   aksResourceGroup: ''
   aksClusterName: ''
+  helmVersion: ''
 
 jobs:
 - job: UpgradeServiceCatalog
@@ -13,6 +14,7 @@ jobs:
       serviceConnection: ${{ parameters.serviceConnection }}
       aksResourceGroup: ${{ parameters.aksResourceGroup }}
       aksClusterName: ${{ parameters.aksClusterName }}
+      helmVersion: ${{ parameters.helmVersion }}
 
   - template: ../tasks/helm-add-repo-svcat.yaml
     parameters:

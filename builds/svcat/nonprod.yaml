@@ -6,4 +6,5 @@ jobs:
     serviceConnection: 'azurerm-nonprod'
     aksResourceGroup: 'cnp-aks-rg'
     aksClusterName: 'cnp-aks-cluster'
+    helmVersion: '2.12.0'
     
