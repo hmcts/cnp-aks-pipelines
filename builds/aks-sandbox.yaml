@@ -11,7 +11,7 @@ variables:
   serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'arm/parameters/aks/sandbox.json'
   helmVersion: '2.12.0'
-  acrName: hmctssandbox
+  acrName: hmcts
 
 jobs:
 - job: Keyvault
@@ -90,7 +90,7 @@ jobs:
   - task: AzureCLI@1
     displayName: 'Configure Helm for ACR'
     inputs:
-      azureSubscription: $(serviceConnection)
+      azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
       inlineScript: |
         az configure --defaults acr=$(acrName)
