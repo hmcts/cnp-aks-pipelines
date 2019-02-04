@@ -4,6 +4,7 @@ jobs:
 - template: ../../jobs/upgrade-osba-service-catalog.yaml
   parameters:
     serviceConnection: 'azurerm-sandbox'
+    keyvaultName: 'infra-vault-sandbox'
     aksResourceGroup: 'cnp-aks-sandbox-rg'
     aksClusterName: 'cnp-aks-sandbox-cluster'
     helmVersion: '2.12.0'

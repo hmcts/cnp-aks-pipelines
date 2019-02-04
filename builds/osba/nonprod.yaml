@@ -4,6 +4,7 @@ jobs:
 - template: ../../jobs/upgrade-osba-service-catalog.yaml
   parameters:
     serviceConnection: 'azurerm-nonprod'
+    keyvaultName: 'infra-vault-nonprod'
     aksResourceGroup: 'cnp-aks-rg'
     aksClusterName: 'cnp-aks-cluster'
     helmVersion: '2.12.0'

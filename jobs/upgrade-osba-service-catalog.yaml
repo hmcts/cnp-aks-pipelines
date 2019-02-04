@@ -1,5 +1,6 @@
 parameters:
   serviceConnection: ''
+  keyvaultName: ''
   aksResourceGroup: ''
   aksClusterName: ''
   helmVersion: ''
@@ -11,8 +12,8 @@ jobs:
   steps:
   - template: ../steps/keyvault-ci.yaml
     parameters:
-      serviceConnection: $(serviceConnection)
-      keyvaultName: $(keyvaultName)
+      serviceConnection: ${{ parameters.serviceConnection }}
+      keyvaultName: ${{ parameters.keyvaultName }}
 
 - job: UpgradeServiceCatalog
   pool:
