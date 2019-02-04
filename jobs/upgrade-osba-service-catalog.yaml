@@ -16,6 +16,9 @@ jobs:
       keyvaultName: ${{ parameters.keyvaultName }}
 
 - job: UpgradeServiceCatalog
+  dependsOn:
+  - Keyvault
+  condition: succeeded()
   pool:
     vmImage: 'Ubuntu 16.04'
   variables:
