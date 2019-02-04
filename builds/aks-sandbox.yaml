@@ -9,9 +9,9 @@ variables:
   aksClusterName: 'cnp-aks-sandbox-cluster'
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
-  aksParametersFile: 'sandbox.json'
-  helmVersion: '2.11.0'
-  acrName: hmcts
+  aksParametersFile: 'arm/parameters/aks/sandbox.json'
+  helmVersion: '2.12.0'
+  acrName: hmctssandbox
 
 jobs:
 - job: Keyvault
