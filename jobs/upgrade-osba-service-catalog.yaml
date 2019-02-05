@@ -1,0 +1,40 @@
+parameters:
+  serviceConnection: ''
+  keyvaultName: ''
+  aksResourceGroup: ''
+  aksClusterName: ''
+  helmVersion: ''
+
+jobs:
+- job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/keyvault-ci.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      keyvaultName: ${{ parameters.keyvaultName }}
+
+- job: UpgradeServiceCatalog
+  dependsOn:
+  - Keyvault
+  condition: succeeded()
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSubscriptionId']]
+    svcatServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalId']]
+    svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
+    svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
+  steps:
+  - template: ../steps/configure-helm-client.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}
+      helmVersion: ${{ parameters.helmVersion }}
+  - template: ../steps/service-catalog.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      aksResourceGroup: ${{ parameters.aksResourceGroup }}
+      aksClusterName: ${{ parameters.aksClusterName }}

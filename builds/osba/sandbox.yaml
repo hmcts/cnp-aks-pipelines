@@ -1,9 +1,10 @@
-name: Upgrade Kubernetes Service Catalog (Sandbox)
+name: Upgrade OSBA (Sandbox)
 trigger: none
 jobs:
-- template: ../../jobs/upgrade-service-catalog.yaml
+- template: ../../jobs/upgrade-osba-service-catalog.yaml
   parameters:
     serviceConnection: 'azurerm-sandbox'
+    keyvaultName: 'infra-vault-sandbox'
     aksResourceGroup: 'cnp-aks-sandbox-rg'
     aksClusterName: 'cnp-aks-sandbox-cluster'
     helmVersion: '2.12.0'
