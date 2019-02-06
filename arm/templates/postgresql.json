@@ -72,7 +72,7 @@
       },
       "collation": {
         "type": "string",
-        "defaultValue": "en_GB.UTF8"
+        "defaultValue": "en-GB"
       },
       "dbRules": {
         "type": "string"
