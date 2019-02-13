@@ -4,8 +4,8 @@ apiserver:
       cpu: 150m
       memory: 40Mi
     limits:
-      cpu: 200m
-      memory: 300Mi
+      cpu: 600m
+      memory: 600Mi
   storage:
     etcd:
       persistence:
@@ -15,8 +15,8 @@ apiserver:
           cpu: 100m
           memory: 100Mi
         limits:
-          cpu: 200m
-          memory: 300Mi
+          cpu: 1000m
+          memory: 1000Mi
   healthcheck:
     enabled: false
 controllerManager:
