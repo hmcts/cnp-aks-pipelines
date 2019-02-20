@@ -41,7 +41,7 @@ jobs:
         az aks create \
           --resource-group cnp-aks-rg \
           --name cnp-aks-cluster \
-          --kubernetes-version 1.12.4 \
+          --kubernetes-version 1.12.5 \
           --node-count 3 \
           --node-vm-size Standard_B8ms \
           --location uksouth \
