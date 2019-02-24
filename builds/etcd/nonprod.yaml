@@ -1,0 +1,10 @@
+name: Upgrade Etcd (Nonprod)
+trigger: none
+jobs:
+- template: ../../jobs/upgrade-etcd.yaml
+  parameters:
+    serviceConnection: 'azurerm-nonprod'
+    aksResourceGroup: 'cnp-aks-rg'
+    aksClusterName: 'cnp-aks-cluster'
+    helmVersion: '2.12.0'
+    

@@ -1,0 +1,11 @@
+replicas: 3
+resources:
+  limits:
+    cpu: 100m
+    memory: 200Mi
+  requests:
+    cpu: 1000m
+    memory: 2000Mi
+persistentVolume:
+  enabled: true
+  storage: "2Gi"

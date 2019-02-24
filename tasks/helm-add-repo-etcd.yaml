@@ -1,0 +1,16 @@
+parameters:
+  serviceConnection: ''
+  aksResourceGroup: ''
+  aksClusterName: ''
+
+steps:
+- task: HelmDeploy@0
+  displayName: 'Add Etcd Helm Repo'
+  enabled: true
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscription: ${{ parameters.serviceConnection }}
+    azureResourceGroup: ${{ parameters.aksResourceGroup }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
+    command: 'repo'
+    arguments: 'add k8s-incubator http://storage.googleapis.com/kubernetes-charts-incubator'

@@ -1,0 +1,19 @@
+  parameters:
+    serviceConnection: ''
+    aksResourceGroup: ''
+    aksClusterName: ''
+
+  steps:
+  - task: HelmDeploy@0
+    displayName: 'Install or Upgrade Etcd'
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscription: ${{ parameters.serviceConnection }}
+      azureResourceGroup: ${{ parameters.aksResourceGroup }}
+      kubernetesCluster: ${{ parameters.aksClusterName }}
+      command: 'upgrade'
+      chartType: 'Name'
+      chartName: 'k8s-incubator/etcd'
+      namespace: 'etcd'
+      releaseName: 'etcd'
+      valueFile: 'helm/all/etcd.yaml'
