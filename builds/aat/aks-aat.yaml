@@ -1,8 +1,9 @@
 #
 # Build for the AAT AKS Cluster
 #
-name: Nonprod AKS Pipeline
+name: AAT AKS Pipeline
 trigger: none
+pr: none
 variables:
   environment: 'nonprod'
   aksResourceGroup: 'cnp-aat-aks-rg'
