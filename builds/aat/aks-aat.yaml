@@ -15,15 +15,6 @@ variables:
   acrName: hmcts
   
 jobs:
-- job: Keyvault
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - template: ../steps/keyvault-ci.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      keyvaultName: $(keyvaultName)
-
 - job: DeployAKS
   pool:
     vmImage: 'Ubuntu 16.04'
