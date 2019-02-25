@@ -32,6 +32,7 @@ jobs:
   ## TODO: change to ARM template when support for autoscaler is added 
   - task: AzureCLI@1
     displayName: 'Install AKS with Azure CLI'
+    enabled: false
     inputs:
       azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
@@ -88,12 +89,12 @@ jobs:
       AKS_SP_ID: $(aks-sp-id)
       AKS_SP_SECRET: $(aks-sp-secret)
 
-  - task: Bash@3
+  - task: AzureCLI@1
     displayName: 'Create namespaces'
     inputs:
-      targetType: inline
-      failOnStderr: false
-      script: |
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
         az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
         kubectl apply -f builds/aat/namespaces.yaml
 
