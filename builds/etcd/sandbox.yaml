@@ -1,4 +1,4 @@
-name: Upgrade Ectd (Sandbox)
+name: Upgrade Etcd (Sandbox)
 trigger: none
 jobs:
 - template: ../../jobs/upgrade-etcd.yaml
