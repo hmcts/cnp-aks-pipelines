@@ -1,0 +1,143 @@
+#
+# Build for the AAT AKS Cluster
+#
+name: Nonprod AKS Pipeline
+trigger: none
+variables:
+  environment: 'nonprod'
+  aksResourceGroup: 'cnp-aat-aks-rg'
+  aksClusterName: 'cnp-aat-cluster'
+  keyvaultName: 'infra-vault-nonprod'
+  serviceConnection: 'azurerm-nonprod'
+  aksParametersFile: 'arm/parameters/aks/aat.json'
+  helmVersion: '2.12.3'
+  acrName: hmcts
+  
+jobs:
+- job: Keyvault
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - template: ../steps/keyvault-ci.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      keyvaultName: $(keyvaultName)
+
+- job: DeployAKS
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
+    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
+  steps:
+  - task: AzureKeyVault@1
+    displayName: 'Get secrets from Keyvault'
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      keyVaultName: ${{ parameters.keyvaultName }}
+      secretsFilter: 'aks-sp-id,aks-sp-secret,kured-slack-webhook-url'
+
+  ## TODO: change to ARM template when support for autoscaler is added 
+  - task: AzureCLI@1
+    displayName: 'Install AKS with Azure CLI'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az extension add --name aks-preview
+        az aks create \
+          --resource-group $(aksResourceGroup) \
+          --name $(aksClusterName) \
+          --kubernetes-version 1.12.5 \
+          --node-count 3 \
+          --node-vm-size Standard_D4s_v3 \
+          --location uksouth \
+          --network-plugin azure \
+          --node-osdisk-size 100 \
+          --dns-name-prefix cnp-aks-aat \
+          --vnet-subnet-id '/subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/core-infra-preview/providers/Microsoft.Network/virtualNetworks/core-infra-vnet-preview/subnets/aks-aat' \
+          --ssh-key-value 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcEzLBwPV771KC/iRQtmJaQwMpOR6YhWnKpId7eIgfNV1N0ww0vCur8hZSb4XZKkJr7NUQjAzgLvbS774QmxUYw+lfGfJpsnrXY4nakugJqK9fK3MFJ4lK3YPwHrjzFLlLZ+aVvGGxVh2YB4+ZlutojT/Wu/wL8kCk+IFm4YR7VXObXsaq4Izv0pdt0N/zq2gn59Tn042PwPaE7+rsqgkr8lSIWdHFbGD4PvndS4+fqdHGe0VhedUkbijLd8ikcK/haOXe4RTP13EYjCgyzY93LaQ4JCJyoI3FQS6ttkFR20k/KbBtL02s6+FcS8zF6zdoOSgg1eL8FM3wCMfhNuUN' \
+          --service-principal $(aksServicePrincipalId) \
+          --client-secret $(aksServicePrincipalSecret) \
+          --enable-vmss \
+          --enable-cluster-autoscaler \
+          --min-count 3 \
+          --max-count 30 \
+          --max-pods 30 \
+          --tags 'Team Name=CNP environment=aat'
+  - template: ../../steps/install-tiller.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
+  - template: ../../tasks/dashboard-rbac.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+  - template: ../../steps/configure-helm-client.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
+  - task: Bash@3
+    displayName: 'Template repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: true
+      script: |
+        sed -i -e 's/${ACR_NAME}/$(acrName)/g' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_ID}@'"$AKS_SP_ID"'@' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_SECRET}@'"$AKS_SP_SECRET"'@' \
+          builds/aat/repositories.yaml
+    env:
+      AKS_SP_ID: $(aksServicePrincipalId)
+      AKS_SP_SECRET: $(aksServicePrincipalSecret)
+
+  - task: Bash@3
+    displayName: 'Create namespaces'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
+        kubectl apply -f builds/aat/namespaces.yaml
+
+  - task: Bash@3
+    displayName: 'Create repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl -n admin delete secret flux-helm-repositories || true
+        kubectl -n admin create secret generic flux-helm-repositories --from-file=builds/aat/repositories.yaml
+  - task: Bash@3
+    displayName: 'Install Weave Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add weaveworks https://weaveworks.github.io/flux
+        helm upgrade flux weaveworks/flux --install --namespace admin -f builds/aat/flux-values.yaml --wait
+  - task: Bash@3
+    displayName: 'Template Kured secret'
+    inputs:
+      targetType: inline
+      failOnStderr: true
+      script: |
+        sed -i -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml
+    env:
+      SLACK_WEBHOOK_URL: $(kured-slack-webhook-url)
+
+  - task: Bash@3
+    displayName: 'Create Kured secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl -n admin delete secret kured-values || true
+        kubectl -n admin create secret generic kured-values --from-file=builds/aat/kured-values.yaml
+        
+        
