@@ -4,10 +4,10 @@ image:
 pullPolicy: "IfNotPresent"
 replicas: 3
 resources:
-  limits:
+  requests:
     cpu: 100m
     memory: 200Mi
-  requests:
+  limits:
     cpu: 1000m
     memory: 2500Mi
 persistentVolume:
