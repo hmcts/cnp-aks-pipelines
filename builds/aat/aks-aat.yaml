@@ -122,6 +122,15 @@ jobs:
         kubectl -n admin delete secret flux-helm-repositories || true
         kubectl -n admin create secret generic flux-helm-repositories --from-file=builds/aat/repositories.yaml
 
+  - task: Bash@3
+    displayName: 'Install Weave Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add weaveworks https://weaveworks.github.io/flux
+        helm upgrade flux weaveworks/flux --install --namespace admin -f builds/aat/flux-values.yaml --wait
+
   - task: DownloadSecureFile@1
     displayName: 'Download flux deploy key'
     inputs:
@@ -134,12 +143,6 @@ jobs:
       failOnStderr: false
       script: |
         kubectl apply -f $(Agent.TempDirectory)/aat-flux-git-deploy.yaml
+        kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
 
-  - task: Bash@3
-    displayName: 'Install Weave Flux'
-    inputs:
-      targetType: inline
-      failOnStderr: false
-      script: |
-        helm repo add weaveworks https://weaveworks.github.io/flux
-        helm upgrade flux weaveworks/flux --install --namespace admin -f builds/aat/flux-values.yaml --wait
+
