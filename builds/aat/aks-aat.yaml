@@ -112,7 +112,7 @@ jobs:
       azureSubscription: $(serviceConnection)
       scriptLocation: 'inlineScript'
       inlineScript: |
-        kubectl apply -f $(Agent.TempDirectory)/$(aksClusterName)-sealed-secret-key.yaml
+        kubectl apply -f $(Agent.TempDirectory)/$(aksClusterName)-sealed-secrets-key.yaml
         kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
 
   - task: Bash@3
