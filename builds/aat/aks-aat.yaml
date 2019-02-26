@@ -115,7 +115,7 @@ jobs:
       script: |
         helm repo add weaveworks https://weaveworks.github.io/flux
         helm upgrade flux weaveworks/flux --install --namespace admin -f builds/aat/flux-values.yaml \
-          --set git.path=k8s/aat,git.label=aat \--wait
+          --set "git.path=k8s/aat\,k8s/common",git.label=aat \--wait
   - task: Bash@3
     displayName: 'Template Kured secret'
     inputs:
