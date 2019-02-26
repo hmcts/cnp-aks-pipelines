@@ -21,9 +21,6 @@ jobs:
     name: hmcts-agent-pool
   workspace:
     clean: all
-  variables:
-    aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
-    aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
   - task: AzureKeyVault@1
     displayName: 'Get secrets from Keyvault'
