@@ -121,7 +121,8 @@ jobs:
       targetType: inline
       failOnStderr: true
       script: |
-        sed -i -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml
+        sed -i -e 's/${SLACK_USERNAME}/$(aksClusterName)/g' \
+               -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml
     env:
       SLACK_WEBHOOK_URL: $(kured-slack-webhook-url)
 
