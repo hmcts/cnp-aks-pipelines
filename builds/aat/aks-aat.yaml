@@ -32,7 +32,7 @@ jobs:
   ## TODO: change to ARM template when support for autoscaler is added 
   - task: AzureCLI@1
     displayName: 'Install AKS with Azure CLI'
-    enabled: false
+    enabled: true
     inputs:
       azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
@@ -112,7 +112,7 @@ jobs:
     env:
       AKS_SP_ID: $(aks-sp-id)
       AKS_SP_SECRET: $(aks-sp-secret)
-      
+
   - task: Bash@3
     displayName: 'Create repositories.yaml secret'
     inputs:
