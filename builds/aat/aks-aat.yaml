@@ -19,6 +19,8 @@ jobs:
   pool:
     #vmImage: 'Ubuntu 16.04'
     name: hmcts-agent-pool
+  workspace:
+    clean: all
   variables:
     aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
