@@ -121,10 +121,8 @@ jobs:
       targetType: inline
       failOnStderr: true
       script: |
-        sed -i -e 's/${SLACK_USERNAME}/$(aksClusterName)/g' \
-               -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml
-
-        cat builds/aat/kured-values.yaml
+        sed -e 's/${SLACK_USERNAME}/$(aksClusterName)/g' \
+            -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml > builds/aat/values.yaml
     env:
       SLACK_WEBHOOK_URL: $(kured-slack-webhook-url)
 
@@ -135,6 +133,6 @@ jobs:
       failOnStderr: false
       script: |
         kubectl -n admin delete secret kured-values || true
-        kubectl -n admin create secret generic kured-values --from-file=builds/aat/kured-values.yaml
+        kubectl -n admin create secret generic kured-values --from-file=builds/aat/values.yaml
         
         
