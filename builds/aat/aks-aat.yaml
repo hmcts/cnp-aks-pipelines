@@ -53,7 +53,8 @@ jobs:
           --client-secret $(aks-sp-secret) \
           --enable-vmss \
           --enable-cluster-autoscaler \
-          --min-count 3 \
+          --node-count 1 \
+          --min-count 1 \
           --max-count 30 \
           --max-pods 30 \
           --tags Team Name=CNP environment=aat
@@ -120,6 +121,19 @@ jobs:
       script: |
         kubectl -n admin delete secret flux-helm-repositories || true
         kubectl -n admin create secret generic flux-helm-repositories --from-file=builds/aat/repositories.yaml
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download flux deploy key'
+    inputs:
+      secureFile: aat-flux-git-deploy.yaml
+
+  - task: Bash@3
+    displayName: 'Create flux deploy key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/aat-flux-git-deploy.yaml
 
   - task: Bash@3
     displayName: 'Install Weave Flux'
