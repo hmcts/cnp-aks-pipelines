@@ -1,2 +1,0 @@
-slackUsername: ${SLACK_USERNAME}
-slackWebhookUrl: ${SLACK_WEBHOOK_URL}

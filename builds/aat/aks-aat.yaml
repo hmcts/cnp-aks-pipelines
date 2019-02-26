@@ -75,19 +75,6 @@ jobs:
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
       helmVersion: $(helmVersion)
-  - task: Bash@3
-    displayName: 'Template repositories.yaml secret'
-    inputs:
-      targetType: inline
-      failOnStderr: true
-      script: |
-        sed -i -e 's/${ACR_NAME}/$(acrName)/g' \
-               -e 's@${ACR_SERVICE_PRINCIPAL_ID}@'"$AKS_SP_ID"'@' \
-               -e 's@${ACR_SERVICE_PRINCIPAL_SECRET}@'"$AKS_SP_SECRET"'@' \
-          builds/aat/repositories.yaml
-    env:
-      AKS_SP_ID: $(aks-sp-id)
-      AKS_SP_SECRET: $(aks-sp-secret)
 
   - task: AzureCLI@1
     displayName: 'Create namespaces'
@@ -113,6 +100,20 @@ jobs:
         kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
 
   - task: Bash@3
+    displayName: 'Template repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: true
+      script: |
+        sed -i -e 's/${ACR_NAME}/$(acrName)/g' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_ID}@'"$AKS_SP_ID"'@' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_SECRET}@'"$AKS_SP_SECRET"'@' \
+          builds/aat/repositories.yaml
+    env:
+      AKS_SP_ID: $(aks-sp-id)
+      AKS_SP_SECRET: $(aks-sp-secret)
+      
+  - task: Bash@3
     displayName: 'Create repositories.yaml secret'
     inputs:
       targetType: inline
@@ -129,25 +130,3 @@ jobs:
       script: |
         helm repo add weaveworks https://weaveworks.github.io/flux
         helm upgrade flux weaveworks/flux --install --namespace admin -f builds/aat/flux-values.yaml --wait
-
-  - task: Bash@3
-    displayName: 'Template Kured secret'
-    inputs:
-      targetType: inline
-      failOnStderr: true
-      script: |
-        sed -e 's/${SLACK_USERNAME}/$(aksClusterName)/g' \
-            -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml > builds/aat/values.yaml
-    env:
-      SLACK_WEBHOOK_URL: $(kured-slack-webhook-url)
-
-  - task: Bash@3
-    displayName: 'Create Kured secret'
-    inputs:
-      targetType: inline
-      failOnStderr: false
-      script: |
-        kubectl -n admin delete secret kured-values || true
-        kubectl -n admin create secret generic kured-values --from-file=builds/aat/values.yaml
-        
-        
