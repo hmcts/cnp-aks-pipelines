@@ -42,7 +42,6 @@ jobs:
           --resource-group $(aksResourceGroup) \
           --name $(aksClusterName) \
           --kubernetes-version 1.12.5 \
-          --node-count 3 \
           --node-vm-size Standard_D4s_v3 \
           --location uksouth \
           --network-plugin azure \
@@ -54,7 +53,7 @@ jobs:
           --client-secret $(aks-sp-secret) \
           --enable-vmss \
           --enable-cluster-autoscaler \
-          --min-count 3 \
+          --min-count 1 \
           --max-count 30 \
           --max-pods 30 \
           --tags Team Name=CNP environment=aat
