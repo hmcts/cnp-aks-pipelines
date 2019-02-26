@@ -53,7 +53,7 @@ jobs:
           --client-secret $(aks-sp-secret) \
           --enable-vmss \
           --enable-cluster-autoscaler \
-          --min-count 1 \
+          --min-count 3 \
           --max-count 30 \
           --max-pods 30 \
           --tags Team Name=CNP environment=aat
