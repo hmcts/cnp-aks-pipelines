@@ -81,7 +81,7 @@ jobs:
       azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
         kubectl apply -f builds/aat/namespaces.yaml
 
   - task: DownloadSecureFile@1
