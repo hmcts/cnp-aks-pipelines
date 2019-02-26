@@ -123,6 +123,8 @@ jobs:
       script: |
         sed -i -e 's/${SLACK_USERNAME}/$(aksClusterName)/g' \
                -e 's@${SLACK_WEBHOOK_URL}@'"$SLACK_WEBHOOK_URL"'@' builds/aat/kured-values.yaml
+
+        cat builds/aat/kured-values.yaml
     env:
       SLACK_WEBHOOK_URL: $(kured-slack-webhook-url)
 
