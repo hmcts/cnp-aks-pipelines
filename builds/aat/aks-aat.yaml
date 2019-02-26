@@ -107,13 +107,13 @@ jobs:
       secureFile: $(aksClusterName)-sealed-secret-key.yaml
 
   - task: AzureCLI@1
-      displayName: 'Create sealed secrets key secret'
-      inputs:
-        azureSubscription: $(serviceConnection)
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          kubectl apply -f $(Agent.TempDirectory)/$(aksClusterName)-sealed-secret-key.yaml
-          kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      azureSubscription: $(serviceConnection)
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        kubectl apply -f $(Agent.TempDirectory)/$(aksClusterName)-sealed-secret-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
 
   - task: Bash@3
     displayName: 'Create repositories.yaml secret'
