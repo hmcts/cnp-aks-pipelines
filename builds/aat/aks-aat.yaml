@@ -17,8 +17,8 @@ variables:
 jobs:
 - job: DeployAKS
   pool:
-    #vmImage: 'Ubuntu 16.04'
-    name: hmcts-agent-pool
+    vmImage: 'Ubuntu 16.04'
+    #name: hmcts-agent-pool
   workspace:
     clean: all
   steps:
