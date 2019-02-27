@@ -43,7 +43,7 @@ jobs:
           --name cnp-aks-cluster \
           --kubernetes-version 1.12.5 \
           --node-count 3 \
-          --node-vm-size Standard_B8ms \
+          --node-vm-size Standard_B4ms \
           --location uksouth \
           --network-plugin azure \
           --node-osdisk-size 100 \
