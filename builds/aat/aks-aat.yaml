@@ -88,7 +88,7 @@ jobs:
   - task: DownloadSecureFile@1
     displayName: 'Download cluster sealed secret key'
     inputs:
-      secureFile: $(aksClusterName)-sealed-secrets-key.yaml
+      secureFile: aat-sealed-secrets-key.yaml
 
   - task: Bash@3
     displayName: 'Create sealed secrets key secret'
@@ -96,7 +96,7 @@ jobs:
       targetType: inline
       failOnStderr: false
       script: |
-        kubectl apply -f $(Agent.TempDirectory)/$(aksClusterName)-sealed-secrets-key.yaml
+        kubectl apply -f $(Agent.TempDirectory)/aat-sealed-secrets-key.yaml
         kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
 
   - task: Bash@3
