@@ -32,7 +32,7 @@ jobs:
   ## TODO: change to ARM template when support for autoscaler is added 
   - task: AzureCLI@1
     displayName: 'Install AKS with Azure CLI'
-    enabled: true
+    enabled: false
     inputs:
       azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
