@@ -1,7 +1,12 @@
 imageTag: latest
 loadBalancerIP: 10.99.201.97
-cpuLimit: 1000m
-memoryLimit: 100Mi
+resources:
+  limits:
+    cpu: 1000m
+    memory: 300Mi
+  requests:
+    cpu: 100m
+    memory: 20Mi
 service:
   annotations:
     service.beta.kubernetes.io/azure-load-balancer-internal: "true"
