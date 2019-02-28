@@ -78,13 +78,13 @@ jobs:
       aksClusterName: $(aksClusterName)
 
   - task: AzureCLI@1
-      displayName: 'Create namespaces'
-      inputs:
-        azureSubscription: azurerm-nonprod
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
-          kubectl apply -f manifests/all/namespaces.yaml
+    displayName: 'Create namespaces'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
+        kubectl apply -f manifests/all/namespaces.yaml
 
   - task: DownloadSecureFile@1
     displayName: 'Download cluster sealed secret key'
