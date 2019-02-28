@@ -31,13 +31,40 @@ jobs:
     aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
-  - template: ../tasks/deploy-aks-arm.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksParametersFile: $(aksParametersFile)
-      aksServicePrincipalId: $(aksServicePrincipalId)
-      aksServicePrincipalSecret: $(aksServicePrincipalSecret)
+  - task: AzureCLI@1
+    displayName: 'Install AKS with Azure CLI'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az extension add --name aks-preview
+        az aks create \
+          --resource-group cnp-aks-rg \
+          --name cnp-aks-cluster \
+          --kubernetes-version 1.12.5 \
+          --node-count 3 \
+          --node-vm-size Standard_B4ms \
+          --location uksouth \
+          --network-plugin azure \
+          --node-osdisk-size 100 \
+          --dns-name-prefix cnp-aks-cluster \
+          --vnet-subnet-id '/subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/core-infra-preview/providers/Microsoft.Network/virtualNetworks/core-infra-vnet-preview/subnets/aks-subnet' \
+          --ssh-key-value 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcEzLBwPV771KC/iRQtmJaQwMpOR6YhWnKpId7eIgfNV1N0ww0vCur8hZSb4XZKkJr7NUQjAzgLvbS774QmxUYw+lfGfJpsnrXY4nakugJqK9fK3MFJ4lK3YPwHrjzFLlLZ+aVvGGxVh2YB4+ZlutojT/Wu/wL8kCk+IFm4YR7VXObXsaq4Izv0pdt0N/zq2gn59Tn042PwPaE7+rsqgkr8lSIWdHFbGD4PvndS4+fqdHGe0VhedUkbijLd8ikcK/haOXe4RTP13EYjCgyzY93LaQ4JCJyoI3FQS6ttkFR20k/KbBtL02s6+FcS8zF6zdoOSgg1eL8FM3wCMfhNuUN' \
+          --service-principal $(aksServicePrincipalId) \
+          --client-secret $(aksServicePrincipalSecret) \
+          --enable-vmss \
+          --enable-cluster-autoscaler \
+          --min-count 3 \
+          --max-count 50 \
+          --max-pods 50 \
+          --tags 'Team Name=CNP'
+  # - template: ../tasks/deploy-aks-arm.yaml
+  #   parameters:
+  #     serviceConnection: $(serviceConnection)
+  #     aksResourceGroup: $(aksResourceGroup)
+  #     aksParametersFile: $(aksParametersFile)
+  #     aksServicePrincipalId: $(aksServicePrincipalId)
+  #     aksServicePrincipalSecret: $(aksServicePrincipalSecret)
   - template: ../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -50,75 +77,50 @@ jobs:
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
 
-- job: InstallTraefik
-  dependsOn: DeployAKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - template: ../steps/configure-helm-client.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      helmVersion: $(helmVersion)
-  - template: ../tasks/traefik.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      environment: $(environment)
-
-- job: InstallKured
-  dependsOn: DeployAKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - task: AzureKeyVault@1
-    displayName: 'Get secrets from Keyvault'
-    inputs:
-      azureSubscription: $(serviceConnection)
-      keyVaultName: $(keyvaultName)
-      secretsFilter: 'kured-slack-webhook-url'
-  - template: ../steps/configure-helm-client.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      helmVersion: $(helmVersion)
   - task: AzureCLI@1
-    displayName: 'Configure Helm for ACR'
+    displayName: 'Create namespaces'
     inputs:
       azureSubscription: azurerm-nonprod
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az configure --defaults acr=$(acrName)
-        az acr helm repo add --name $(acrName)
-        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
-        helm upgrade kured $(acrName)/kured --install --set slackWebhookUrl=$(kured-slack-webhook-url),slackUsername=$(aksClusterName)
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
+        kubectl apply -f manifests/all/namespaces.yaml
 
-- job: InstallServiceCatalog
-  dependsOn:
-  - Keyvault
-  - DeployAKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  variables:
-    svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSubscriptionId']]
-    svcatServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalId']]
-    svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
-    svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
-  steps:
-  - template: ../steps/configure-helm-client.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      helmVersion: $(helmVersion)
-  - template: ../steps/service-catalog.yml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
+  - task: DownloadSecureFile@1
+    displayName: 'Download cluster sealed secret key'
+    inputs:
+      secureFile: preview-sealed-secrets-key.yaml
+
+  - task: Bash@3
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/preview-sealed-secrets-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+
+  - task: Bash@3
+    displayName: 'Install Weave Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add weaveworks https://weaveworks.github.io/flux
+        helm upgrade flux weaveworks/flux --install --namespace admin -f helm/nonprod/flux.yaml --wait
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download flux deploy key'
+    inputs:
+      secureFile: preview-flux-git-deploy.yaml
+
+  - task: Bash@3
+    displayName: 'Create flux deploy key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl -n admin delete secret flux-git-deploy
+        kubectl create -f $(Agent.TempDirectory)/preview-flux-git-deploy.yaml
+        kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
+        

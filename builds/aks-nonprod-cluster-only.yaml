@@ -1,9 +1,0 @@
-name: Nonprod AKS Pipeline (cluster only)
-trigger: none
-jobs:
-- template: ../jobs/aks-cluster-only.yaml
-  parameters:
-    serviceConnection: azurerm-nonprod
-    keyvaultName: infra-vault-nonprod
-    aksResourceGroup: cnp-aks-rg
-    aksParametersFile: arm/parameters/aks/nonprod.json
