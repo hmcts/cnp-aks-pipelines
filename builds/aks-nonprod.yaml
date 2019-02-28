@@ -50,75 +50,49 @@ jobs:
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
 
-- job: InstallTraefik
-  dependsOn: DeployAKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - template: ../steps/configure-helm-client.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      helmVersion: $(helmVersion)
-  - template: ../tasks/traefik.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      environment: $(environment)
+  - task: AzureCLI@1
+      displayName: 'Create namespaces'
+      inputs:
+        azureSubscription: azurerm-nonprod
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
+          kubectl apply -f manifests/all/namespaces.yaml
 
-# - job: InstallKured
-#   dependsOn: DeployAKS
-#   condition: succeeded()
-#   pool:
-#     vmImage: 'Ubuntu 16.04'
-#   steps:
-#   - task: AzureKeyVault@1
-#     displayName: 'Get secrets from Keyvault'
-#     inputs:
-#       azureSubscription: $(serviceConnection)
-#       keyVaultName: $(keyvaultName)
-#       secretsFilter: 'kured-slack-webhook-url'
-#   - template: ../steps/configure-helm-client.yaml
-#     parameters:
-#       serviceConnection: $(serviceConnection)
-#       aksResourceGroup: $(aksResourceGroup)
-#       aksClusterName: $(aksClusterName)
-#       helmVersion: $(helmVersion)
-#   - task: AzureCLI@1
-#     displayName: 'Configure Helm for ACR'
-#     inputs:
-#       azureSubscription: azurerm-nonprod
-#       scriptLocation: 'inlineScript'
-#       inlineScript: |
-#         az configure --defaults acr=$(acrName)
-#         az acr helm repo add --name $(acrName)
-#         az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
-#         helm upgrade kured $(acrName)/kured --install --set slackWebhookUrl=$(kured-slack-webhook-url),slackUsername=$(aksClusterName)
+  - task: DownloadSecureFile@1
+    displayName: 'Download cluster sealed secret key'
+    inputs:
+      secureFile: preview-sealed-secrets-key.yaml
 
-- job: InstallServiceCatalog
-  dependsOn:
-  - Keyvault
-  - DeployAKS
-  condition: succeeded()
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  variables:
-    svcatServicePrincipalSubscriptionId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSubscriptionId']]
-    svcatServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalId']]
-    svcatServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalSecret']]
-    svcatServicePrincipalTenantId: $[dependencies.Keyvault.outputs['exportKeyvault.svcatServicePrincipalTenantId']]
-  steps:
-  - template: ../steps/configure-helm-client.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      helmVersion: $(helmVersion)
-  - template: ../steps/service-catalog.yml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
+  - task: Bash@3
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/preview-sealed-secrets-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+
+  - task: Bash@3
+    displayName: 'Install Weave Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add weaveworks https://weaveworks.github.io/flux
+        helm upgrade flux weaveworks/flux --install --namespace admin -f helm/nonprod/flux.yaml --wait
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download flux deploy key'
+    inputs:
+      secureFile: preview-flux-git-deploy.yaml
+
+  - task: Bash@3
+    displayName: 'Create flux deploy key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/preview-flux-git-deploy.yaml
+        kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
+        
