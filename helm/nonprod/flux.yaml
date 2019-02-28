@@ -1,0 +1,13 @@
+helmOperator:
+    create: true
+    chartsSyncInterval: 1m
+    #configureRepositories:
+    #  enable: true
+registry:
+  acr:
+    enabled: true
+git:
+  url: git@github.com:hmcts/cnp-flux-config
+  path: k8s/preview
+  label: preview
+  pollInterval: 1m
