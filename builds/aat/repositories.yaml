@@ -13,6 +13,6 @@ repositories:
   certFile: ""
   keyFile: ""
   name: ${ACR_NAME}
-  url: https://${ACR_NAME}.azurecr.io/helm/v1/repo
+  url: https://${ACR_NAME}.azurecr.io/helm/v1/repo/
   username: ${ACR_SERVICE_PRINCIPAL_ID}
   password: ${ACR_SERVICE_PRINCIPAL_SECRET}
