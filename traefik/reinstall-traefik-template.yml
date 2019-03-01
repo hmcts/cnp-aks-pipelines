@@ -37,7 +37,7 @@ steps:
     command: 'install'
     chartType: 'Name'
     chartName: 'stable/traefik'
-    namespace: 'kube-system'
+    namespace: 'admin'
     releaseName: 'traefik'
     valueFile: 'helm/$(environment)/traefik.yml'
 

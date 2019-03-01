@@ -16,6 +16,6 @@ steps:
     command: 'upgrade'
     chartType: 'Name'
     chartName: 'stable/traefik'
-    namespace: 'kube-system'
+    namespace: 'admin'
     releaseName: 'traefik'
     valueFile: 'helm/${{ parameters.environment }}/traefik.yml'
