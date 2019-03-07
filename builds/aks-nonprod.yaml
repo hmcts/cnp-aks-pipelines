@@ -53,11 +53,18 @@ jobs:
           --service-principal $(aksServicePrincipalId) \
           --client-secret $(aksServicePrincipalSecret) \
           --enable-vmss \
-          --enable-cluster-autoscaler \
-          --min-count 3 \
-          --max-count 50 \
           --max-pods 50 \
           --tags 'Team Name=CNP'
+
+        az aks enable-addons -a monitoring -n cnp-aks-cluster -g cnp-aks-rg --workspace-resource-id "subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/oms-automation/providers/Microsoft.OperationalInsights/workspaces/hmcts-nonprod"
+
+        az aks update \
+          --resource-group cnp-aks-rg \
+          --name cnp-aks-cluster \
+          --enable-cluster-autoscaler \
+          --min-count 3 \
+          --max-count 35
+          
   # - template: ../tasks/deploy-aks-arm.yaml
   #   parameters:
   #     serviceConnection: $(serviceConnection)
