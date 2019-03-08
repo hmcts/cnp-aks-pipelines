@@ -20,7 +20,7 @@ jobs:
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
 
           if [ "$(kubectl get ns $(namespace) 2>/dev/null)" ]; then
-            kubectl delete $(namespace) test
+            kubectl delete ns $(namespace)
           else
             echo "namespace $(namespace) not found, nothing to delete."
           fi
