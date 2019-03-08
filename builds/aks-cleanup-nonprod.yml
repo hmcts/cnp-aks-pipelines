@@ -49,7 +49,6 @@ jobs:
       inputs:
         helmVersion: $(helmVersion)
         installKubectl: false
-
     - task: AzureCLI@1
       displayName: 'Helm Delete Release'
       inputs:
@@ -64,4 +63,3 @@ jobs:
           else
             echo "chart $(namespace) not found, doing nothing"
           fi
-
