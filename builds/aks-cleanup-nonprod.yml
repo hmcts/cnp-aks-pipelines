@@ -1,46 +1,65 @@
 ---
-
 variables:
   connectionType: 'Azure Resource Manager'
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
   containerRegistry: 'hmcts'
+  helmVersion: '2.13.0'
 
 jobs:
   - job: delete_namespace
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
-    - template: ../steps/kube-delete-namespace.yml
-      parameters:
-        serviceConnection: azurerm-nonprod
+    - task: AzureCLI@1
+      displayName: 'Delete Namespace'
+      inputs:
+        azureSubscription: azurerm-nonprod
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
+
+          if [ "$(kubectl get ns $(namespace) 2>/dev/null)" ]; then
+            kubectl delete ns $(namespace)
+          else
+            echo "namespace $(namespace) not found, nothing to delete."
+          fi
   
   - job: delete_acr_image
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
-    - template: ../steps/delete-acr-image.yml
-      parameters:
-        serviceConnection: azurerm-nonprod
+    - task: AzureCLI@1
+      displayName: 'Delete ACR image'
+      enabled: true
+      inputs:
+        azureSubscription: azurerm-nonprod
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          repository=`echo $(namespace) | sed 's/-pr-.*//'`
+          tag=`echo $(namespace) | sed "s/$repository-//"`
+          az acr repository delete -n $(containerRegistry) --image "hmcts/$repository:$tag" --yes
 
   - job: delete_helm_release
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
     - task: HelmInstaller@0
-      displayName: 'Install Helm 2.11.0'
+      displayName: 'Install Helm $(helmVersion)'
       inputs:
-        helmVersion: "2.11.0"
+        helmVersion: $(helmVersion)
         installKubectl: false
-
     - task: AzureCLI@1
       displayName: 'Helm Delete Release'
-      continueOnError: true # TODO In case of manifest deployment instead, remove when Helm is used exclusively
       inputs:
         azureSubscription:  'azurerm-nonprod'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
           helm init --client-only
-          helm delete --purge $(namespace)
 
+          if [ "$(helm get $(namespace) 2>/dev/null)" ]; then
+            helm delete --purge $(namespace)
+          else
+            echo "chart $(namespace) not found, doing nothing"
+          fi
