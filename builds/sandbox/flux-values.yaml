@@ -1,6 +1,8 @@
 helmOperator:
     create: true
     chartsSyncInterval: 1m
+    configureRepositories:
+      enable: true
 registry:
   acr:
     enabled: true
