@@ -18,7 +18,7 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
-  - template: ../steps/keyvault-ci.yaml
+  - template: ../../steps/keyvault-ci.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       keyvaultName: $(keyvaultName)
@@ -31,20 +31,20 @@ jobs:
     aksServicePrincipalId: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalId']]
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
-  - template: ../tasks/deploy-aks-arm.yaml
+  - template: ../../tasks/deploy-aks-arm.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksParametersFile: $(aksParametersFile)
       aksServicePrincipalId: $(aksServicePrincipalId)
       aksServicePrincipalSecret: $(aksServicePrincipalSecret)
-  - template: ../steps/install-tiller.yaml
+  - template: ../../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
       helmVersion: $(helmVersion)
-  - template: ../tasks/dashboard-rbac.yaml
+  - template: ../../tasks/dashboard-rbac.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
@@ -74,13 +74,36 @@ jobs:
         kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
 
   - task: Bash@3
+    displayName: 'Template repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: true
+      script: |
+        sed -i -e 's/${ACR_NAME}/$(acrName)/g' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_ID}@'"$AKS_SP_ID"'@' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_SECRET}@'"$AKS_SP_SECRET"'@' \
+          builds/sandbox/repositories.yaml
+    env:
+      AKS_SP_ID: $(aksServicePrincipalId)
+      AKS_SP_SECRET: $(aksServicePrincipalSecret)
+
+  - task: Bash@3
+    displayName: 'Create repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl -n admin delete secret flux-helm-repositories || true
+        kubectl -n admin create secret generic flux-helm-repositories --from-file=builds/sandbox/repositories.yaml
+
+  - task: Bash@3
     displayName: 'Install Weave Flux'
     inputs:
       targetType: inline
       failOnStderr: false
       script: |
         helm repo add weaveworks https://weaveworks.github.io/flux
-        helm upgrade flux weaveworks/flux --install --namespace admin -f helm/sandbox/flux.yaml --wait
+        helm upgrade flux weaveworks/flux --install --namespace admin -f builds/sandbox/flux-values.yaml --wait
 
   - task: DownloadSecureFile@1
     displayName: 'Download flux deploy key'
