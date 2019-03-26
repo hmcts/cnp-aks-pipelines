@@ -40,7 +40,7 @@ jobs:
           repository=`echo $(namespace) | sed 's/-pr-.*//'`
           tag=`echo $(namespace) | sed "s/$repository-//"`
           az acr repository show-tags -n $(containerRegistry) --repository hmcts/$repository --query "[?starts_with(@, '$tag-')]" -o tsv \
-            | xargs -I% az acr repository delete -n $(containerRegistry) --image "hmcts/$repository:%" --yes
+            | xargs -I% az acr repository untag -n $(containerRegistry) --image "hmcts/$repository:%"
 
   - job: delete_helm_release
     pool:
