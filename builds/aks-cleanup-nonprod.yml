@@ -1,11 +1,11 @@
 ---
 variables:
   connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'cnp-aks-sandbox-rg'  # cnp-aks-rg
-  kubernetesCluster: 'cnp-aks-sandbox-cluster'  # cnp-aks-cluster
-  containerRegistry: 'hmctssandbox'  # hmcts
+  azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
+  kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
+  containerRegistry: 'hmcts'  # hmctssandbox
   helmVersion: '2.13.0'
-  azureSubscription: azurerm-sandbox  # azurerm-nonprod
+  azureSubscription: azurerm-nonprod  # azurerm-sandbox
 
 jobs:
   - job: delete_namespace
