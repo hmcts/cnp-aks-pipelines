@@ -1,6 +1,8 @@
 helmOperator:
     create: true
     chartsSyncInterval: 1m
+    configureRepositories:
+      enable: true
 registry:
   acr:
     enabled: true
@@ -9,3 +11,5 @@ git:
   path: k8s/sandbox,k8s/common
   label: sandbox
   pollInterval: 1m
+additionalArgs:
+- --connect=ws://fluxcloud
