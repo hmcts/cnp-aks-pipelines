@@ -1,10 +1,11 @@
 ---
 variables:
   connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'cnp-aks-rg'
-  kubernetesCluster: 'cnp-aks-cluster'
-  containerRegistry: 'hmcts'
+  azureResourceGroup: 'cnp-aks-sandbox-rg'  # cnp-aks-rg
+  kubernetesCluster: 'cnp-aks-sandbox-cluster'  # cnp-aks-cluster
+  containerRegistry: 'hmctssandbox'  # hmcts
   helmVersion: '2.13.0'
+  azureSubscription: azurerm-sandbox  # azurerm-nonprod
 
 jobs:
   - job: delete_namespace
@@ -14,7 +15,7 @@ jobs:
     - task: AzureCLI@1
       displayName: 'Delete Namespace'
       inputs:
-        azureSubscription: azurerm-nonprod
+        azureSubscription: $(azureSubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
@@ -33,7 +34,7 @@ jobs:
       displayName: 'Delete ACR image'
       enabled: true
       inputs:
-        azureSubscription: azurerm-nonprod
+        azureSubscription: $(azureSubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
           repository=`echo $(namespace) | sed 's/-pr-.*//'`
@@ -53,7 +54,7 @@ jobs:
     - task: AzureCLI@1
       displayName: 'Helm Delete Release'
       inputs:
-        azureSubscription:  'azurerm-nonprod'
+        azureSubscription:  '$(azureSubscription)'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
