@@ -26,12 +26,12 @@ jobs:
             echo "namespace $(namespace) not found, nothing to delete."
           fi
   
-  - job: delete_acr_image
+  - job: untag_acr_image
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
     - task: AzureCLI@1
-      displayName: 'Delete ACR image'
+      displayName: 'Untag ACR image'
       enabled: true
       inputs:
         azureSubscription: $(azureSubscription)
