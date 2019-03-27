@@ -1,10 +1,11 @@
 ---
 variables:
   connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'cnp-aks-rg'
-  kubernetesCluster: 'cnp-aks-cluster'
-  containerRegistry: 'hmcts'
+  azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
+  kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
+  containerRegistry: 'hmcts'  # hmctssandbox
   helmVersion: '2.13.0'
+  azureSubscription: azurerm-nonprod  # azurerm-sandbox
 
 jobs:
   - job: delete_namespace
@@ -14,7 +15,7 @@ jobs:
     - task: AzureCLI@1
       displayName: 'Delete Namespace'
       inputs:
-        azureSubscription: azurerm-nonprod
+        azureSubscription: $(azureSubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
@@ -25,20 +26,21 @@ jobs:
             echo "namespace $(namespace) not found, nothing to delete."
           fi
   
-  - job: delete_acr_image
+  - job: untag_acr_image
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
     - task: AzureCLI@1
-      displayName: 'Delete ACR image'
+      displayName: 'Untag ACR image'
       enabled: true
       inputs:
-        azureSubscription: azurerm-nonprod
+        azureSubscription: $(azureSubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
           repository=`echo $(namespace) | sed 's/-pr-.*//'`
           tag=`echo $(namespace) | sed "s/$repository-//"`
-          az acr repository delete -n $(containerRegistry) --image "hmcts/$repository:$tag" --yes
+          az acr repository show-tags -n $(containerRegistry) --repository hmcts/$repository --query "[?starts_with(@, '$tag-')]" -o tsv \
+            | xargs -I% az acr repository untag -n $(containerRegistry) --image "hmcts/$repository:%"
 
   - job: delete_helm_release
     pool:
@@ -52,7 +54,7 @@ jobs:
     - task: AzureCLI@1
       displayName: 'Helm Delete Release'
       inputs:
-        azureSubscription:  'azurerm-nonprod'
+        azureSubscription:  '$(azureSubscription)'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
