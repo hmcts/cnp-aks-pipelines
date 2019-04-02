@@ -27,14 +27,14 @@ jobs:
     inputs:
       azureSubscription: $(serviceConnection)
       keyVaultName: $(keyvaultName)
-      secretsFilter: 'aks-sp-id,aks-sp-secret,kured-slack-webhook-url'
+      secretsFilter: 'aks-sp-id,aks-sp-secret'
   - template: ../../tasks/deploy-aks-arm.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksParametersFile: $(aksParametersFile)
-      aksServicePrincipalId: $(aksServicePrincipalId)
-      aksServicePrincipalSecret: $(aksServicePrincipalSecret)
+      aksServicePrincipalId: $(aks-sp-id)
+      aksServicePrincipalSecret: $(aks-sp-secret)
   - template: ../../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
