@@ -28,25 +28,25 @@ jobs:
       azureSubscription: $(serviceConnection)
       keyVaultName: $(keyvaultName)
       secretsFilter: 'aks-sp-id,aks-sp-secret,kured-slack-webhook-url'
-  - template: tasks/deploy-aks-arm.yaml
+  - template: ../../tasks/deploy-aks-arm.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksParametersFile: $(aksParametersFile)
       aksServicePrincipalId: $(aksServicePrincipalId)
       aksServicePrincipalSecret: $(aksServicePrincipalSecret)
-  - template: steps/install-tiller.yaml
+  - template: ../../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
       helmVersion: $(helmVersion)
-  - template: tasks/dashboard-rbac.yaml
+  - template: ../../tasks/dashboard-rbac.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
-  - template: steps/configure-helm-client.yaml
+  - template: ../../steps/configure-helm-client.yaml
     parameters:
       serviceConnection: $(serviceConnection)
       aksResourceGroup: $(aksResourceGroup)
