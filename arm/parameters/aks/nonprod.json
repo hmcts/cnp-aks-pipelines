@@ -34,6 +34,12 @@
       },
       "servicePrincipalSecret": {
           "value": ""
+      },
+      "logAnalyticsResourceGroup": {
+        "value": "oms-automation"
+      },
+      "logAnalyticsWorkspaceName": {
+        "value": "hmcts-nonprod"
       }
     }
 }
