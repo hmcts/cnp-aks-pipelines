@@ -34,6 +34,12 @@
         },
         "servicePrincipalSecret": {
             "type": "String"
+        },
+        "logAnalyticsResourceGroup": {
+            "type": "String"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "String"
         }
     },
     "variables": {},
@@ -51,6 +57,14 @@
             "properties": {
                 "kubernetesVersion": "[parameters('kubernetesVersion')]",
                 "dnsPrefix": "[parameters('dnsPrefix')]",
+                "addonProfiles": {
+                    "omsagent": {
+                      "config": {
+                        "logAnalyticsWorkspaceResourceID": "[resourceId(parameters('logAnalyticsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+                      },
+                      "enabled": true
+                    }
+                },
                 "agentPoolProfiles": [
                     {
                         "name": "nodepool1",
