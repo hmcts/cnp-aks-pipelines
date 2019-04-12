@@ -1,0 +1,133 @@
+#
+# Build for the sprod SPROD Cluster
+#
+name: SPROD AKS Pipeline
+trigger: none
+pr: none
+variables:
+  environment: 'nonprod'
+  aksResourceGroup: 'cnp-sprod-aks-rg'
+  aksClusterName: 'cnp-sprod-cluster'
+  keyvaultName: 'infra-vault-sandbox'
+  serviceConnection: 'azurerm-sandbox'
+  aksParametersFile: 'arm/parameters/aks/sprod.json'
+  helmVersion: '2.13.1'
+  acrName: hmcts
+  
+jobs:
+- job: DeployAKS
+  pool:
+    vmImage: 'Ubuntu 16.04'
+    #name: hmcts-agent-pool
+  workspace:
+    clean: all
+  steps:
+  - task: AzureKeyVault@1
+    displayName: 'Get secrets from Keyvault'
+    inputs:
+      azureSubscription: $(serviceConnection)
+      keyVaultName: $(keyvaultName)
+      secretsFilter: 'aks-sprod-sp-id,aks-sprod-sp-secret'
+  - template: ../../tasks/deploy-aks-arm.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksParametersFile: $(aksParametersFile)
+      aksServicePrincipalId: $(aks-sprod-sp-id)
+      aksServicePrincipalSecret: $(aks-sprod-sp-secret)
+  - template: ../../steps/install-tiller.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
+  - template: ../../tasks/dashboard-rbac.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+  - template: ../../steps/configure-helm-client.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
+
+  - task: AzureCLI@1
+    displayName: 'Create namespaces'
+    inputs:
+      azureSubscription: azurerm-sandbox
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
+        kubectl apply -f manifests/all/namespaces.yaml
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download cluster sealed secret key'
+    inputs:
+      secureFile: sprod-sealed-secrets-key.yaml
+
+  - task: Bash@3
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/sprod-sealed-secrets-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+
+  - task: Bash@3
+    displayName: 'Install Bitnami Sealed Secrets'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin -f builds/sprod/sealed-secrets-values.yaml --wait
+
+  - task: Bash@3
+    displayName: 'Template repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: true
+      script: |
+        sed -i -e 's/${ACR_NAME}/$(acrName)/g' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_ID}@'"$AKS_SP_ID"'@' \
+               -e 's@${ACR_SERVICE_PRINCIPAL_SECRET}@'"$AKS_SP_SECRET"'@' \
+          builds/sprod/repositories.yaml
+    env:
+      AKS_SP_ID: $(aks-sprod-sp-id)
+      AKS_SP_SECRET: $(aks-sprod-sp-secret)
+
+  - task: Bash@3
+    displayName: 'Create repositories.yaml secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl -n admin delete secret flux-helm-repositories || true
+        kubectl -n admin create secret generic flux-helm-repositories --from-file=builds/sprod/repositories.yaml
+
+  - task: Bash@3
+    displayName: 'Install Weave Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add weaveworks https://weaveworks.github.io/flux
+        helm upgrade flux weaveworks/flux --install --namespace admin -f builds/sprod/flux-values.yaml --wait
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download flux deploy key'
+    inputs:
+      secureFile: sprod-flux-git-deploy.yaml
+
+  - task: Bash@3
+    displayName: 'Create flux deploy key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/sprod-flux-git-deploy.yaml
+        kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
+
+
