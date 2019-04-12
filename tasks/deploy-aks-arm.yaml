@@ -1,9 +1,4 @@
 parameters:
-  serviceConnection: ''
-  aksResourceGroup: ''
-  aksParametersFile: ''
-  aksServicePrincipalId: ''
-  aksServicePrincipalSecret: ''
 
 steps:
 - task: AzureResourceGroupDeployment@2
