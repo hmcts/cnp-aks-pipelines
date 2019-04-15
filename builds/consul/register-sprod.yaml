@@ -1,0 +1,11 @@
+name: Register Consul (SPROD)
+trigger: none
+pr: none
+
+jobs:
+  - template: template.yaml
+    parameters:
+      serviceName: $(serviceName)
+      serviceAddress: 10.100.47.247
+      consulAddress: 10.100.11.254
+      agentPool: mgmt-aks-sandbox
