@@ -1,22 +1,12 @@
 name: Register Consul AAT
 trigger: none
 pr: none
-variables:
-  serviceName: 
-  
+
 jobs:
-- job: RegisterConsul
-  pool:
-    name: hmcts-agent-pool
-  workspace:
-    clean: all
-  steps:
-  - task: Bash@3
-    displayName: 'Register service in Consul AAT'
-    inputs:
-      targetType: inline
-      failOnStderr: false
-      script: |
-        curl -H "Content-Type: application/json" -X PUT \
-          --data '{"Name":"$(serviceName)","Service":"$(serviceName)","Address":"10.96.160.97","Port":80}' \
-          http://10.96.139.254:8500/v1/agent/service/register
+  - template: template.yml
+    parameters:
+      serviceName: $(serviceName)
+      serviceAddress: 10.96.160.97
+      consulAddress: 10.96.139.254
+      agentPool: hmcts-agent-pool
+

@@ -1,0 +1,22 @@
+parameters:
+  serviceName: ''
+  serviceAddress: ''
+  consulAddress: ''
+  agentPool: ''
+
+jobs:
+- job: RegisterConsul
+  pool:
+    name: ${{ parameters.agentPool }}
+  workspace:
+    clean: all
+  steps:
+  - task: Bash@3
+    displayName: 'Register service in Consul AAT'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        curl -H "Content-Type: application/json" -X PUT \
+          --data '{"Name":"$(serviceName)","Service":"$(serviceName)","Address":"${{ parameters.serviceAddress }}","Port":80}' \
+          http://${{ parameters.consulAddress }}:8500/v1/agent/service/register
