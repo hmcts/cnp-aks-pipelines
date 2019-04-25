@@ -32,7 +32,7 @@ jobs:
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
   - task: AzureCLI@1
-    enabled: false
+    enabled: true
     displayName: 'Install AKS with Azure CLI'
     inputs:
       azureSubscription: azurerm-nonprod
