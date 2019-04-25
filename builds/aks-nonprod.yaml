@@ -32,6 +32,7 @@ jobs:
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
   - task: AzureCLI@1
+    enabled: false
     displayName: 'Install AKS with Azure CLI'
     inputs:
       azureSubscription: azurerm-nonprod
@@ -113,7 +114,7 @@ jobs:
       targetType: inline
       failOnStderr: false
       script: |
-        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin -set secretName=preview-sealed-secrets-key --wait
+        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin --set secretName=preview-sealed-secrets-key --wait
 
   - task: Bash@3
     displayName: 'Install Weave Flux'
