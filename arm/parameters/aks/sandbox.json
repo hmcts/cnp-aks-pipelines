@@ -15,13 +15,13 @@
         "value": 3
       },
       "aksVnetResourceGroup": {
-        "value": "core-infra-saat"
+        "value": "core-infra-sandbox"
       },
       "aksVnetName": {
-          "value": "core-infra-vnet-saat"
+          "value": "core-infra-vnet-sandbox"
       },
       "aksSubnetName": {
-          "value": "aks-subnet"
+          "value": "aks"
       },
       "dnsPrefix": {
         "value": "cnp-aks-sa-cnp-aks-sandbox--bf308a"

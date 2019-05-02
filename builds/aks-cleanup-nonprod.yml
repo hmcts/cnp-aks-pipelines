@@ -4,7 +4,7 @@ variables:
   azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
   kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
   containerRegistry: 'hmcts'  # hmctssandbox
-  helmVersion: '2.13.0'
+  helmVersion: '2.13.1'
   azureSubscription: azurerm-nonprod  # azurerm-sandbox
 
 jobs:
