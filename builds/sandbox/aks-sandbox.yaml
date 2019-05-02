@@ -74,6 +74,14 @@ jobs:
         kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
 
   - task: Bash@3
+    displayName: 'Install Bitnami Sealed Secrets'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin -f builds/sandbox/sealed-secrets-values.yaml --wait
+
+  - task: Bash@3
     displayName: 'Template repositories.yaml secret'
     inputs:
       targetType: inline
