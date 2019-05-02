@@ -6,7 +6,7 @@ variables:
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
   containerRegistry: 'hmcts'
-  helmVersion: 2.13.0
+  helmVersion: 2.13.1
 
 jobs:
   - job: DeleteFaileHelmReleases
