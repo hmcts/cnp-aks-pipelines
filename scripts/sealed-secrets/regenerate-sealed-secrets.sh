@@ -40,5 +40,5 @@ git add .
 echo "checking git status before commiting"
 git status
 
-git commit -m "Regenerating Sealed secrets with latest certificate for $(environment)"
+git commit -m "Regenerating Sealed secrets with latest certificate for ${ENVIRONMENT}"
 git push
