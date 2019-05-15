@@ -48,4 +48,4 @@ jobs:
   - task: DownloadSecureFile@1
     displayName: 'Download flux deploy key'
     inputs:
-      secureFile: preview-flux-git-deploy.yaml
+      secureFile: mgmt-sandbox-flux-git-deploy.yaml
