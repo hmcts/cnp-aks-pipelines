@@ -19,3 +19,33 @@ jobs:
   - template: ../steps/artifactory.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
+  - task: Bash@3
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/sandbox-mgmt-sealed-secrets-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+
+  - task: Bash@3
+    displayName: 'Install Bitnami Sealed Secrets'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin --set secretName=sandbox-mgmt-sealed-secrets-key --wait
+
+  - task: Bash@3
+    displayName: 'Install Weave Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add weaveworks https://weaveworks.github.io/flux
+        helm upgrade flux weaveworks/flux --install --namespace admin -f helm/mgmt-sandbox/flux.yaml --wait
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download flux deploy key'
+    inputs:
+      secureFile: preview-flux-git-deploy.yaml
