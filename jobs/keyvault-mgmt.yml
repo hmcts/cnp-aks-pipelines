@@ -16,10 +16,11 @@ jobs:
     inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
       keyVaultName: $(keyvaultName)
-      secretsFilter: 'aks-mgmt-sp-id,aks-mgmt-sp-secret'      
+      secretsFilter: 'aks-mgmt-sp-id,aks-mgmt-sp-secret,mgmt-sandbox-sealed-secret'
 
   - script: |
       echo "##vso[task.setvariable variable=aksServicePrincipalId;isOutput=true]$(aks-mgmt-sp-id)"
       echo "##vso[task.setvariable variable=aksServicePrincipalSecret;isOutput=true]$(aks-mgmt-sp-secret)"
+      echo "##vso[task.setvariable variable=mgmtSandboxSealedSecret;isOutput=true]$(mgmt-sandbox-sealed-secret)"
     displayName: 'Translate Keyvault Variables'
     name: exportKeyvault
