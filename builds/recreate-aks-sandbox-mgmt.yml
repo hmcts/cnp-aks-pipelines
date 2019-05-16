@@ -24,3 +24,7 @@ jobs:
 - template: ../jobs/aks-mgmt.yml
   parameters:
     serviceConnection: azurerm-sandbox
+
+- template: ../jobs/aks-mgmt-sandbox.yml
+  parameters:
+    serviceConnection: azurerm-sandbox
