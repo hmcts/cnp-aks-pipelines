@@ -1,4 +1,7 @@
 ---
+name: AKS Cleanup Preview
+trigger: none
+pr: none
 variables:
   connectionType: 'Azure Resource Manager'
   azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg

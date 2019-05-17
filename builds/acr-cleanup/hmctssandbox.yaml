@@ -1,6 +1,6 @@
 name: ACR Cleanup (hmctssandbox)
 trigger: none
-
+pr: none
 variables:
   serviceConnection: azurerm-sandbox
   acrName: "hmctssandbox"
