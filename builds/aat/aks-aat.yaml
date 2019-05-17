@@ -11,7 +11,7 @@ variables:
   keyvaultName: 'infra-vault-nonprod'
   serviceConnection: 'azurerm-nonprod'
   aksParametersFile: 'arm/parameters/aks/aat.json'
-  helmVersion: '2.13.1'
+  helmVersion: '2.14.0'
   acrName: hmcts
   
 jobs:

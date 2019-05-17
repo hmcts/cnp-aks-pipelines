@@ -11,7 +11,7 @@ variables:
   keyvaultName: 'infra-vault-sandbox'
   serviceConnection: 'azurerm-sandbox'
   aksParametersFile: 'arm/parameters/aks/sprod.json'
-  helmVersion: '2.13.1'
+  helmVersion: '2.14.0'
   acrName: hmcts
   
 jobs:
