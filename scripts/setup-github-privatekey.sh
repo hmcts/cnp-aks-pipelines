@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup env with GITHUB_KEY with github private key and GITHUB_USER_NAME, with username to set agent with credentials.
+# setup env with GITHUB_KEY with github private key and GITHUB_USER_NAME, GITHUB_USER_EMAIL with user details to set agent with credentials.
 mkdir -p ~/.ssh
 echo "${GITHUB_KEY}" > ~/.ssh/id_rsa
 echo "Setting up appropriate permissiions for ssh key"
