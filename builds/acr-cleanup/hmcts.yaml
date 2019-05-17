@@ -1,6 +1,6 @@
 name: ACR Cleanup (hmcts)
 trigger: none
-
+pr: none
 variables:
   serviceConnection: azurerm-nonprod
   acrName: "hmcts"
