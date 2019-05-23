@@ -9,3 +9,5 @@ git:
   path: k8s/mgmt-sandbox
   label: mgmt-sandbox
   pollInterval: 1m
+additionalArgs:
+- --connect=ws://fluxcloud

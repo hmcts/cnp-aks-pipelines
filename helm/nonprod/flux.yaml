@@ -9,3 +9,5 @@ git:
   path: k8s/preview,k8s/common
   label: preview
   pollInterval: 1m
+additionalArgs:
+- --connect=ws://fluxcloud
