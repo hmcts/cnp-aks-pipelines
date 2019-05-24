@@ -11,3 +11,5 @@ git:
   path: k8s/aat,k8s/common
   label: aat
   pollInterval: 1m
+additionalArgs:
+- --connect=ws://fluxcloud

@@ -11,3 +11,5 @@ git:
   path: k8s/sprod,k8s/common
   label: sprod
   pollInterval: 1m
+additionalArgs:
+- --connect=ws://fluxcloud
