@@ -110,6 +110,7 @@ jobs:
       targetType: inline
       failOnStderr: false
       script: |
+        kubectl apply -f https://raw.githubusercontent.com/fluxcd/flux/master/deploy-helm/flux-helm-release-crd.yaml
         helm repo add fluxcd https://fluxcd.github.io/flux
         helm upgrade flux fluxcd/flux --install --namespace admin -f builds/sandbox/flux-values.yaml --wait
 
