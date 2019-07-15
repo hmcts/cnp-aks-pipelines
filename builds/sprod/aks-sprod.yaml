@@ -113,8 +113,8 @@ jobs:
       targetType: inline
       failOnStderr: false
       script: |
-        helm repo add weaveworks https://weaveworks.github.io/flux
-        helm upgrade flux weaveworks/flux --install --namespace admin -f builds/sprod/flux-values.yaml --wait
+        helm repo add fluxcd https://fluxcd.github.io/flux
+        helm upgrade flux fluxcd/flux --install --namespace admin -f builds/sprod/flux-values.yaml --wait
 
   - task: DownloadSecureFile@1
     displayName: 'Download flux deploy key'
