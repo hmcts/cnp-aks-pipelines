@@ -8,4 +8,4 @@ jobs:
       serviceName: $(serviceName)
       serviceAddress: 10.10.7.120
       consulAddress: 10.100.139.254
-      agentPool: mgmt-aks-sandbox
+      agentPool: hmcts-sandbox-agent-pool
