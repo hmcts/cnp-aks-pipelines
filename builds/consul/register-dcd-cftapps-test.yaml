@@ -1,4 +1,4 @@
-name: Register Consul (DCD-CFTAPPS-STG)
+name: Register Consul (DCD-CFTAPPS-TEST)
 trigger: none
 pr: none
 
@@ -6,6 +6,6 @@ jobs:
   - template: template.yaml
     parameters:
       serviceName: $(serviceName)
-      serviceAddress: 10.10.24.121
-      consulAddress: 10.96.139.254
+      serviceAddress: 10.10.46.121
+      consulAddress: 10.112.139.254
       agentPool: hmcts-agent-pool
