@@ -8,4 +8,4 @@ jobs:
       serviceName: $(serviceName)
       serviceAddress: 10.10.3.250
       consulAddress: 10.100.139.254
-      agentPool: hmcts-agent-pool
+      agentPool: hmcts-sandbox-agent-pool
