@@ -1,0 +1,11 @@
+name: Register Consul (DCD-CFTAPPS-SBOX)
+trigger: none
+pr: none
+
+jobs:
+  - template: template.yaml
+    parameters:
+      serviceName: $(serviceName)
+      serviceAddress: 10.10.7.122
+      consulAddress: 10.100.139.254
+      agentPool: hmcts-agent-pool
