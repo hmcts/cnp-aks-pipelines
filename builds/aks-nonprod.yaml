@@ -3,6 +3,7 @@
 #
 name: Nonprod AKS Pipeline
 trigger: none
+pr: none
 variables:
   environment: 'nonprod'
   aksResourceGroup: 'cnp-aks-rg'
