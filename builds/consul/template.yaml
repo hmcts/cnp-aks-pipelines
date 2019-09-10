@@ -12,7 +12,7 @@ jobs:
     clean: all
   steps:
   - task: Bash@3
-    displayName: 'Register service in Consul AAT'
+    displayName: 'Register service in Consul'
     inputs:
       targetType: inline
       failOnStderr: false
