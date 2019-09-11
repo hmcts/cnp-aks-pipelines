@@ -60,9 +60,10 @@ jobs:
 
         az aks enable-addons -a monitoring -n cnp-aks-cluster -g cnp-aks-rg --workspace-resource-id "subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/oms-automation/providers/Microsoft.OperationalInsights/workspaces/hmcts-nonprod"
 
-        az aks update \
+        az aks nodepool add \
           --resource-group cnp-aks-rg \
           --name cnp-aks-cluster \
+          --cluster-name=cnp-aks-cluster \
           --enable-cluster-autoscaler \
           --min-count 3 \
           --max-count 50
