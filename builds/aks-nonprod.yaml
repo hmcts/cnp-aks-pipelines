@@ -62,8 +62,8 @@ jobs:
 
         az aks nodepool add \
           --resource-group cnp-aks-rg \
-          --name cnp-aks-cluster \
-          --cluster-name=cnp-aks-prev \
+          --name cnp-aks-prev \
+          --cluster-name=cnp-aks-cluster \
           --enable-cluster-autoscaler \
           --min-count 3 \
           --max-count 50
