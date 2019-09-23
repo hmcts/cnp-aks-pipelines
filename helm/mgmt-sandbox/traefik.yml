@@ -1,4 +1,4 @@
-imageTag: latest
+imageTag: 1.7.12
 loadBalancerIP: 10.99.201.97
 resources:
   limits:
@@ -17,3 +17,11 @@ dashboard:
   domain: sandbox-traefik.platform.hmcts.net
 ssl:
   enabled: true
+startupArguments:
+  - "--ping"
+  - "--ping.entrypoint=http"
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 4
+podDisruptionBudget:
+  maxUnavailable: 50%
