@@ -6,9 +6,9 @@ for ns in $(echo "am bsp camunda ccd chart-tests cnp ctsc dg divorce em ethos ev
   inactiveDays=${1:-7}
 
   for release in $(echo "${helmreleases}" | jq -r '.[] | @base64'); do
-      lastUpdated=$(gdate -d "$(echo $release| base64 --decode | jq -r '.Updated')"  +%s)
+      lastUpdated=$(date -d "$(echo $release| base64 --decode | jq -r '.Updated')"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.Name')
-      currenttime=$(gdate +%s)
+      currenttime=$(date +%s)
       cutoff=$((inactiveDays*24*3600))
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then

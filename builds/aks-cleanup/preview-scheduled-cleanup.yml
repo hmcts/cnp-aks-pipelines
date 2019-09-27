@@ -35,7 +35,7 @@ jobs:
         helmVersion: $(helmVersion)
         installKubectl: false
     - task: Bash@3
-      displayName: 'Setting up Git credentials'
+      displayName: 'Delete outdated helm releases'
       inputs:
         targetType: filePath
         filePath: scripts/delete-inactive-helm-releases.sh
