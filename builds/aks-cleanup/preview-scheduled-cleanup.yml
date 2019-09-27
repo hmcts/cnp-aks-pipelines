@@ -2,8 +2,7 @@
 ---
 name: AKS Cleanup Preview
 trigger: none
-pr:
-  - master
+pr: none
 schedules:
   - cron: '0 */12 * * *'
     displayName: clean up every 12 hours
