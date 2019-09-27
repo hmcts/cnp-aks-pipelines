@@ -5,7 +5,9 @@ for ns in $(echo "am bsp camunda ccd chart-tests cnp ctsc dg divorce em ethos ev
   helmreleases=$(helm ls --namespace=${ns} --output=json | jq '.Releases')
   inactiveDays=${1:-7}
 
+  #Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${helmreleases}" | jq -r '.[] | @base64'); do
+    #uses gdate to convert to epoch millis.
       lastUpdated=$(date -d "$(echo $release| base64 --decode | jq -r '.Updated')"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.Name')
       currenttime=$(date +%s)
@@ -13,7 +15,7 @@ for ns in $(echo "am bsp camunda ccd chart-tests cnp ctsc dg divorce em ethos ev
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then
          echo "Deleting Helm release ${releaseName} as it is inactive for more than ${inactiveDays} days"
-         echo ${releaseName}
+         helm delete --purge "${releaseName}"
       fi
   done
 done
