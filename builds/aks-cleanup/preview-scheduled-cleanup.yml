@@ -5,7 +5,7 @@ trigger: none
 pr: none
 schedules:
   - cron: '0 */12 * * *'
-    displayName: clean up every 12 hours
+    displayName: Clean up every 12 hours
     branches:
       include:
         - master
