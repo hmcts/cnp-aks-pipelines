@@ -1,0 +1,42 @@
+# see https://dev.azure.com/hmcts/Platform%20Engineering/_build?definitionId=224&_a=summary
+---
+name: AKS Cleanup Preview
+trigger: none
+pr: none
+schedules:
+  - cron: '0 */12 * * *'
+    displayName: Clean up every 12 hours
+    branches:
+      include:
+        - master
+    always: 'true'
+variables:
+  connectionType: 'Azure Resource Manager'
+  azureResourceGroup: 'cnp-aks-rg'
+  kubernetesCluster: 'cnp-aks-cluster'
+  containerRegistry: 'hmcts'
+  helmVersion: '2.14.3'
+  azureSubscription: azurerm-nonprod
+
+jobs:
+  - job: delete_helm_release
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - task: AzureCLI@1
+      displayName: 'Login to AKS'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
+    - task: HelmInstaller@0
+      displayName: 'Install Helm $(helmVersion)'
+      inputs:
+        helmVersion: $(helmVersion)
+        installKubectl: false
+    - task: Bash@3
+      displayName: 'Delete outdated helm releases'
+      inputs:
+        targetType: filePath
+        filePath: scripts/delete-inactive-helm-releases.sh
