@@ -17,6 +17,7 @@ variables:
   containerRegistry: 'hmcts'
   helmVersion: '2.14.3'
   azureSubscription: azurerm-nonprod
+  cutfoffDays: 7
 
 jobs:
   - job: delete_helm_release
@@ -40,3 +41,4 @@ jobs:
       inputs:
         targetType: filePath
         filePath: scripts/delete-inactive-helm-releases.sh
+        arguments: $(cutfoffDays)
