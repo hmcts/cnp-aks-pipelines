@@ -31,11 +31,10 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
-    - task: HelmInstaller@0
+    - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'
       inputs:
-        helmVersion: $(helmVersion)
-        installKubectl: false
+        helmVersionToInstall: $(helmVersion)
     - task: Bash@3
       displayName: 'Delete outdated helm releases'
       inputs:
