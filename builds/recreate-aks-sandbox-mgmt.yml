@@ -1,6 +1,8 @@
 #
 # Build for the Sanbox Jenkins AKS Cluster
 #
+trigger: none
+pr: none
 variables:
   environment: 'mgmt-sandbox'
   aksResourceGroup: 'cnp-aks-mgmt-rg'
@@ -15,7 +17,6 @@ variables:
   kubernetesVersion: '1.11.3'
   keyvaultName: 'infra-vault-sandbox'
   kubectlConnectionType: 'Azure Resource Manager'
-
 jobs:
 - template: ../jobs/keyvault-mgmt.yml
   parameters:
