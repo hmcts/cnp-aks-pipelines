@@ -9,9 +9,9 @@ steps:
       keyVaultName: $(keyvaultName)
       secretsFilter: "bfa-root-password,bfa-user-password"
 
-  - task: HelmInstaller@0
+  - task: HelmInstaller@1
     inputs:
-      helmVersion: "2.11.0"
+      helmVersionToInstall: "2.11.0"
       installKubectl: false
 
   - task: HelmDeploy@0

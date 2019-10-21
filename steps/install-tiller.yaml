@@ -17,10 +17,10 @@ steps:
     arguments: '-f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml'
     outputFormat: 'name'
 
-- task: HelmInstaller@0
+- task: HelmInstaller@1
   displayName: 'Install Helm ${{ parameters.helmVersion }}'
   inputs:
-      helmVersion: ${{ parameters.helmVersion }}
+      helmVersionToInstall: ${{ parameters.helmVersion }}
       checkLatestHelmVersion: false
       installKubectl: false
 
