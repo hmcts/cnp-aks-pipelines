@@ -49,10 +49,10 @@ jobs:
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
-    - task: HelmInstaller@0
+    - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'
       inputs:
-        helmVersion: $(helmVersion)
+        helmVersionToInstall: $(helmVersion)
         installKubectl: false
     - task: AzureCLI@1
       displayName: 'Helm Delete Release'
