@@ -1,0 +1,11 @@
+name: Register Consul (DCD-CNP-DEV-PREVIEW)
+trigger: none
+pr: none
+
+jobs:
+  - template: template.yaml
+    parameters:
+      serviceName: $(serviceName)
+      serviceAddress: 10.97.17.51
+      consulAddress: 10.97.8.4
+      agentPool: hmcts-agent-pool
