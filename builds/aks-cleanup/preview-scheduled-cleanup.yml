@@ -17,7 +17,7 @@ variables:
   containerRegistry: 'hmcts'
   helmVersion: '2.14.3'
   azureSubscription: azurerm-nonprod
-  cutoffDays: 2
+  cutoffDays: 4
 
 jobs:
   - job: delete_helm_release
