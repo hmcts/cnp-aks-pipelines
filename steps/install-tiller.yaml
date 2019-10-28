@@ -3,6 +3,7 @@ parameters:
   aksResourceGroup: ''
   aksClusterName: ''
   helmVersion: ''
+  tillerReplicas: '1'
 
 steps:
 - task: Kubernetes@1
@@ -33,4 +34,4 @@ steps:
     azureResourceGroup: ${{ parameters.aksResourceGroup }}
     kubernetesCluster: ${{ parameters.aksClusterName }}
     command: 'init'
-    arguments: '--service-account tiller --tiller-image gcr.io/kubernetes-helm/tiller:v${{ parameters.helmVersion }}'
+    arguments: '--service-account tiller --tiller-image gcr.io/kubernetes-helm/tiller:v${{ parameters.helmVersion }} --replicas ${{ parameters.tillerReplicas }}'
