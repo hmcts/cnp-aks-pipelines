@@ -33,7 +33,7 @@ jobs:
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
   - task: AzureCLI@1
-    enabled: false
+    enabled: true
     displayName: 'Install AKS with Azure CLI'
     inputs:
       azureSubscription: azurerm-nonprod
@@ -82,3 +82,65 @@ jobs:
       aksClusterName: $(aksClusterName)
       helmVersion: $(helmVersion)
       tillerReplicas: 3
+  - template: ../tasks/dashboard-rbac.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+
+  - task: AzureCLI@1
+    displayName: 'Create namespaces'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
+        kubectl apply -f manifests/all/namespaces.yaml
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download cluster sealed secret key'
+    inputs:
+      secureFile: preview-sealed-secrets-key.yaml
+
+  - task: Bash@3
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/preview-sealed-secrets-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+
+  - task: Bash@3
+    displayName: 'Install Bitnami Sealed Secrets'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin --set secretName=preview-sealed-secrets-key --wait
+
+  - task: Bash@3
+    displayName: 'Install FluxCD Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f deployments/fluxcd/flux-helm-release-crd.yaml
+        helm repo add fluxcd https://fluxcd.github.io/flux
+        helm upgrade flux fluxcd/flux --install --namespace admin -f helm/nonprod/flux.yaml --version 0.14.1 --wait
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download flux deploy key'
+    inputs:
+      secureFile: preview-flux-git-deploy.yaml
+
+  - task: Bash@3
+    displayName: 'Create flux deploy key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl -n admin delete secret flux-git-deploy
+        kubectl create -f $(Agent.TempDirectory)/preview-flux-git-deploy.yaml
+        kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
+
