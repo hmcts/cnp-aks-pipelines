@@ -11,7 +11,7 @@ variables:
   keyvaultName: 'infra-vault-nonprod'
   serviceConnection: 'azurerm-nonprod'
   aksParametersFile: 'arm/parameters/aks/nonprod.json'
-  helmVersion: '2.14.3'
+  helmVersion: '2.15.0'
   acrName: hmcts
   
 jobs:
@@ -81,6 +81,7 @@ jobs:
       aksResourceGroup: $(aksResourceGroup)
       aksClusterName: $(aksClusterName)
       helmVersion: $(helmVersion)
+      tillerReplicas: 3
   - template: ../tasks/dashboard-rbac.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -142,4 +143,4 @@ jobs:
         kubectl -n admin delete secret flux-git-deploy
         kubectl create -f $(Agent.TempDirectory)/preview-flux-git-deploy.yaml
         kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
-        
+
