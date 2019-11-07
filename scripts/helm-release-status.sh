@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
 set -x
-CLUSTER_NAME=$1
+ENABLE_HELM_TLS=$1
+CLUSTER_NAME=$2
+
+if [[ ${ENABLE_HELM_TLS} == true ]]
+then
+    helm_tls_param="--tls --tls-verify --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem"
+fi
 
 sudo snap install yq
 

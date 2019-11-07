@@ -36,4 +36,4 @@ jobs:
       inputs:
         targetType: filePath
         filePath: scripts/helm-release-status.sh
-        arguments: ${{ parameters.kubernetesCluster }}
+        arguments: ${{parameters.enableHelmTls}} ${{ parameters.kubernetesCluster }}

@@ -25,7 +25,4 @@ then
     get_kv_secret helm-pki-helm-cert   helm.cert.pem
     get_kv_secret helm-pki-helm-key    helm.key.pem
     get_kv_secret helm-pki-ca-cert     ca.cert.pem
-    helm_tls_param="--tls --tls-verify --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem"
 fi
-
-echo "##vso[task.setvariable variable=helm_tls_param;isOutput=true]$helm_tls_param"
