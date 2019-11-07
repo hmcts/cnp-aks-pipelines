@@ -14,9 +14,6 @@ function get_kv_secret {
  --file ${2}
 }
 
-WEBHOOK_URL=$(az keyvault secret show --vault-name ${VAULT_NAME} --name slack-webhook-url --query value -o tsv)
-echo "##vso[task.setvariable variable=WEBHOOK_URL;isOutput=true]$WEBHOOK_URL"
-
 #download helm tls certs
 if [[ ${ENABLE_HELM_TLS} == true ]]
 then

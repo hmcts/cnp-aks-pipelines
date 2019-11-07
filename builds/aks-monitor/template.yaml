@@ -31,9 +31,15 @@ jobs:
         scriptPath: scripts/download-helm-certs.sh
         arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}}
         failOnStandardError: true
+    - task: AzureKeyVault@1
+      displayName: 'Get git secrets from Keyvault'
+      inputs:
+        azureSubscription:  ${{ parameters.azureSubscription }}
+        keyVaultName:   ${{parameters.vaultName}}
+        secretsFilter: 'slack-webhook-url'
     - task: Bash@3
       displayName: 'Run Helm Release Status script'
       inputs:
         targetType: filePath
         filePath: scripts/helm-release-status.sh
-        arguments: ${{parameters.enableHelmTls}} ${{ parameters.kubernetesCluster }}
+        arguments: ${{parameters.enableHelmTls}} ${{ parameters.kubernetesCluster }} $(slack-webhook-url)
