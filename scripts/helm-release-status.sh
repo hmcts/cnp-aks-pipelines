@@ -10,7 +10,7 @@ then
     helm_tls_param="--tls --tls-verify --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem"
 fi
 
-sudo snap install yq
+#sudo snap install yq
 yq --version
 jq --version
 
@@ -21,7 +21,7 @@ teamConfig=$(cat team-config.yaml)
 declare -A namespaceMapping
 
 #remove duplicates and prepare slack channel mapping.
-for row in $(echo "${teamConfig}" | yq r -  -j | jq '.[] | @base64' ); do
+for row in $(echo "${teamConfig}" | yq r -  -j | jq -r '.[] | @base64' ); do
     _jq() {
      echo ${row} | base64 --decode | jq -r ${1}
     }
