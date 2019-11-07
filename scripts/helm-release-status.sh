@@ -4,8 +4,8 @@ VAULT_NAME=$1
 ENABLE_HELM_TLS=$2
 CLUSTER_NAME=$3
 
-pip install --upgrade pip
-hash -d pip
+sudo python3 -m pip uninstall pip && sudo apt install python3-pip --reinstall
+
 pip install yq
 function get_kv_secret {
  az keyvault secret download \
