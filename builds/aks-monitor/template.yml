@@ -1,0 +1,30 @@
+variables:
+  azureResourceGroup: ''
+  kubernetesCluster: ''
+  helmVersion: ''
+  azureSubscription: ''
+  vaultName: ''
+  enableHelmTls: ''
+
+jobs:
+  - job: helm_release_status
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - task: AzureCLI@1
+      displayName: 'Login to AKS'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
+    - task: HelmInstaller@1
+      displayName: 'Install Helm $(helmVersion)'
+      inputs:
+        helmVersionToInstall: $(helmVersion)
+    - task: Bash@3
+      displayName: 'Run Helm Release Status script'
+      inputs:
+        targetType: filePath
+        filePath: scripts/helm-release-status.sh
+        arguments: $(vaultName) $(enableHelmTls) $(kubernetesCluster)
