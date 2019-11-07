@@ -5,7 +5,9 @@ ENABLE_HELM_TLS=$2
 CLUSTER_NAME=$3
 
 sudo apt install python-pip
+hash -d pip
 pip install --upgrade pip
+hash -d pip
 pip install yq
 
 function get_kv_secret {
