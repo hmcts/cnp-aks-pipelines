@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+
 ENABLE_HELM_TLS=$1
 CLUSTER_NAME=$2
 WEBHOOK_URL=$3
