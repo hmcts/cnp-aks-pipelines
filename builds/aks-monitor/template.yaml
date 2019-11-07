@@ -1,11 +1,3 @@
-parameters:
-  azureResourceGroup: ''
-  kubernetesCluster: ''
-  helmVersion: ''
-  azureSubscription: ''
-  vaultName: ''
-  enableHelmTls: ''
-
 jobs:
   - job: helm_release_status
     pool:
