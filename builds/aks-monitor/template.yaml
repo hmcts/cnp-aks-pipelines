@@ -27,7 +27,7 @@ jobs:
       inputs:
         scriptType: bash
         azureSubscription: ${{ parameters.azureSubscription }}
-        scriptLocation: scripts/helm-release-status.sh
+        scriptLocation: scriptPath
         scriptPath: scripts/helm-release-status.sh
         arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}} ${{parameters.kubernetesCluster}}
         failOnStandardError: true
