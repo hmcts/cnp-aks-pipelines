@@ -21,7 +21,7 @@ teamConfig=$(cat team-config.yaml)
 declare -A namespaceMapping
 
 #remove duplicates and prepare slack channel mapping.
-for row in $(echo "${teamConfig}" | yq r -  -j | jq .[] | @base64 ); do
+for row in $(echo "${teamConfig}" | yq r -  -j | jq '.[] | @base64' ); do
     _jq() {
      echo ${row} | base64 --decode | jq -r ${1}
     }
