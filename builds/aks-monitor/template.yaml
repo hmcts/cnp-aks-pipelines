@@ -7,7 +7,7 @@ parameters:
   enableHelmTls: ''
 
 jobs:
-  - job: Helm release alerts  ${{parameters.kubernetesCluster}}
+  - job: Helm_release_alerts
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
