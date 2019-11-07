@@ -32,7 +32,7 @@ jobs:
         arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}}
         failOnStandardError: true
     - task: AzureKeyVault@1
-      displayName: 'Get git secrets from Keyvault'
+      displayName: 'Get webhook from Keyvault'
       inputs:
         azureSubscription:  ${{ parameters.azureSubscription }}
         keyVaultName:   ${{parameters.vaultName}}
