@@ -4,9 +4,10 @@ VAULT_NAME=$1
 ENABLE_HELM_TLS=$2
 CLUSTER_NAME=$3
 
-sudo python3 -m pip uninstall pip && sudo apt install python3-pip --reinstall
+sudo add-apt-repository ppa:rmescandon/yq
+sudo apt update
+sudo apt install yq -y
 
-pip install yq
 function get_kv_secret {
  az keyvault secret download \
  --vault-name ${VAULT_NAME} \
