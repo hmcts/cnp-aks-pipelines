@@ -22,9 +22,10 @@ jobs:
       displayName: 'Install Helm ${{parameters.helmVersion}}'
       inputs:
         helmVersionToInstall: ${{parameters.helmVersion}}
-    - task: Bash@3
+    - task: AzureCLI@2
       displayName: 'Run Helm Release Status script'
       inputs:
-        targetType: filePath
-        filePath: scripts/helm-release-status.sh
+        azureSubscription: ${{ parameters.azureSubscription }}
+        scriptPath: scripts/helm-release-status.sh
         arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}} ${{parameters.kubernetesCluster}}
+        failOnStandardError: true
