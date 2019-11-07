@@ -4,7 +4,7 @@ VAULT_NAME=$1
 ENABLE_HELM_TLS=$2
 CLUSTER_NAME=$3
 
-sudo apt-get install jq
+pip install yq
 
 function get_kv_secret {
  az keyvault secret download \
