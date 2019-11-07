@@ -4,9 +4,7 @@ VAULT_NAME=$1
 ENABLE_HELM_TLS=$2
 CLUSTER_NAME=$3
 
-sudo add-apt-repository ppa:rmescandon/yq
-sudo apt update
-sudo apt install yq -y
+sudo apt-get install jq
 
 function get_kv_secret {
  az keyvault secret download \
@@ -36,9 +34,9 @@ teamConfig=$(cat team-config.yaml)
 declare -A namespaceMapping
 
 #remove duplicates and prepare slack channel mapping.
-for row in $(echo "${teamConfig}" | yq -R '.[] | @base64'); do
+for row in $(echo "${teamConfig}" | yq -r '.[] | @base64'); do
     _jq() {
-     echo ${row} | base64 --decode | jq -R ${1}
+     echo ${row} | base64 --decode | jq -r ${1}
     }
 
    namespace=$(_jq '.namespace')
@@ -52,7 +50,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   echo "Processing failed releases for namespace ${ns}"
   failedReleaseNames=""
 
-  for release in $( helm ls --namespace=${ns} --failed --short --output=json $helm_tls_param | jq -R '.[] '); do
+  for release in $( helm ls --namespace=${ns} --failed --short --output=json $helm_tls_param | jq -r '.[] '); do
       echo "Found a failed release $release"
       failedReleaseNames+=$release" "
   done
@@ -71,9 +69,9 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   pendingHelmreleases=$(helm ls --namespace=${ns} --pending --output=json $helm_tls_param | jq '.Releases')
   pendingReleaseNames=""
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
-  for release in $(echo "${pendingHelmreleases}" | jq -R '.[] | @base64'); do
-    lastUpdated=$(date -d "$(echo $release| base64 --decode | jq -R '.Updated')"  +%s)
-    releaseName=$(echo $release| base64 --decode | jq -R '.Name')
+  for release in $(echo "${pendingHelmreleases}" | jq -r '.[] | @base64'); do
+    lastUpdated=$(date -d "$(echo $release| base64 --decode | jq -r '.Updated')"  +%s)
+    releaseName=$(echo $release| base64 --decode | jq -r '.Name')
     currenttime=$(date +%s)
     cutoff=600 #600 seconds
     if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
