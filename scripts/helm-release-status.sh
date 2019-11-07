@@ -10,7 +10,7 @@ then
     helm_tls_param="--tls --tls-verify --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem"
 fi
 
-#sudo snap install yq
+sudo snap install yq
 yq --version
 jq --version
 
