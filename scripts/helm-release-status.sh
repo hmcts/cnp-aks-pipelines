@@ -46,7 +46,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   then
         echo "Sending notification to slack channel ${namespaceMapping[$ns]} for $failedReleaseNames"
         build_notices_channel=${namespaceMapping[$ns]}
-        curl -X POST --data-urlencode 'payload={"channel": "${build_notices_channel}", "username": "${CLUSTER_NAME}", "text": "Helm releases are in a failed state: $failedReleaseNames", "icon_emoji": ":rotating_light:"}' ${WEBHOOK_URL}
+        curl -X POST --data-urlencode 'payload={"channel": "$build_notices_channel", "username": "${CLUSTER_NAME}", "text": "Helm releases are in a failed state: $failedReleaseNames", "icon_emoji": ":rotating_light:"}' ${WEBHOOK_URL}
   fi
 
 done
