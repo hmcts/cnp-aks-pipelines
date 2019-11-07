@@ -19,7 +19,7 @@ jobs:
         inlineScript: |
           az aks get-credentials --resource-group ${{parameters.azureResourceGroup}} --name ${{parameters.kubernetesCluster}}
     - task: HelmInstaller@1
-      displayName: 'Install Helm $(helmVersion)'
+      displayName: 'Install Helm ${{parameters.helmVersion}}'
       inputs:
         helmVersionToInstall: ${{parameters.helmVersion}}
     - task: Bash@3
