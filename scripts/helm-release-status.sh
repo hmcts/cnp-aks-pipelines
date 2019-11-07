@@ -4,8 +4,7 @@ VAULT_NAME=$1
 ENABLE_HELM_TLS=$2
 CLUSTER_NAME=$3
 
-pip install wheel
-pip install yq
+snap install yq
 
 function get_kv_secret {
  az keyvault secret download \
@@ -35,7 +34,7 @@ teamConfig=$(cat team-config.yaml)
 declare -A namespaceMapping
 
 #remove duplicates and prepare slack channel mapping.
-for row in $(echo "${teamConfig}" | yq -r '.[] | @base64'); do
+for row in $(echo "${teamConfig}" | yq r -  -j | jq .[] | base64 ); do
     _jq() {
      echo ${row} | base64 --decode | jq -r ${1}
     }
