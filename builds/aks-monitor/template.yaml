@@ -25,7 +25,9 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Run Helm Release Status script'
       inputs:
+        scriptType: bash
         azureSubscription: ${{ parameters.azureSubscription }}
+        scriptLocation: scripts/helm-release-status.sh
         scriptPath: scripts/helm-release-status.sh
         arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}} ${{parameters.kubernetesCluster}}
         failOnStandardError: true
