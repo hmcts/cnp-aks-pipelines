@@ -5,7 +5,7 @@ trigger: none
 pr: none
 schedules:
   - cron: '0 */1 * * *'
-    displayName: Monitor every 1 hour
+    displayName: Monitor releases every 1 hour
     branches:
       include:
         - master
