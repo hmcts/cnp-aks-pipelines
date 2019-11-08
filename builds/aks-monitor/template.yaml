@@ -1,0 +1,44 @@
+parameters:
+  azureResourceGroup: ''
+  kubernetesCluster: ''
+  helmVersion: ''
+  azureSubscription: ''
+  vaultName: ''
+  enableHelmTls: ''
+
+jobs:
+  - job: Helm_release_alerts
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - task: AzureCLI@1
+      displayName: 'Login to AKS'
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials --resource-group ${{parameters.azureResourceGroup}} --name ${{parameters.kubernetesCluster}} -a
+    - task: HelmInstaller@1
+      displayName: 'Install Helm ${{parameters.helmVersion}}'
+      inputs:
+        helmVersionToInstall: ${{parameters.helmVersion}}
+    - task: AzureCLI@2
+      displayName: 'Download secrets'
+      inputs:
+        scriptType: bash
+        azureSubscription: ${{ parameters.azureSubscription }}
+        scriptLocation: scriptPath
+        scriptPath: scripts/download-helm-certs.sh
+        arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}}
+    - task: AzureKeyVault@1
+      displayName: 'Get webhook from Keyvault'
+      inputs:
+        azureSubscription:  ${{ parameters.azureSubscription }}
+        keyVaultName:   ${{parameters.vaultName}}
+        secretsFilter: 'slack-webhook-url'
+    - task: Bash@3
+      displayName: 'Run Helm Release Status script'
+      inputs:
+        targetType: filePath
+        filePath: scripts/helm-release-status.sh
+        arguments: ${{parameters.enableHelmTls}} ${{ parameters.kubernetesCluster }} $(slack-webhook-url)
