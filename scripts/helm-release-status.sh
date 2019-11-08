@@ -44,7 +44,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   if [ ! -z "$failedReleaseNames" ]
   then
         echo "Sending notification to slack channel ${namespaceMapping[$ns]} for $failedReleaseNames"
-        curl -X POST --data-urlencode "payload={\"channel\": \"${namespaceMapping[$ns]}\", \"username\": \"${CLUSTER_NAME}\", \"text\": \"Helm releases are in a failed state: $failedReleaseNames\", \"icon_emoji\": \":rotating_light:\"}" ${WEBHOOK_URL}
+        curl -X POST --data-urlencode "payload={\"channel\": \"${namespaceMapping[$ns]}\", \"username\": \"${CLUSTER_NAME}\", \"text\": \"Following Helm releases are in a failed state in your team name space *${ns}*  : *$failedReleaseNames*\", \"icon_emoji\": \":rotating_light:\"}" ${WEBHOOK_URL}
   fi
 
 done
@@ -71,7 +71,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   if [ ! -z "$pendingReleaseNames" ]
   then
         echo "Sending notification to slack channel ${namespaceMapping[$ns]} for $pendingReleaseNames"
-        curl -X POST --data-urlencode "payload={\"channel\": \"${namespaceMapping[$ns]}\", \"username\": \"${CLUSTER_NAME}\", \"text\": \"Helm releases are in a pending state and a rollback has been attempted: $pendingReleaseNames\", \"icon_emoji\": \":rotating_light:\"}" ${WEBHOOK_URL}
+        curl -X POST --data-urlencode "payload={\"channel\": \"${namespaceMapping[$ns]}\", \"username\": \"${CLUSTER_NAME}\", \"text\": \"Following Helm releases are in a pending state in your team name space *${ns}*  and a rollback has been attempted: *$pendingReleaseNames*\", \"icon_emoji\": \":rotating_light:\"}" ${WEBHOOK_URL}
   fi
 
 done
