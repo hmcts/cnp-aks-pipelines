@@ -4,7 +4,7 @@ name: AKS Monitor AAT 00 Helm Releases
 trigger: none
 pr: none
 schedules:
-  - cron: '0 */1 * * *'
+  - cron: '0 */2 * * *'
     displayName: Monitor releases every 1 hour
     branches:
       include:
