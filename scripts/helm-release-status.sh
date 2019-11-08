@@ -10,8 +10,6 @@ then
 fi
 
 sudo snap install yq
-yq --version
-jq --version
 
 #get team config
 curl -s https://raw.githubusercontent.com/hmcts/cnp-jenkins-config/master/team-config.yml > team-config.yaml
