@@ -1,0 +1,22 @@
+# see https://dev.azure.com/hmcts/Platform%20Engineering/_build?definitionId=224&_a=summary
+---
+name: AKS Monitor prod 01 Helm Releases
+trigger: none
+pr: none
+schedules:
+  - cron: '0 */1 * * *'
+    displayName: Monitor every 1 hour
+    branches:
+      include:
+        - master
+    always: 'true'
+
+jobs:
+  - template: template.yaml
+    parameters:
+      azureResourceGroup: 'prod-01-rg'
+      kubernetesCluster: 'prod-01-aks'
+      helmVersion: '2.15.2'
+      azureSubscription: 'DCD-CFTAPPS-PROD'
+      vaultName: 'cft-apps-prod'
+      enableHelmTls: 'true'
