@@ -1,15 +1,15 @@
 # see https://dev.azure.com/hmcts/CNP/_build?definitionId=254&_a=summary
 ---
-name: AKS Monitor AAT 00 Helm Releases
+name: Monitor AKS AAT 00 Helm Releases
 trigger: none
 pr: none
 schedules:
-- cron: '0 */2 * * *'
-  displayName: Monitor releases every 2 hour
-  branches:
-    include:
-      - master
-  always: 'true'
+  - cron: '0 8-18 * * Mon-Fri'
+    displayName: Every hour Mon-Fri
+    branches:
+      include:
+        - master
+    always: 'true'
 
 jobs:
   - template: template.yaml

@@ -1,11 +1,11 @@
 # see https://dev.azure.com/hmcts/Platform%20Engineering/_build?definitionId=224&_a=summary
 ---
-name: AKS Monitor AAT 01 Helm Releases
+name: Monitor AKS AAT 01 Helm Releases
 trigger: none
 pr: none
 schedules:
-  - cron: '0 */1 * * *'
-    displayName: Monitor Release every 1 hour
+  - cron: '0 8-18 * * Mon-Fri'
+    displayName: Every hour Mon-Fri
     branches:
       include:
         - master
