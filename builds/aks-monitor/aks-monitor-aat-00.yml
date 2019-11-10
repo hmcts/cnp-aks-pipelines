@@ -1,4 +1,4 @@
-# see https://dev.azure.com/hmcts/Platform%20Engineering/_build?definitionId=224&_a=summary
+# see https://dev.azure.com/hmcts/CNP/_build?definitionId=254&_a=summary
 ---
 name: AKS Monitor AAT 00 Helm Releases
 trigger: none
