@@ -1,0 +1,12 @@
+name: Register Consul (DTS-CFTSBOX-INTSVC-00)
+trigger: none
+pr: none
+
+jobs:
+  - template: template.yaml
+    parameters:
+      serviceName: $(serviceName)
+      serviceAddress: 10.10.9.250
+      consulAddress: 10.100.139.254
+      agentPool: hmcts-sandbox-agent-pool
+
