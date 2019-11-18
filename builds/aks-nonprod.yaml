@@ -33,6 +33,62 @@ jobs:
     aksServicePrincipalSecret: $[dependencies.Keyvault.outputs['exportKeyvault.aksServicePrincipalSecret']]
   steps:
   - task: AzureCLI@1
+    enabled: true
+    displayName: 'Install AKS with Azure CLI'
+    inputs:
+      azureSubscription: azurerm-nonprod
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az extension add --name aks-preview
+        az aks create \
+          --resource-group cnp-aks-rg \
+          --name cnp-aks-cluster \
+          --kubernetes-version 1.15.4 \
+          --node-count 3 \
+          --node-vm-size Standard_B4ms \
+          --location uksouth \
+          --network-plugin azure \
+          --node-osdisk-size 100 \
+          --dns-name-prefix cnp-aks-cluster \
+          --vnet-subnet-id '/subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/core-infra-preview/providers/Microsoft.Network/virtualNetworks/core-infra-vnet-preview/subnets/aks-subnet' \
+          --ssh-key-value 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcEzLBwPV771KC/iRQtmJaQwMpOR6YhWnKpId7eIgfNV1N0ww0vCur8hZSb4XZKkJr7NUQjAzgLvbS774QmxUYw+lfGfJpsnrXY4nakugJqK9fK3MFJ4lK3YPwHrjzFLlLZ+aVvGGxVh2YB4+ZlutojT/Wu/wL8kCk+IFm4YR7VXObXsaq4Izv0pdt0N/zq2gn59Tn042PwPaE7+rsqgkr8lSIWdHFbGD4PvndS4+fqdHGe0VhedUkbijLd8ikcK/haOXe4RTP13EYjCgyzY93LaQ4JCJyoI3FQS6ttkFR20k/KbBtL02s6+FcS8zF6zdoOSgg1eL8FM3wCMfhNuUN' \
+          --service-principal $(aksServicePrincipalId) \
+          --client-secret $(aksServicePrincipalSecret) \
+          --enable-vmss \
+          --max-pods 50 \
+          --tags 'Team Name=CNP'
+
+        az aks enable-addons -a monitoring -n cnp-aks-cluster -g cnp-aks-rg --workspace-resource-id "subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/oms-automation/providers/Microsoft.OperationalInsights/workspaces/hmcts-nonprod"
+
+        az aks nodepool update \
+          --resource-group cnp-aks-rg \
+          --name nodepool1 \
+          --cluster-name=cnp-aks-cluster \
+          --enable-cluster-autoscaler \
+          --min-count 3 \
+          --max-count 50
+          
+  # - template: ../tasks/deploy-aks-arm.yaml
+  #   parameters:
+  #     serviceConnection: $(serviceConnection)
+  #     aksResourceGroup: $(aksResourceGroup)
+  #     aksParametersFile: $(aksParametersFile)
+  #     aksServicePrincipalId: $(aksServicePrincipalId)
+  #     aksServicePrincipalSecret: $(aksServicePrincipalSecret)
+  - template: ../steps/install-tiller.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+      helmVersion: $(helmVersion)
+      tillerReplicas: 3
+  - template: ../tasks/dashboard-rbac.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      aksResourceGroup: $(aksResourceGroup)
+      aksClusterName: $(aksClusterName)
+
+  - task: AzureCLI@1
     displayName: 'Create namespaces'
     inputs:
       azureSubscription: azurerm-nonprod
@@ -40,13 +96,29 @@ jobs:
       inlineScript: |
         az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName) --overwrite
         kubectl apply -f manifests/all/namespaces.yaml
-  - template: ../steps/install-tiller.yaml	
-    parameters:	
-      serviceConnection: $(serviceConnection)	
-      aksResourceGroup: $(aksResourceGroup)	
-      aksClusterName: $(aksClusterName)	
-      helmVersion: $(helmVersion)	
-      tillerReplicas: 3    
+
+  - task: DownloadSecureFile@1
+    displayName: 'Download cluster sealed secret key'
+    inputs:
+      secureFile: preview-sealed-secrets-key.yaml
+
+  - task: Bash@3
+    displayName: 'Create sealed secrets key secret'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        kubectl apply -f $(Agent.TempDirectory)/preview-sealed-secrets-key.yaml
+        kubectl delete pod -n admin -l app.kubernetes.io/name=sealed-secrets || true
+
+  - task: Bash@3
+    displayName: 'Install Bitnami Sealed Secrets'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin --set secretName=preview-sealed-secrets-key --wait
+
   - task: Bash@3
     displayName: 'Install FluxCD Flux'
     inputs:
