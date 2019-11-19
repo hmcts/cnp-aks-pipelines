@@ -6,7 +6,7 @@ variables:
   connectionType: 'Azure Resource Manager'
   azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
   kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
-  containerRegistry: 'hmcts'  # hmctssandbox
+  containerRegistry: 'hmctspublic'  # hmctssandbox
   helmVersion: '2.14.3'
   azureSubscription: azurerm-nonprod  # azurerm-sandbox
 
