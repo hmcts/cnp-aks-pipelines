@@ -43,7 +43,7 @@ jobs:
         inlineScript: |
           repository=`echo $(namespace) | sed 's/-pr-.*//' |sed '1 s/-/\//' `
           tag=`echo $(namespace) | sed "s/.*-pr-/pr-/"`
-          az acr repository show-tags -n $(containerRegistry) --repository $repository --query "[?starts_with(@, '$tag-')]" -o tsv \
+          az acr repository show-tags -n $(containerRegistry) --repository $repository --query "[?starts_with(@, '$tag')]" -o tsv \
             | xargs -I% az acr repository untag -n $(containerRegistry) --image "$repository:%"
 
   - job: delete_helm_release
