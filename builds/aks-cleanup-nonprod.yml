@@ -9,6 +9,7 @@ variables:
   containerRegistry: 'hmctspublic'  # hmctssandbox
   helmVersion: '2.14.3'
   azureSubscription: azurerm-nonprod  # azurerm-sandbox
+  registrySubscription: azurerm-prod
 
 jobs:
   - job: delete_namespace
@@ -37,7 +38,7 @@ jobs:
       displayName: 'Untag ACR image'
       enabled: true
       inputs:
-        azureSubscription: $(azureSubscription)
+        azureSubscription: $(registrySubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
           repository=`echo $(namespace) | sed 's/-pr-.*//'`
