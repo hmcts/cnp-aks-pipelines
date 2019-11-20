@@ -9,6 +9,7 @@ variables:
   containerRegistry: 'hmctspublic'  # hmctssandbox
   helmVersion: '2.14.3'
   azureSubscription: azurerm-nonprod  # azurerm-sandbox
+  registrySubscription: azurerm-prod
 
 jobs:
   - job: delete_namespace
@@ -37,13 +38,13 @@ jobs:
       displayName: 'Untag ACR image'
       enabled: true
       inputs:
-        azureSubscription: $(azureSubscription)
+        azureSubscription: $(registrySubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
-          repository=`echo $(namespace) | sed 's/-pr-.*//'`
-          tag=`echo $(namespace) | sed "s/$repository-//"`
-          az acr repository show-tags -n $(containerRegistry) --repository hmcts/$repository --query "[?starts_with(@, '$tag')]" -o tsv \
-            | xargs -I% az acr repository untag -n $(containerRegistry) --image "hmcts/$repository:%"
+          repository=`echo $(namespace) | sed 's/-pr-.*//' |sed '1 s/-/\//' `
+          tag=`echo $(namespace) | sed "s/.*-pr-/pr-/"`
+          az acr repository show-tags -n $(containerRegistry) --repository $repository --query "[?starts_with(@, '$tag')]" -o tsv \
+            | xargs -I% az acr repository untag -n $(containerRegistry) --image "$repository:%"
 
   - job: delete_helm_release
     pool:
