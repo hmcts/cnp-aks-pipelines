@@ -68,13 +68,6 @@ jobs:
           --min-count 3 \
           --max-count 75
           
-  # - template: ../tasks/deploy-aks-arm.yaml
-  #   parameters:
-  #     serviceConnection: $(serviceConnection)
-  #     aksResourceGroup: $(aksResourceGroup)
-  #     aksParametersFile: $(aksParametersFile)
-  #     aksServicePrincipalId: $(aksServicePrincipalId)
-  #     aksServicePrincipalSecret: $(aksServicePrincipalSecret)
   - template: ../steps/install-tiller.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -119,16 +112,6 @@ jobs:
       script: |
         helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin --set secretName=preview-sealed-secrets-key --wait
 
-  - task: Bash@3
-    displayName: 'Install FluxCD Flux'
-    inputs:
-      targetType: inline
-      failOnStderr: false
-      script: |
-        kubectl apply -f deployments/fluxcd/flux-helm-release-crd.yaml
-        helm repo add fluxcd https://fluxcd.github.io/flux
-        helm upgrade flux fluxcd/flux --install --namespace admin -f helm/nonprod/flux.yaml --version 0.14.1 --wait
-
   - task: DownloadSecureFile@1
     displayName: 'Download flux deploy key'
     inputs:
@@ -142,5 +125,15 @@ jobs:
       script: |
         kubectl -n admin delete secret flux-git-deploy
         kubectl create -f $(Agent.TempDirectory)/preview-flux-git-deploy.yaml
-        kubectl -n admin delete $(kubectl get pod -o name -l app=flux -n admin)
+
+  - task: Bash@3
+    displayName: 'Install FluxCD Flux'
+    inputs:
+      targetType: inline
+      failOnStderr: false
+      script: |
+        helm repo add fluxcd https://charts.fluxcd.io
+        kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/chart-0.3.0/deploy/flux-helm-release-crd.yaml
+        helm upgrade flux fluxcd/flux --install --namespace admin -f helm/nonprod/flux.yaml --version 0.15.0 --set image.tag=1.16.0 --wait
+        helm upgrade helm-operator fluxcd/helm-operator --install --namespace admin   -f  helm/nonprod/helm-operator.yaml --version 0.3.0 --wait
 
