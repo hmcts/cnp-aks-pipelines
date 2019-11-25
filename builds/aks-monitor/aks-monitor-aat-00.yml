@@ -4,12 +4,12 @@ name: Monitor AKS AAT 00 Helm Releases
 trigger: none
 pr: none
 schedules:
-  - cron: '0 8-18 * * Mon-Fri'
-    displayName: Every hour Mon-Fri
-    branches:
-      include:
-        - master
-    always: 'true'
+- cron: "*/2 * * * Mon-Fri"
+  displayName: 'everyday'
+  branches:
+    include:
+      - master
+  always: 'true'
 
 jobs:
   - template: template.yaml
