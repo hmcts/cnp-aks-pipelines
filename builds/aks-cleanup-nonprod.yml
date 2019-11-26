@@ -7,7 +7,7 @@ variables:
   azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
   kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
   containerRegistry: 'hmctspublic'  # hmctssandbox
-  helmVersion: '2.14.3'
+  helmVersion: '2.16.1'
   azureSubscription: azurerm-nonprod  # azurerm-sandbox
   registrySubscription: azurerm-prod
 
