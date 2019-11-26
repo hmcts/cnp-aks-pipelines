@@ -3,7 +3,7 @@
 name: Monitor AKS AAT 00 Helm Releases
 pr: none
 schedules:
-- cron: "*/2 * * * Mon-Fri"
+- cron: '*/2 * * * Mon-Fri'
   displayName: 'everyday'
   branches:
     include:
