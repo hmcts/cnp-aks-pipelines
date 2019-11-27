@@ -1,0 +1,20 @@
+parameters:
+  serviceConnection: ''
+  repoRegex: ''
+  acrName: ''
+  acrResourceGroup: ''
+
+jobs:
+- job: ACR_Cleanup
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  timeoutInMinutes: 600
+  steps:
+  - task: AzureCLI@1
+    displayName: 'Delete old prod images'
+    inputs:
+      scriptType: bash
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptLocation: scriptPath
+      scriptPath: scripts/cleanup-acr-from-old-prod-images.sh
+      arguments: ${{parameters.repoRegex}} ${{parameters.acrName}} ${{parameters.acrResourceGroup}}
