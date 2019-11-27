@@ -13,7 +13,7 @@ schedules:
 jobs:
   - template: template-prod-cleanup.yaml
     parameters:
-      serviceConnection: ''
+      serviceConnection: azurerm-prod
       repoRegex: '.*'
       acrName: 'hmctspublic'
       acrResourceGroup: 'rpe-acr-prod-rg'
