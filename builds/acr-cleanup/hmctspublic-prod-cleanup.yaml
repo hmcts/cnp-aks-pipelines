@@ -1,0 +1,19 @@
+---
+name: Clean up old prod tags from ACR
+trigger: none
+pr: none
+schedules:
+  - cron: '12 5 * * Mon-Fri'
+    displayName: At 5:12AM Mon-Fri
+    branches:
+      include:
+        - master
+    always: 'true'
+
+jobs:
+  - template: template-prod-cleanup.yaml
+    parameters:
+      serviceConnection: ''
+      repoRegex: '.*'
+      acrName: 'hmctspublic'
+      acrResourceGroup: 'rpe-acr-prod-rg'
