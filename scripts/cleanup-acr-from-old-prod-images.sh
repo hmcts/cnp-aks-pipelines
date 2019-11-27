@@ -45,7 +45,7 @@ do
           # Make sure we really have a manifest digest otherwise we might accidentally delete the entire repo! (never happened before :shifty-face:)
           if [[ $m_sha == sha256:* ]] 
           then
-            echo "az acr repository delete --name $registry --image ${repo}@${m_sha} --yes"
+            az acr repository delete --name $registry --image ${repo}@${m_sha} --yes
           fi
           count_removed=$(($count_removed + 1))
         fi
