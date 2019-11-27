@@ -34,8 +34,8 @@ do
     count_removed=0
     if (( ${#manifests[@]} > $keep_min_latest_num ))
     then
-      max_remove=$((${#manifests[@]} - $keep_min_latest_num))
-      for idx in $(seq 1 $max_remove)
+      max_remove=$((${#manifests[@]} - $keep_min_latest_num - 1))
+      for idx in $(seq 0 $max_remove)
       do
         m_ts=$($_date -d `echo ${manifests[idx]} |cut -d' ' -f2` '+%s')
         if (( $now_ts - $m_ts > $older_than ))
