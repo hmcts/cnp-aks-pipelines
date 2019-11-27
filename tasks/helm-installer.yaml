@@ -1,6 +1,6 @@
 steps:
 - task: HelmInstaller@1
-  displayName: 'Install Helm 2.11.0'
+  displayName: 'Install Helm 2.16.1'
   inputs:
-    helmVersionToInstall: "2.11.0"
+    helmVersionToInstall: "2.16.1"
       installKubectl: false
