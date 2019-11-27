@@ -8,7 +8,7 @@
 set -e
 
 # GNU date is needed to run this on a mac (e.g. gdate if installed using brew)
-_date=gdate
+_date=date
 
 repo_regex="${1:-.*}"
 registry=${2:-hmctspublic}
