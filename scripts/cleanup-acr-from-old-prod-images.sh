@@ -18,7 +18,6 @@ keep_min_latest_num=6    # or at least 6 images if 30 days would leave fewer tha
 
 
 now_ts=$($_date '+%s') 
-#for repo in "draft-store/service"
 az acr repository list --name $registry --resource-group $resource_group -o tsv \
   | while read repo
 do
@@ -43,7 +42,7 @@ do
         then
           echo "Deleting: ${manifests[idx]}"
           m_sha=$(echo ${manifests[idx]} |cut -d' ' -f1)
-          # Make sure we really have a manifest digest otherwise we might accidentally delete the entire repo!
+          # Make sure we really have a manifest digest otherwise we might accidentally delete the entire repo! (never happened before :shifty-face:)
           if [[ $m_sha == sha256:* ]] 
           then
             echo "az acr repository delete --name $registry --image ${repo}@${m_sha} --yes"
