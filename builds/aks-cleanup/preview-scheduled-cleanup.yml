@@ -15,7 +15,7 @@ variables:
   azureResourceGroup: 'cnp-aks-rg'
   kubernetesCluster: 'cnp-aks-cluster'
   containerRegistry: 'hmcts'
-  helmVersion: '2.16.1'
+  helmVersion: '3.0.2'
   azureSubscription: azurerm-nonprod
   cutoffDays: 4
 
