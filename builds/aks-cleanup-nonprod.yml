@@ -7,7 +7,7 @@ variables:
   azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
   kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
   containerRegistry: 'hmctspublic'  # hmctssandbox
-  helmVersion: '2.16.1'
+  helmVersion: '3.0.2'
   azureSubscription: azurerm-nonprod  # azurerm-sandbox
   registrySubscription: azurerm-prod
 
@@ -16,20 +16,6 @@ jobs:
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
-    - task: AzureCLI@1
-      displayName: 'Delete Namespace'
-      inputs:
-        azureSubscription: $(azureSubscription)
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
-
-          if [ "$(kubectl get ns $(namespace) 2>/dev/null)" ]; then
-            kubectl delete ns $(namespace)
-          else
-            echo "namespace $(namespace) not found, nothing to delete."
-          fi
-  
   - job: untag_acr_image
     pool:
       vmImage: 'Ubuntu 16.04'
@@ -41,8 +27,8 @@ jobs:
         azureSubscription: $(registrySubscription)
         scriptLocation: 'inlineScript'
         inlineScript: |
-          repository=`echo $(namespace) | sed 's/-pr-.*//' |sed '1 s/-/\//' `
-          tag=`echo $(namespace) | sed "s/.*-pr-/pr-/"`
+          repository=`echo $(release_name) | sed 's/-pr-.*//' |sed '1 s/-/\//' `
+          tag=`echo $(release_name) | sed "s/.*-pr-/pr-/"`
           az acr repository show-tags -n $(containerRegistry) --repository $repository --query "[?starts_with(@, '$tag')]" -o tsv \
             | xargs -I% az acr repository untag -n $(containerRegistry) --image "$repository:%"
 
@@ -62,10 +48,9 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
-          helm init --client-only
 
-          if [ "$(helm get $(namespace) 2>/dev/null)" ]; then
-            helm delete --purge $(namespace)
+          if [ "$(helm get values --namespace $(namespace) $(release_name) 2>/dev/null)" ]; then
+            helm delete --namespace $(namespace) $(release_name)
           else
-            echo "chart $(namespace) not found, doing nothing"
+            echo "chart $(release_name) not found, doing nothing"
           fi
