@@ -12,10 +12,6 @@ variables:
   registrySubscription: azurerm-prod
 
 jobs:
-  - job: delete_namespace
-    pool:
-      vmImage: 'Ubuntu 16.04'
-    steps:
   - job: untag_acr_image
     pool:
       vmImage: 'Ubuntu 16.04'
