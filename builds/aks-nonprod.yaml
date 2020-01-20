@@ -5,14 +5,11 @@ name: Nonprod AKS Pipeline
 trigger: none
 pr: none
 variables:
-  environment: 'nonprod'
   aksResourceGroup: 'cnp-aks-rg'
   aksClusterName: 'cnp-aks-cluster'
   keyvaultName: 'infra-vault-nonprod'
   serviceConnection: 'azurerm-nonprod'
-  aksParametersFile: 'arm/parameters/aks/nonprod.json'
-  helmVersion: '2.16.1'
-  acrName: hmcts
+  helmVersion: '3.0.2'
   
 jobs:
 - job: Keyvault
@@ -67,14 +64,14 @@ jobs:
           --enable-cluster-autoscaler \
           --min-count 3 \
           --max-count 75
-          
-  - template: ../steps/install-tiller.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
-      helmVersion: $(helmVersion)
-      tillerReplicas: 3
+        
+  - task: HelmInstaller@1
+    displayName: 'Install Helm $(helmVersion)'
+    inputs:
+      helmVersionToInstall: $(helmVersion)
+      checkLatestHelmVersion: false
+      installKubectl: false
+      
   - template: ../tasks/dashboard-rbac.yaml
     parameters:
       serviceConnection: $(serviceConnection)
@@ -110,6 +107,7 @@ jobs:
       targetType: inline
       failOnStderr: false
       script: |
+        helm repo add stable https://kubernetes-charts.storage.googleapis.com/
         helm upgrade sealed-secrets stable/sealed-secrets --version 1.0.1 --install --namespace admin --set secretName=preview-sealed-secrets-key --wait
 
   - task: DownloadSecureFile@1
@@ -133,7 +131,7 @@ jobs:
       failOnStderr: false
       script: |
         helm repo add fluxcd https://charts.fluxcd.io
-        kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/chart-0.3.0/deploy/flux-helm-release-crd.yaml
-        helm upgrade flux fluxcd/flux --install --namespace admin -f helm/nonprod/flux.yaml --version 0.15.0 --set image.tag=1.16.0 --wait
+        kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/chart-0.5.0/deploy/flux-helm-release-crd.yaml
+        helm upgrade flux fluxcd/flux --install --recreate-pods --namespace admin -f ${VALUES} --version 1.1.0 --set image.tag=1.17.1
         helm upgrade helm-operator fluxcd/helm-operator --install --namespace admin   -f  helm/nonprod/helm-operator.yaml --version 0.5.0 --wait
 
