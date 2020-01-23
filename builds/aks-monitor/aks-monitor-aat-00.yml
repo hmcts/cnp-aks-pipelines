@@ -11,12 +11,6 @@ schedules:
   always: 'true'
 
 
-jobs:
-  - template: template.yaml
-    parameters:
-      azureResourceGroup: 'aat-00-rg'
-      kubernetesCluster: 'aat-00-aks'
-      helmVersion: '2.16.1'
-      azureSubscription: 'DCD-CFTAPPS-STG'
-      vaultName: 'cftapps-stg'
-      enableHelmTls: 'true'
+steps:
+- script: echo Hello, world!!
+  displayName: 'Run a one-line script'
