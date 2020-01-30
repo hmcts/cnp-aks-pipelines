@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 
-ENABLE_HELM_TLS=$1
-CLUSTER_NAME=$2
-WEBHOOK_URL=$3
+CLUSTER_NAME=$1
+WEBHOOK_URL=$2
 
-if [[ ${ENABLE_HELM_TLS} == true ]]
-then
-    helm_tls_param="--tls --tls-verify --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem"
-fi
 
 sudo snap install yq
 
@@ -34,7 +29,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   echo "Processing failed releases for namespace ${ns}"
   failedReleaseNames=""
 
-  for release in $( helm ls --namespace=${ns} --failed --short --output=json $helm_tls_param | jq -r '.[] '); do
+  for release in $( helm ls --namespace=${ns} --failed --short --output=json | jq -r '.[] '); do
       echo "Found a failed release $release"
       failedReleaseNames+=$release" "
   done
@@ -50,7 +45,7 @@ done
 #process pending releases
 for ns in $(echo ${!namespaceMapping[*]}); do
   echo "Processing pending releases for namespace ${ns}"
-  pendingHelmreleases=$(helm ls --namespace=${ns} --pending --output=json $helm_tls_param | jq '.Releases')
+  pendingHelmreleases=$(helm ls --namespace=${ns} --pending --output=json | jq '.Releases')
   pendingReleaseNames=""
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${pendingHelmreleases}" | jq -r '.[] | @base64'); do
@@ -62,7 +57,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
     then
         echo "Found a release in pending state:  $releaseName"
         pendingReleaseNames+=$releaseName" "
-        helm rollback $releaseName $helm_tls_param 0
+        helm rollback $releaseName 0 --namespace=${ns}
     fi
   done
 

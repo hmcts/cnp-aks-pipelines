@@ -16,7 +16,7 @@ jobs:
     parameters:
       azureResourceGroup: 'aat-01-rg'
       kubernetesCluster: 'aat-01-aks'
-      helmVersion: '2.16.1'
+      helmVersion: '3.0.2'
       azureSubscription: 'DCD-CFTAPPS-STG'
       vaultName: 'cftapps-stg'
       enableHelmTls: 'true'
