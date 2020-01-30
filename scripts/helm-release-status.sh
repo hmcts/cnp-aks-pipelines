@@ -49,8 +49,12 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   pendingReleaseNames=""
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${pendingHelmreleases}" | jq -r '.[] | @base64'); do
-    lastUpdated=$(date -d "$(echo $release| base64 --decode | jq -r '.Updated')"  +%s)
-    releaseName=$(echo $release| base64 --decode | jq -r '.Name')
+    fullDate=$(echo $release| base64 --decode | jq -r '.updated')
+     # remove 'UTC' string, for some reason helm adds utc offset and timezone name which breaks parsing
+    trimmedDate=${fullDate%????}
+    lastUpdated=$(date -d "${trimmedDate}"  +%s)
+    
+    releaseName=$(echo $release| base64 --decode | jq -r '.name')
     currenttime=$(date +%s)
     cutoff=600 #600 seconds
     if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
