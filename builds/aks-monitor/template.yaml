@@ -4,7 +4,6 @@ parameters:
   helmVersion: ''
   azureSubscription: ''
   vaultName: ''
-  enableHelmTls: ''
 
 jobs:
   - job: Helm_release_alerts
@@ -22,14 +21,6 @@ jobs:
       displayName: 'Install Helm ${{parameters.helmVersion}}'
       inputs:
         helmVersionToInstall: ${{parameters.helmVersion}}
-    - task: AzureCLI@2
-      displayName: 'Download secrets'
-      inputs:
-        scriptType: bash
-        azureSubscription: ${{ parameters.azureSubscription }}
-        scriptLocation: scriptPath
-        scriptPath: scripts/download-helm-certs.sh
-        arguments: ${{parameters.vaultName}} ${{parameters.enableHelmTls}}
     - task: AzureKeyVault@1
       displayName: 'Get webhook from Keyvault'
       inputs:
@@ -41,4 +32,4 @@ jobs:
       inputs:
         targetType: filePath
         filePath: scripts/helm-release-status.sh
-        arguments: ${{parameters.enableHelmTls}} ${{ parameters.kubernetesCluster }} $(slack-webhook-url)
+        arguments: ${{ parameters.kubernetesCluster }} $(slack-webhook-url)
