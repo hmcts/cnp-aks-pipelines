@@ -29,7 +29,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
   echo "Processing failed releases for namespace ${ns}"
   failedReleaseNames=""
 
-  for release in $( helm ls --namespace=${ns} --failed --short --output=json | jq -r '.[] '); do
+  for release in $( helm ls --namespace=${ns} --failed --short); do
       echo "Found a failed release $release"
       failedReleaseNames+=$release" "
   done
