@@ -45,7 +45,7 @@ done
 #process pending releases
 for ns in $(echo ${!namespaceMapping[*]}); do
   echo "Processing pending releases for namespace ${ns}"
-  pendingHelmreleases=$(helm ls --namespace=${ns} --pending --output=json | jq '.Releases')
+  pendingHelmreleases=$(helm ls --namespace=${ns} --pending --output=json )
   pendingReleaseNames=""
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${pendingHelmreleases}" | jq -r '.[] | @base64'); do
