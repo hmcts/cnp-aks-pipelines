@@ -63,7 +63,7 @@ jobs:
           --cluster-name=cnp-aks-cluster \
           --enable-cluster-autoscaler \
           --min-count 3 \
-          --max-count 75
+          --max-count 85
         
   - task: HelmInstaller@1
     displayName: 'Install Helm $(helmVersion)'
