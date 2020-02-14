@@ -6,6 +6,6 @@ jobs:
   - template: template.yaml
     parameters:
       serviceName: $(serviceName)
-      serviceAddress: 10.10.7.120
+      serviceAddress: 10.10.7.122
       consulAddress: 10.100.139.254
       agentPool: hmcts-sandbox-agent-pool
