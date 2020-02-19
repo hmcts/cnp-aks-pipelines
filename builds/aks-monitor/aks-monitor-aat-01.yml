@@ -11,6 +11,7 @@ schedules:
         - master
     always: 'true'
 
+
 jobs:
   - template: template.yaml
     parameters:
