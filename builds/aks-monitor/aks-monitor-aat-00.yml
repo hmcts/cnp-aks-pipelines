@@ -1,15 +1,22 @@
-# https://dev.azure.com/hmcts/CNP/_build?definitionId=256&_a=summary
+# see https://dev.azure.com/hmcts/CNP/_build?definitionId=257&_a=summary
 ---
 name: Monitor AKS AAT 00 Helm Releases
+trigger: none
 pr: none
 schedules:
-- cron: '*/2 * * * Mon-Fri'
-  displayName: 'everyyy day'
-  branches:
-    include:
-      - master
-  always: 'true'
+  - cron: '0 8-18 * * 1-5'
+    displayName: Every working hour
+    branches:
+      include:
+        - master
+    always: 'true'
 
-steps:
-- script: echo Hello world!!
-  displayName: 'Run a one-line script againnn'
+
+jobs:
+  - template: template.yaml
+    parameters:
+      azureResourceGroup: 'aat-00-rg'
+      kubernetesCluster: 'aat-00-aks'
+      helmVersion: '3.0.2'
+      azureSubscription: 'DCD-CFTAPPS-STG'
+      vaultName: 'cftapps-stg'
