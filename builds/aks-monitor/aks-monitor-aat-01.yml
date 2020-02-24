@@ -5,7 +5,7 @@ trigger: none
 pr: none
 schedules:
   - cron: '0 8-18 * * 1-5'
-    displayName: Every hour work week
+    displayName: Every working hour
     branches:
       include:
         - master
