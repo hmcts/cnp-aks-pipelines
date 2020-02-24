@@ -4,7 +4,7 @@ trigger: none
 pr: none
 schedules:
   - cron: '12 5 * * Mon-Fri'
-    displayName: At 5:12AM week days
+    displayName: At 05:12 on every day-of-week from Monday through Friday
     branches:
       include:
         - master
