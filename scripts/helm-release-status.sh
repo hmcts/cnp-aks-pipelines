@@ -67,8 +67,9 @@ for ns in $(echo ${!namespaceMapping[*]}); do
 
   if [ ! -z "$pendingReleaseNames" ]
   then
-        echo "Sending notification to slack channel ${namespaceMapping[$ns]} for $pendingReleaseNames"
-        curl -s -X POST --data-urlencode "payload={\"channel\": \"${namespaceMapping[$ns]}\", \"username\": \"${CLUSTER_NAME}\", \"text\": \"Following Helm releases are in a *pending* state in your team name space *${ns}*  and a rollback has been attempted: *$pendingReleaseNames*\", \"icon_emoji\": \":rotating_light:\"}" ${WEBHOOK_URL}
+        #echo "Sending notification to slack channel ${namespaceMapping[$ns]} for $pendingReleaseNames"
+        echo "Notification is disabled due to helm3 bug https://github.com/helm/helm/issues/7495"
+        #curl -s -X POST --data-urlencode "payload={\"channel\": \"${namespaceMapping[$ns]}\", \"username\": \"${CLUSTER_NAME}\", \"text\": \"Following Helm releases are in a *pending* state in your team name space *${ns}*  and a rollback has been attempted: *$pendingReleaseNames*\", \"icon_emoji\": \":rotating_light:\"}" ${WEBHOOK_URL}
   fi
 
 done
