@@ -40,8 +40,8 @@ jobs:
         az aks create \
           --resource-group cnp-aks-rg \
           --name cnp-aks-cluster \
-          --kubernetes-version 1.15.7 \
-          --node-count 3 \
+          --kubernetes-version 1.16.7 \
+          --node-count 75 \
           --node-vm-size Standard_B4ms \
           --location uksouth \
           --network-plugin azure \
@@ -57,13 +57,13 @@ jobs:
 
         az aks enable-addons -a monitoring -n cnp-aks-cluster -g cnp-aks-rg --workspace-resource-id "subscriptions/1c4f0704-a29e-403d-b719-b90c34ef14c9/resourceGroups/oms-automation/providers/Microsoft.OperationalInsights/workspaces/hmcts-nonprod"
 
-        az aks nodepool update \
-          --resource-group cnp-aks-rg \
-          --name nodepool1 \
-          --cluster-name=cnp-aks-cluster \
-          --enable-cluster-autoscaler \
-          --min-count 3 \
-          --max-count 85
+        #az aks nodepool update \
+          #--resource-group cnp-aks-rg \
+          #--name nodepool1 \
+          #--cluster-name=cnp-aks-cluster \
+          #--enable-cluster-autoscaler \
+          #--min-count 3 \
+          #--max-count 85
         
   - task: HelmInstaller@1
     displayName: 'Install Helm $(helmVersion)'
@@ -72,11 +72,11 @@ jobs:
       checkLatestHelmVersion: false
       installKubectl: false
       
-  - template: ../tasks/dashboard-rbac.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
+#   - template: ../tasks/dashboard-rbac.yaml
+#     parameters:
+#       serviceConnection: $(serviceConnection)
+#       aksResourceGroup: $(aksResourceGroup)
+#       aksClusterName: $(aksClusterName)
 
   - task: AzureCLI@1
     displayName: 'Create namespaces'
