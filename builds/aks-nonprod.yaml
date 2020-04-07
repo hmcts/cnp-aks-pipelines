@@ -72,11 +72,11 @@ jobs:
       checkLatestHelmVersion: false
       installKubectl: false
       
-  - template: ../tasks/dashboard-rbac.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
-      aksResourceGroup: $(aksResourceGroup)
-      aksClusterName: $(aksClusterName)
+#   - template: ../tasks/dashboard-rbac.yaml
+#     parameters:
+#       serviceConnection: $(serviceConnection)
+#       aksResourceGroup: $(aksResourceGroup)
+#       aksClusterName: $(aksClusterName)
 
   - task: AzureCLI@1
     displayName: 'Create namespaces'
