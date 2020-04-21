@@ -1,18 +1,7 @@
 parameters:
   serviceConnection: ''
-  acrServiceConnection: ''
-  acrName: ''
-  kubectlConnectionType: ''
-  aksResourceGroup: ''
-  clusterName: ''
   keyvaultName: ''
-  ingressHost: ''
   resourceGroup: ''
-  helmVersion: ''
-  tenantId: ''
-  subscriptionId: ''
-  postgresqlHost: ''
-  postgresqlDatabase: ''
   postgresqlParametersFile: ''
   installPostgresql: false
 
@@ -45,17 +34,3 @@ jobs:
   - template: ../steps/install-pact-broker.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
-      acrServiceConnection: ${{ parameters.acrServiceConnection }}
-      acrName: ${{ parameters.acrName }}
-      kubectlConnectionType: ${{ parameters.kubectlConnectionType }}
-      aksResourceGroup: ${{ parameters.aksResourceGroup }}
-      clusterName: ${{ parameters.clusterName }}
-      keyvaultName: ${{ parameters.keyvaultName }}
-      ingressHost: ${{ parameters.ingressHost }}
-      resourceGroup: ${{ parameters.resourceGroup }}
-      helmVersion: ${{ parameters.helmVersion }}
-      postgresqlParametersFile: ${{ parameters.postgresqlParametersFile }}
-      tenantId: ${{ parameters.tenantId }}
-      subscriptionId: ${{ parameters.subscriptionId }}
-      postgresqlHost: ${{ parameters.postgresqlHost }}
-      postgresqlDatabase: ${{ parameters.postgresqlDatabase }}
