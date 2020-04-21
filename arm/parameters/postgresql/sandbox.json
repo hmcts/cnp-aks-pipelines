@@ -18,7 +18,7 @@
       "value": "pact"
     },
     "dbRules": {
-      "value": "{'rule_name': 'cftsbox-intsvc', 'subnet_id': '/subscriptions/1497c3d7-ab6d-4bb7-8a10-b51d03189ee3/resourceGroups/aks-infra-cftsbox-intsvc-rg/providers/Microsoft.Network/virtualNetworks/core-cftsbox-intsvc-vnet/subnets/aks-00'}"
+      "value": "{'rule_name': 'cftsbox', 'subnet_id': '/subscriptions/1497c3d7-ab6d-4bb7-8a10-b51d03189ee3/resourceGroups/aks-infra-cftsbox-intsvc-rg/providers/Microsoft.Network/virtualNetworks/core-cftsbox-intsvc-vnet/subnets/aks-00'}"
     },
     "teamName": {
       "value": "Software Engineering"
