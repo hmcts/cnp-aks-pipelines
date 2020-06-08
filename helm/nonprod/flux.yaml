@@ -3,6 +3,7 @@ registry:
     enabled: true
 git:
   url: git@github.com:hmcts/cnp-flux-config
+  branch: temp-preview
   path: k8s/preview,k8s/common
   label: preview
   pollInterval: 1m
