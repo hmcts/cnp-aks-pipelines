@@ -20,13 +20,11 @@ jobs:
       displayName: 'Untag ACR image'
       enabled: true
       inputs:
+        scriptType: bash
         azureSubscription: $(registrySubscription)
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          repository=`echo $(release_name) | sed 's/-pr-.*//' |sed '1 s/-/\//' `
-          tag=`echo $(release_name) | sed "s/.*-pr-/pr-/"`
-          az acr repository show-tags -n $(containerRegistry) --repository $repository --query "[?starts_with(@, '$tag')]" -o tsv \
-            | xargs -I% az acr repository untag -n $(containerRegistry) --image "$repository:%"
+        scriptLocation: scriptPath
+        scriptPath: scripts/untag-acr-image.sh
+        arguments: $(release_name) $(product) $(containerRegistry)
 
   - job: delete_helm_release
     pool:
