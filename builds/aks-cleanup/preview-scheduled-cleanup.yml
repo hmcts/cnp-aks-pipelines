@@ -12,11 +12,11 @@ schedules:
     always: 'true'
 variables:
   connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'cnp-aks-rg'
-  kubernetesCluster: 'cnp-aks-cluster'
+  azureResourceGroup: 'preview-00-rg'
+  kubernetesCluster: 'preview-00-aks'
   containerRegistry: 'hmcts'
   helmVersion: '3.0.2'
-  azureSubscription: azurerm-nonprod
+  azureSubscription: DCD-CFTAPPS-DEV
   cutoffDays: 4
 
 jobs:
