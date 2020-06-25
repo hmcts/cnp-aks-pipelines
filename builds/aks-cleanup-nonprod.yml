@@ -4,11 +4,11 @@ trigger: none
 pr: none
 variables:
   connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'cnp-aks-rg'  # cnp-aks-sandbox-rg
-  kubernetesCluster: 'cnp-aks-cluster'  # cnp-aks-sandbox-cluster
+  azureResourceGroup: 'preview-00-rg'  # cnp-aks-sandbox-rg
+  kubernetesCluster: 'preview-00-aks'  # cnp-aks-sandbox-cluster
   containerRegistry: 'hmctspublic'  # hmctssandbox
   helmVersion: '3.0.2'
-  azureSubscription: azurerm-nonprod  # azurerm-sandbox
+  azureSubscription: DCD-CFTAPPS-DEV  # azurerm-sandbox
   registrySubscription: azurerm-prod
 
 jobs:
