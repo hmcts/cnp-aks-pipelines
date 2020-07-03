@@ -4,7 +4,7 @@ azureResourceGroup=${1:-preview-00-rg}
 kubernetesCluster=${2:-preview-00-aks}
 inactiveDays=${3:-4}
 
-az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} --subscription DCD-CFTAPPS-DEV -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
+az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
 
 #get team config
 curl -s https://raw.githubusercontent.com/hmcts/cnp-jenkins-config/master/team-config.yml > team-config.yaml
