@@ -1,9 +1,28 @@
 #!/usr/bin/env bash
 set -e
+azureResourceGroup=${1:-preview-00-rg}
+kubernetesCluster=${2:-preview-00-aks}
+inactiveDays=${3:-4}
 
-for ns in $(echo "adoption am bsp bar camunda ccd chart-tests cnp coh ctsc dg divorce dm-store em ethos evidence-mment family-public-law fees-pay financial-remedy ia idam immigration money-claims pcq probate professional-applications rd reform-scan rpe sscs xui"); do
+az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
+
+#get team config
+curl -s https://raw.githubusercontent.com/hmcts/cnp-jenkins-config/master/team-config.yml > team-config.yaml
+teamConfig=$(cat team-config.yaml)
+declare -A namespaceMapping
+#remove duplicates and prepare namespace mapping.
+for row in $(echo "${teamConfig}" | yq r -  -j | jq -r '.[] | @base64' ); do
+    _jq() {
+     echo ${row} | base64 --decode | jq -r ${1}
+    }
+
+   namespace=$(_jq '.namespace')
+   namespaceMapping[$namespace]=1
+done
+
+for ns in $(echo ${!namespaceMapping[*]}); do
   helmreleases=$(helm ls --namespace=${ns} --output=json)
-  inactiveDays=${1:-7}
+  
 
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${helmreleases}" | jq -r '.[] | @base64'); do
