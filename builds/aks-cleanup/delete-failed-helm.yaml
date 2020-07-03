@@ -1,12 +1,8 @@
-name: Helm Cleanup
+name: Preview Helm Failure Cleanup
 trigger: none
 pr: none
 variables:
-  connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'cnp-aks-rg'
-  kubernetesCluster: 'cnp-aks-cluster'
-  containerRegistry: 'hmcts'
-  helmVersion: 2.14.0
+  helmVersion: 3.2.4
 
 jobs:
   - job: DeleteFaileHelmReleases
@@ -17,16 +13,17 @@ jobs:
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
-        installKubectl: false
     - task: AzureCLI@1
-      displayName: 'Delete Failed Helm Releases'
+      displayName: 'Delete Failed Helm Releases preview 00'
       inputs:
-        azureSubscription:  'azurerm-nonprod'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
-          helm init --client-only
-
-          for release in $(helm list -q --failed); do
-            helm delete --purge $release
-          done
+        azureSubscription:  'DCD-CFTAPPS-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-failed-release.sh
+        arguments: preview-00-rg preview-00-aks
+    - task: AzureCLI@1
+      displayName: 'Delete Failed Helm Releases preview 01'
+      inputs:
+        azureSubscription:  'DCD-CFTAPPS-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-failed-release.sh
+        arguments: preview-01-rg preview-01-aks 
