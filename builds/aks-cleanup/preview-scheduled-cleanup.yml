@@ -11,10 +11,6 @@ schedules:
         - master
     always: 'true'
 variables:
-  connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'preview-00-rg'
-  kubernetesCluster: 'preview-00-aks'
-  containerRegistry: 'hmcts'
   helmVersion: '3.0.2'
   azureSubscription: DCD-CFTAPPS-DEV
   cutoffDays: 4
@@ -29,16 +25,17 @@ jobs:
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
-    - task: Bash@3
+    - task: AzureCLI@1
       displayName: 'Delete outdated helm releases preview-00'
       inputs:
-        targetType: filePath
-        filePath: scripts/delete-inactive-helm-releases.sh
+        azureSubscription:  '$(azureSubscription)'
+        scriptLocation: scriptPath
+        scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: preview-00-rg preview-00-aks $(cutoffDays)
     - task: AzureCLI@1
       displayName: 'Delete outdated helm releases preview-01'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
-        scriptPath: scripts//delete-inactive-helm-releases.sh
+        scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: preview-01-rg preview-01-aks $(cutoffDays)
