@@ -24,6 +24,7 @@ jobs:
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
+    - script: sudo snap install yq
     - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'
       inputs:
