@@ -24,20 +24,19 @@ jobs:
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
-    - task: AzureCLI@1
-      displayName: 'Login to AKS'
-      inputs:
-        azureSubscription: $(azureSubscription)
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster) -a
     - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
     - task: Bash@3
-      displayName: 'Delete outdated helm releases'
+      displayName: 'Delete outdated helm releases preview-00'
       inputs:
         targetType: filePath
         filePath: scripts/delete-inactive-helm-releases.sh
-        arguments: $(cutoffDays)
+        arguments: preview-00-rg preview-00-aks $(cutoffDays)
+    - task: Bash@3
+      displayName: 'Delete outdated helm releases preview-01'
+      inputs:
+        targetType: filePath
+        filePath: scripts/delete-inactive-helm-releases.sh
+        arguments: preview-01-rg preview-01-aks $(cutoffDays)
