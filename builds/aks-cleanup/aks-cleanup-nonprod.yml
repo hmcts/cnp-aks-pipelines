@@ -18,7 +18,6 @@ jobs:
       displayName: 'Untag ACR image'
       enabled: true
       inputs:
-        scriptType: bash
         azureSubscription: $(registrySubscription)
         scriptLocation: scriptPath
         scriptPath: scripts/untag-acr-image.sh
@@ -32,19 +31,18 @@ jobs:
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
-        installKubectl: false
     - task: AzureCLI@1
-      displayName: 'Helm Delete Release'
+      displayName: 'Helm Delete Release on preview 00'
       inputs:
         azureSubscription:  '$(azureSubscription)'
-        targetType: filePath
-        filePath: scripts/clean-pr-release.sh
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
         arguments: preview-00-rg preview-00-aks $(namespace) $(release_name)
     - task: AzureCLI@1
-      displayName: 'Helm Delete Release'
+      displayName: 'Helm Delete Release preview 01'
       inputs:
         azureSubscription:  '$(azureSubscription)'
-        targetType: filePath
-        filePath: scripts/clean-pr-release.sh
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
         arguments: preview-01-rg preview-01-aks $(namespace) $(release_name)
           
