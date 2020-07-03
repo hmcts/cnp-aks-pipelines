@@ -11,7 +11,7 @@ schedules:
         - master
     always: 'true'
 variables:
-  helmVersion: '3.0.2'
+  helmVersion: '3.2.4'
   azureSubscription: DCD-CFTAPPS-DEV
   cutoffDays: 4
 

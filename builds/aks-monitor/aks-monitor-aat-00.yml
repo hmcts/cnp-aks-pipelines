@@ -17,6 +17,6 @@ jobs:
     parameters:
       azureResourceGroup: 'aat-00-rg'
       kubernetesCluster: 'aat-00-aks'
-      helmVersion: '3.0.2'
+      helmVersion: '3.2.4'
       azureSubscription: 'DCD-CFTAPPS-STG'
       vaultName: 'cftapps-stg'
