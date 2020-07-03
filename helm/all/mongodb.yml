@@ -1,5 +1,0 @@
-mongodbUsername: build-failure-analyzer
-mongodbDatabase: build-failure-analyzer
-
-service:
-  type: "LoadBalancer"
