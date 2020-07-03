@@ -4,8 +4,6 @@ trigger: none
 pr: none
 variables:
   connectionType: 'Azure Resource Manager'
-  azureResourceGroup: 'preview-00-rg'  # cnp-aks-sandbox-rg
-  kubernetesCluster: 'preview-00-aks'  # cnp-aks-sandbox-cluster
   containerRegistry: 'hmctspublic'  # hmctssandbox
   helmVersion: '3.0.2'
   azureSubscription: DCD-CFTAPPS-DEV  # azurerm-sandbox
@@ -39,12 +37,14 @@ jobs:
       displayName: 'Helm Delete Release'
       inputs:
         azureSubscription:  '$(azureSubscription)'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster) -a
-
-          if [ "$(helm get values --namespace $(namespace) $(release_name) 2>/dev/null)" ]; then
-            helm delete --namespace $(namespace) $(release_name)
-          else
-            echo "chart $(release_name) not found, doing nothing"
-          fi
+        targetType: filePath
+        filePath: scripts/clean-pr-release.sh
+        arguments: preview-00-rg preview-00-aks $(namespace) $(release_name)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release'
+      inputs:
+        azureSubscription:  '$(azureSubscription)'
+        targetType: filePath
+        filePath: scripts/clean-pr-release.sh
+        arguments: preview-01-rg preview-01-aks $(namespace) $(release_name)
+          
