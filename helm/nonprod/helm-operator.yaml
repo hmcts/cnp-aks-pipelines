@@ -1,7 +1,0 @@
-workers: 2
-git:
-  pollInterval: 1m
-  ssh:
-    secretName: flux-git-deploy
-helm:
-  versions: v3

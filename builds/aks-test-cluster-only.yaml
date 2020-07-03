@@ -1,9 +1,0 @@
-name: Test AKS Pipeline (Cluster Only)
-trigger: none
-jobs:
-- template: ../jobs/aks-cluster-only.yaml
-  parameters:
-    serviceConnection: azurerm-sandbox
-    keyvaultName: infra-vault-sandbox
-    aksResourceGroup: cnp-test-aks-rg
-    aksParametersFile: arm/parameters/aks/test.json
