@@ -5,7 +5,7 @@ pr: none
 variables:
   connectionType: 'Azure Resource Manager'
   containerRegistry: 'hmctspublic'  # hmctssandbox
-  helmVersion: '3.0.2'
+  helmVersion: '3.2.4'
   azureSubscription: DCD-CFTAPPS-DEV  # azurerm-sandbox
   registrySubscription: azurerm-prod
 
