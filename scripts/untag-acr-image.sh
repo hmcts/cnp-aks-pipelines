@@ -4,7 +4,7 @@ RELEASE_NAME=${1}
 PRODUCT=${2}
 CONTAINER_REGISTRY=${3}
 
-component=$(echo ${RELEASE_NAME} | sed -e "s/^${PRODUCT}-//" -e 's/-pr-.*//' -e '1 s/-/\//')
+component=$(echo ${RELEASE_NAME} | sed -e "s/^${PRODUCT}-//" -e 's/-pr-.*//')
 repository="${PRODUCT}/${component}"
 tag=$(echo ${RELEASE_NAME} | sed "s/.*-pr-/pr-/")
 
