@@ -10,6 +10,7 @@ schedules:
         - master
     always: 'true'
 
+
 jobs:
   - template: template-prod-cleanup.yaml
     parameters:
