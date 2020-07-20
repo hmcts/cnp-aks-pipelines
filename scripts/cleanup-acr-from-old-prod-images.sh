@@ -7,50 +7,29 @@
 
 set -e
 
-# GNU date is needed to run this on a mac (e.g. gdate if installed using brew)
-_date=date
-
 repo_regex="${1:-.*}"
 registry=${2:-hmctspublic}
-resource_group=${3:-rpe-acr-prod-rg}
-older_than=2592000       # 30 days
-keep_min_latest_num=6    # or at least 6 images if 30 days would leave fewer than 6 images
+older_than=30d
+keep_min_latest_num=6
 
-
-now_ts=$($_date '+%s') 
-az acr repository list --name $registry --resource-group $resource_group -o tsv \
+az acr repository list --name "$registry" -o tsv \
   | while read repo
 do
-  ! [[ "$repo" =~ $repo_regex ]] && echo "Skipping $repo as it does not match regex $repo_regex" && continue
-  for _tag in prod aat staging
-  do  
-    echo "** Deleting old $_tag images for $repo"
-    manifests=()
-    while read -r manifest
-    do 
-      manifests+=("$manifest")
-    done < <(az acr repository show-manifests --name hmctspublic --repository "$repo" --query "[?not_null(tags[?starts_with(@, \`\"${_tag}-\"\`)])]|sort_by([*], &timestamp)|[].[digest, timestamp]" -o tsv) 
-    echo "Found ${#manifests[@]} $_tag images for ${repo}"
-    count_removed=0
-    if (( ${#manifests[@]} > $keep_min_latest_num ))
-    then
-      max_remove=$((${#manifests[@]} - $keep_min_latest_num - 1))
-      for idx in $(seq 0 $max_remove)
-      do
-        m_ts=$($_date -d `echo ${manifests[idx]} |cut -d' ' -f2` '+%s')
-        if (( $now_ts - $m_ts > $older_than ))
-        then
-          echo "Deleting: ${manifests[idx]}"
-          m_sha=$(echo ${manifests[idx]} |cut -d' ' -f1)
-          # Make sure we really have a manifest digest otherwise we might accidentally delete the entire repo! (never happened before :shifty-face:)
-          if [[ $m_sha == sha256:* ]] 
-          then
-            az acr repository delete --name $registry --image ${repo}@${m_sha} --yes
-          fi
-          count_removed=$(($count_removed + 1))
-        fi
-      done
-    fi
-    echo "** Deleted $count_removed $_tag images for ${repo}"
-  done
+  if ! [[ $repo =~ $repo_regex ]]; then
+    continue
+  fi
+  
+  echo "$(tput setaf 2)Cleaning up $repo, deleting images older than $older_than and keeping at least $keep_min_latest_num"
+  
+  cat << EOF | az acr run --registry "$registry" -f - --timeout 10800 /dev/null
+version: v1.1.0
+alias:
+  values:
+    forkedacr: "hmctspublic.azurecr.io/acr:fd0cf6"
+steps:
+  - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than}
+  - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^aat-.* --keep ${keep_min_latest_num} --ago ${older_than}
+  - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^staging-.* --keep ${keep_min_latest_num} --ago ${older_than}
+EOF
+  
 done
