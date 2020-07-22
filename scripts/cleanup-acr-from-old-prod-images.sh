@@ -20,7 +20,7 @@ do
   fi
 
   # ACR API doesn't respect the 'last' parameter on our base images when passing the sortby flag
-  if [[ $repo =~ (^base/.*|^cmc/ccd-definition-importer$) ]]; then
+  if [[ $repo =~ (^base/.*|^cmc/ccd-definition-importer$|^imported/.*) ]]; then
     echo "$(TERM=xterm tput setaf 3)Skipping $repo as it's a base image"
     continue
   fi
