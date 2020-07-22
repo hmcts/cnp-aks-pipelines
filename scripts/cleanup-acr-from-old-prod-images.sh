@@ -20,12 +20,20 @@ do
   fi
 
   # ACR API doesn't respect the 'last' parameter on our base images when passing the sortby flag
-  if [[ $repo =~ (^base/.*|^cmc/ccd-definition-importer$|^imported/.*) ]]; then
+  if [[ $repo =~ (^base/.*|^cmc/ccd-definition-importer$|^imported/.*|k8s-dns-node-cache-amd64) ]]; then
     echo "$(TERM=xterm tput setaf 3)Skipping $repo as it's a base image"
+    continue
+  fi
+
+  START_POINT='k'
+  CURRENT_FIRST_CHAR=${repo:0:1}
+  if [[ $CURRENT_FIRST_CHAR < $START_POINT ]] ;then
+    echo "$(TERM=xterm tput setaf 3)Skipping $repo as it's previously passed" 
     continue
   fi
   
   echo "$(TERM=xterm tput setaf 2)Cleaning up $repo, deleting images older than $older_than and keeping at least $keep_min_latest_num"
+
   cat << EOF | az acr run --registry "$registry" -f - --timeout 10800 /dev/null
 version: v1.1.0
 alias:
