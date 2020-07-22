@@ -25,13 +25,6 @@ do
     continue
   fi
 
-  START_POINT='s'
-  CURRENT_FIRST_CHAR=${repo:0:1}
-  if [[ $CURRENT_FIRST_CHAR < $START_POINT ]] ;then
-    echo "$(TERM=xterm tput setaf 3)Skipping $repo as it's previously passed" 
-    continue
-  fi
-  
   echo "$(TERM=xterm tput setaf 2)Cleaning up $repo, deleting images older than $older_than and keeping at least $keep_min_latest_num"
 
   cat << EOF | az acr run --registry "$registry" -f - --timeout 10800 /dev/null
