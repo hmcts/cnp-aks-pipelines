@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 azureResourceGroup=${1:-preview-00-rg}
 kubernetesCluster=${2:-preview-00-aks}
 inactiveDays=${3:-4}
