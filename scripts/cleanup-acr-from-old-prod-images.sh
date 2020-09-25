@@ -25,7 +25,7 @@ do
 version: v1.1.0
 alias:
   values:
-    forkedacr: "hmctspublic.azurecr.io/acr:6e655c8"
+    forkedacr: "hmctspublic.azurecr.io/acr:e666d99"
 steps:
   - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
   - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^aat-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
