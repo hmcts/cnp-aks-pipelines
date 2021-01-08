@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
-azureResourceGroup=${1:-preview-00-rg}
-kubernetesCluster=${2:-preview-00-aks}
-inactiveDays=${3:-4}
-
-az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
-
 #get team config
 curl -s https://raw.githubusercontent.com/hmcts/cnp-jenkins-config/master/team-config.yml > team-config.yaml
 teamConfig=$(cat team-config.yaml)
 declare -A namespaceMapping
 #remove duplicates and prepare namespace mapping.
-for row in $(echo "${teamConfig}" | yq r -  -j | jq -r '.[] | @base64' ); do
+for row in $(echo "${teamConfig}" | yq e -  -j | jq -r '.[] | @base64' ); do
     _jq() {
      echo ${row} | base64 --decode | jq -r ${1}
     }
