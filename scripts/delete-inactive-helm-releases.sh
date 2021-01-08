@@ -10,7 +10,7 @@ curl -s https://raw.githubusercontent.com/hmcts/cnp-jenkins-config/master/team-c
 teamConfig=$(cat team-config.yaml)
 declare -A namespaceMapping
 #remove duplicates and prepare namespace mapping.
-for row in $(echo "${teamConfig}" | yq r -  -j | jq -r '.[] | @base64' ); do
+for row in $(echo "${teamConfig}" | yq e -  -j | jq -r '.[] | @base64' ); do
     _jq() {
      echo ${row} | base64 --decode | jq -r ${1}
     }
