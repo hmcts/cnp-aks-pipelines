@@ -1,14 +1,20 @@
-name: ACR Cleanup (hmctssandbox)
+---
+name: Clean up old prod tags from ACR
 trigger: none
 pr: none
-variables:
-  serviceConnection: azurerm-sandbox
-  acrName: "hmctssandbox"
-  acrResourceGroup: "cnp-acr-rg"
+schedules:
+  - cron: '12 5 * * Mon-Fri'
+    displayName: At 05:12 on every day-of-week from Monday through Friday
+    branches:
+      include:
+        - master
+    always: 'true'
+
 
 jobs:
-  - template: template.yaml
+  - template: template-image-cleanup.yaml
     parameters:
-      serviceConnection: $(serviceConnection)
-      acrName: $(acrName)
-      acrResourceGroup: $(acrResourceGroup)
+      serviceConnection: azurerm-sandbox
+      repoRegex: '.*'
+      acrName: 'hmctssandbox'
+      acrResourceGroup: 'cnp-acr-rg'

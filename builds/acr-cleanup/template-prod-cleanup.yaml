@@ -11,10 +11,10 @@ jobs:
   timeoutInMinutes: 600
   steps:
   - task: AzureCLI@1
-    displayName: 'Delete old prod images'
+    displayName: 'Delete old images'
     inputs:
       scriptType: bash
       azureSubscription: ${{ parameters.serviceConnection }}
       scriptLocation: scriptPath
-      scriptPath: scripts/cleanup-acr-from-old-prod-images.sh
+      scriptPath: scripts/cleanup-acr-old-images.sh
       arguments: ${{parameters.repoRegex}} ${{parameters.acrName}} ${{parameters.acrResourceGroup}}

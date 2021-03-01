@@ -12,7 +12,7 @@ schedules:
 
 
 jobs:
-  - template: template-prod-cleanup.yaml
+  - template: template-image-cleanup.yaml
     parameters:
       serviceConnection: azurerm-prod
       repoRegex: '.*'
