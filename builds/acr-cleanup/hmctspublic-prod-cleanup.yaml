@@ -1,5 +1,5 @@
 ---
-name: Clean up old prod tags from ACR
+name: Clean up old tags from ACR
 trigger: none
 pr: none
 schedules:
