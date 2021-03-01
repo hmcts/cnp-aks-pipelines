@@ -23,13 +23,10 @@ do
 
   cat << EOF | az acr run --registry "$registry" -f - --timeout 10800 /dev/null
 version: v1.1.0
-alias:
-  values:
-    forkedacr: "hmctspublic.azurecr.io/acr:e666d99"
 steps:
-  - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
-  - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^aat-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
-  - cmd: \$forkedacr purge --registry \$RegistryName --filter $repo:^staging-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
+  - cmd: {{ .Run.Registry }}/acr:latest purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
+  - cmd: {{ .Run.Registry }}/acr:latest purge --registry \$RegistryName --filter $repo:^aat-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
+  - cmd: {{ .Run.Registry }}/acr:latest purge --registry \$RegistryName --filter $repo:^staging-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged
 EOF
   
 done
