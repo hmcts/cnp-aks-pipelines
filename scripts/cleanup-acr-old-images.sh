@@ -28,7 +28,7 @@ do
   cat << EOF | az acr run --registry "$registry" -f - --timeout 10800 /dev/null
 version: v1.1.0
 steps:
-  - cmd: acr purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 4
+  - cmd: acr purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 5
   - cmd: acr purge --registry \$RegistryName --filter $repo:^aat-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 5
   - cmd: acr purge --registry \$RegistryName --filter $repo:^staging-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 5
   - cmd: acr purge --registry \$RegistryName --filter $repo:^pr-.* --ago ${pr_old_than} --untagged --concurrency 5
