@@ -29,9 +29,13 @@ do
 version: v1.1.0
 steps:
   - cmd: acr purge --registry \$RegistryName --filter $repo:^prod-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 5
+    retries: 3
   - cmd: acr purge --registry \$RegistryName --filter $repo:^aat-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 5
+    retries: 3
   - cmd: acr purge --registry \$RegistryName --filter $repo:^staging-.* --keep ${keep_min_latest_num} --ago ${older_than} --untagged --concurrency 5
+    retries: 3
   - cmd: acr purge --registry \$RegistryName --filter $repo:^pr-.* --ago ${pr_old_than} --untagged --concurrency 5
+    retries: 3
 EOF
   
 done
