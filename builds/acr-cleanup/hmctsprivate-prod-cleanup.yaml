@@ -16,5 +16,5 @@ jobs:
     parameters:
       serviceConnection: azurerm-prod
       repoRegex: '.*'
-      acrName: 'hmctspublic'
+      acrName: 'hmctsprivate'
       acrResourceGroup: 'rpe-acr-prod-rg'
