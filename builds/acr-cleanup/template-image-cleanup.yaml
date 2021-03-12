@@ -16,5 +16,5 @@ jobs:
       scriptType: bash
       azureSubscription: ${{ parameters.serviceConnection }}
       scriptLocation: scriptPath
-      scriptPath: scripts/cleanup-acr-old-images.sh
+      scriptPath: scripts/${{parameters.scriptPath}} 
       arguments: ${{parameters.repoRegex}} ${{parameters.acrName}} ${{parameters.acrResourceGroup}}

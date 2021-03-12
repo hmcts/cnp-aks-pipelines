@@ -1,5 +1,5 @@
 ---
-name: Clean up old prod tags from ACR
+name: Clean up old tags from ACR
 trigger: none
 pr: none
 schedules:
@@ -14,8 +14,8 @@ schedules:
 jobs:
   - template: template-image-cleanup.yaml
     parameters:
-      serviceConnection: azurerm-sandbox
+      serviceConnection: azurerm-prod
       repoRegex: '.*'
-      acrName: 'hmctssandbox'
-      acrResourceGroup: 'cnp-acr-rg'
-      scriptPath: cleanup-acr-old-images.sh
+      acrName: 'hmctsprivate'
+      acrResourceGroup: 'rpe-acr-prod-rg'
+      scriptPath: cleanup-acr-old-images-hmctsprivate.sh
