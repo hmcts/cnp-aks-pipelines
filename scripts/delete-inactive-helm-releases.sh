@@ -16,7 +16,11 @@ for row in $(echo "${teamConfig}" | yq e -  -j | jq -r '.[] | @base64' ); do
     }
 
    namespace=$(_jq '.namespace')
-   namespaceMapping[$namespace]=1
+   # whitelist namespace being deleted accidentally.
+   if [ $namespace != "admin" ]
+    then
+     namespaceMapping[$namespace]=1
+   fi
 done
 
 for ns in $(echo ${!namespaceMapping[*]}); do
