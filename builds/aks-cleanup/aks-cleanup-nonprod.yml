@@ -45,4 +45,18 @@ jobs:
         scriptLocation: scriptPath
         scriptPath: scripts/clean-pr-release.sh
         arguments: preview-01-rg preview-01-aks $(namespace) $(release_name)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release on sds dev 00'
+      inputs:
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
+        arguments: ss-dev-00-rg ss-dev-00-aks $(namespace) $(release_name)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release sds dev 01'
+      inputs:
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
+        arguments: ss-dev-01-rg ss-dev-01-aks $(namespace) $(release_name)
           
