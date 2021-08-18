@@ -18,3 +18,9 @@ jobs:
       repoRegex: '.*'
       acrName: 'hmctspublic'
       acrResourceGroup: 'rpe-acr-prod-rg'
+  - template: template-image-cleanup.yaml
+    parameters:
+      serviceConnection: DTS-SHAREDSERVICES-PROD
+      repoRegex: '.*'
+      acrName: 'sdshmctspublic'
+      acrResourceGroup: 'sds-acr-rg'
