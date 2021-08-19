@@ -5,9 +5,9 @@ parameters:
   acrResourceGroup: ''
 
 jobs:
-- job: ACR_Cleanup
+- job:
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-latest'
   timeoutInMinutes: 600
   steps:
   - task: AzureCLI@1
