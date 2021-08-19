@@ -5,7 +5,7 @@ parameters:
   acrResourceGroup: ''
 
 jobs:
-- job: ACR_Cleanup
+- job:
   pool:
     vmImage: 'Ubuntu 16.04'
   timeoutInMinutes: 600
