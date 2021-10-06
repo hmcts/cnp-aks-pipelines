@@ -12,7 +12,7 @@ variables:
 jobs:
   - job: untag_acr_image
     pool:
-      vmImage: 'Ubuntu 16.04'
+      vmImage: 'Ubuntu 18.04'
     steps:
     - task: AzureCLI@1
       displayName: 'Untag ACR image'
@@ -25,7 +25,7 @@ jobs:
 
   - job: delete_helm_release
     pool:
-      vmImage: 'Ubuntu 16.04'
+      vmImage: 'Ubuntu 18.04'
     steps:
     - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'

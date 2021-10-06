@@ -8,7 +8,7 @@ parameters:
 jobs:
   - job: Helm_release_alerts
     pool:
-      vmImage: 'Ubuntu 16.04'
+      vmImage: 'Ubuntu 18.04'
     steps:
     - task: AzureCLI@1
       displayName: 'Login to AKS'

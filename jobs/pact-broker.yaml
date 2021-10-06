@@ -8,7 +8,7 @@ parameters:
 jobs:
 - job: Keyvault
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'Ubuntu 18.04'
   steps:
   - template: ../steps/keyvault-pact.yaml
     parameters:
@@ -18,7 +18,7 @@ jobs:
 - job: DeployPactBroker
   dependsOn: Keyvault
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'Ubuntu 18.04'
   variables:
     pactDbUser: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbUser']]
     pactDbPassword: $[dependencies.Keyvault.outputs['exportKeyvault.pactDbPassword']]
