@@ -1,0 +1,21 @@
+---
+name: AKS Cleanup Completed Pods
+trigger: none
+pr: none
+schedules:
+  - cron: '0 * * * *'
+    displayName: Clean up hour
+    branches:
+      include:
+        - master
+    always: 'true'
+variables:
+  helmVersion: '3.2.4'
+  azureSubscription: DCD-CFTAPPS-DEV
+
+jobs:
+  - job: DeleteCompletedPods
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+      - template: delete-completed-pods-template.yml
