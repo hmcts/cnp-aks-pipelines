@@ -18,4 +18,4 @@ jobs:
     pool:
       vmImage: 'Ubuntu 18.04'
     steps:
-      - template: delete-completed-pods-template.yml
+      - template: ./templates/delete-completed-pods-template.yml
