@@ -9,10 +9,6 @@ schedules:
       include:
         - master
     always: 'true'
-variables:
-  helmVersion: '3.2.4'
-  azureSubscription: DCD-CFTAPPS-DEV
-
 jobs:
   - job: DeleteCompletedPods
     pool:
