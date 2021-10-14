@@ -33,3 +33,27 @@ jobs:
                   rg: cft-aat-01-rg
               namespaces:
                 - rpe
+            - name: DCD-CFTAPPS-ITHC
+              clusters:
+                - name: ithc-00-aks
+                  rg: ithc-00-rg
+                - name: ithc-01-aks
+                  rg: ithc-01-rg
+              namespaces:
+                - rpe
+            - name: DCD-CFTAPPS-DEMO
+              clusters:
+                - name: demo-00-aks
+                  rg: demo-00-rg
+                - name: demo-01-aks
+                  rg: demo-01-rg
+              namespaces:
+                - rpe
+            - name: DCD-CFTAPPS-TEST
+              clusters:
+                - name: cft-perftest-00-aks
+                  rg: cft-perftest-00-rg
+                - name: cft-perftest-01-aks
+                  rg: cft-perftest-01-rg
+              namespaces:
+                - rpe
