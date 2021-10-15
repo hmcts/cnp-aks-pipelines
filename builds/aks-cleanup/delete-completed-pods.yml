@@ -35,10 +35,10 @@ jobs:
                 - rpe
             - name: DCD-CFTAPPS-ITHC
               clusters:
-                - name: ithc-00-aks
-                  rg: ithc-00-rg
-                - name: ithc-01-aks
-                  rg: ithc-01-rg
+                - name: cft-ithc-00-aks
+                  rg: cft-ithc-00-rg
+                - name: cft-ithc-01-aks
+                  rg: cft-ithc-01-rg
               namespaces:
                 - rpe
             - name: DCD-CFTAPPS-DEMO
@@ -55,5 +55,13 @@ jobs:
                   rg: cft-perftest-00-rg
                 - name: cft-perftest-01-aks
                   rg: cft-perftest-01-rg
+              namespaces:
+                - rpe
+            - name: DCD-CFTAPPS-PROD
+              clusters:
+                - name: prod-00-aks
+                  rg: prod-00-rg
+                - name: prod-01-aks
+                  rg: prod-01-rg
               namespaces:
                 - rpe
