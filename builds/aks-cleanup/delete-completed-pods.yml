@@ -25,6 +25,7 @@ jobs:
                   rg: preview-01-rg
               namespaces:
                 - rpe
+                - fees-pay
             - name: DCD-CFTAPPS-STG
               clusters:
                 - name: cft-aat-00-aks
@@ -33,6 +34,7 @@ jobs:
                   rg: cft-aat-01-rg
               namespaces:
                 - rpe
+                - fees-pay
             - name: DCD-CFTAPPS-ITHC
               clusters:
                 - name: cft-ithc-00-aks
@@ -41,6 +43,7 @@ jobs:
                   rg: cft-ithc-01-rg
               namespaces:
                 - rpe
+                - fees-pay
             - name: DCD-CFTAPPS-DEMO
               clusters:
                 - name: demo-00-aks
@@ -49,6 +52,7 @@ jobs:
                   rg: demo-01-rg
               namespaces:
                 - rpe
+                - fees-pay
             - name: DCD-CFTAPPS-TEST
               clusters:
                 - name: cft-perftest-00-aks
@@ -57,6 +61,7 @@ jobs:
                   rg: cft-perftest-01-rg
               namespaces:
                 - rpe
+                - fees-pay
             - name: DCD-CFTAPPS-PROD
               clusters:
                 - name: prod-00-aks
@@ -65,3 +70,4 @@ jobs:
                   rg: prod-01-rg
               namespaces:
                 - rpe
+                - fees-pay
