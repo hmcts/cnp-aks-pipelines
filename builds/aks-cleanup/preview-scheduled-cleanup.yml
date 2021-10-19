@@ -17,7 +17,7 @@ variables:
 jobs:
   - job: delete_helm_release
     pool:
-      vmImage: 'Ubuntu 16.04'
+      vmImage: 'ubuntu-latest'
     steps:
     - script: sudo snap install yq
     - task: HelmInstaller@1

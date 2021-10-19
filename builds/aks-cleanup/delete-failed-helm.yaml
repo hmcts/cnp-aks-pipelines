@@ -7,7 +7,7 @@ variables:
 jobs:
   - job: DeleteFaileHelmReleases
     pool:
-      vmImage: 'Ubuntu 16.04'
+      vmImage: 'ubuntu-latest'
     steps:
     - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'

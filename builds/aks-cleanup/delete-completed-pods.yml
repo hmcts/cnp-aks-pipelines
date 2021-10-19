@@ -1,0 +1,73 @@
+---
+name: AKS Cleanup Completed Pods
+trigger: none
+pr: none
+schedules:
+  - cron: '0 * * * *'
+    displayName: Clean up hour
+    branches:
+      include:
+        - master
+    always: 'true'
+jobs:
+  - job: DeleteCompletedPods
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - template: ./templates/delete-completed-pods-template.yml
+        parameters:
+          serviceConnection:
+            - name: DCD-CFTAPPS-DEV
+              clusters:
+                - name: preview-00-aks
+                  rg: preview-00-rg
+                - name: preview-01-aks
+                  rg: preview-01-rg
+              namespaces:
+                - rpe
+                - fees-pay
+            - name: DCD-CFTAPPS-STG
+              clusters:
+                - name: cft-aat-00-aks
+                  rg: cft-aat-00-rg
+                - name: cft-aat-01-aks
+                  rg: cft-aat-01-rg
+              namespaces:
+                - rpe
+                - fees-pay
+            - name: DCD-CFTAPPS-ITHC
+              clusters:
+                - name: cft-ithc-00-aks
+                  rg: cft-ithc-00-rg
+                - name: cft-ithc-01-aks
+                  rg: cft-ithc-01-rg
+              namespaces:
+                - rpe
+                - fees-pay
+            - name: DCD-CFTAPPS-DEMO
+              clusters:
+                - name: demo-00-aks
+                  rg: demo-00-rg
+                - name: demo-01-aks
+                  rg: demo-01-rg
+              namespaces:
+                - rpe
+                - fees-pay
+            - name: DCD-CFTAPPS-TEST
+              clusters:
+                - name: cft-perftest-00-aks
+                  rg: cft-perftest-00-rg
+                - name: cft-perftest-01-aks
+                  rg: cft-perftest-01-rg
+              namespaces:
+                - rpe
+                - fees-pay
+            - name: DCD-CFTAPPS-PROD
+              clusters:
+                - name: prod-00-aks
+                  rg: prod-00-rg
+                - name: prod-01-aks
+                  rg: prod-01-rg
+              namespaces:
+                - rpe
+                - fees-pay
