@@ -30,5 +30,5 @@ steps:
           azureSubscription: ${{sc.name}}
           scriptLocation: scriptPath
           scriptPath: scripts/delete-completed-pods.sh
-          arguments: ${{sc.name}} ${{c.rg}} ${{c.name}} ${{ join(';', sc.namespaces) }}
+          arguments: ${{sc.name}} ${{c.rg}} ${{c.name}} ${{ join(' ', sc.namespaces) }}
           failOnStandardError: false
