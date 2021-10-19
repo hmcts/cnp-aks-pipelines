@@ -16,8 +16,9 @@ else
     pods=$(kubectl get pod -n $n 2>&1 | grep Completed | awk '{print $1}')
     if [ -z "${pods}" ]
     then
-      echo "No Completed pods to delete"
+      echo "No Completed pods to delete in namespace '${n}'"
     else
+      echo "Deleting Completed pods in namespace '${n}'"
       deleteError=$(echo $pods | xargs kubectl delete pod -n $n 2>&1)
       echo $deleteError
     fi
