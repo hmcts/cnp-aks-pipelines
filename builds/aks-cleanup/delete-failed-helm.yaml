@@ -19,11 +19,11 @@ jobs:
         azureSubscription:  'DCD-CFTAPPS-DEV'
         scriptLocation: scriptPath
         scriptPath: scripts/clean-failed-release.sh
-        arguments: preview-00-rg preview-00-aks
+        arguments: cft-preview-00-rg cft-preview-00-aks
     - task: AzureCLI@1
       displayName: 'Delete Failed Helm Releases preview 01'
       inputs:
         azureSubscription:  'DCD-CFTAPPS-DEV'
         scriptLocation: scriptPath
         scriptPath: scripts/clean-failed-release.sh
-        arguments: preview-01-rg preview-01-aks 
+        arguments: cft-preview-01-rg cft-preview-01-aks 
