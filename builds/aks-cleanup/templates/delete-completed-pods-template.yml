@@ -5,10 +5,10 @@ parameters:
 #    default:
 #      - name: DCD-CFTAPPS-DEV
 #        clusters:
-#          - name: preview-00-aks
-#            rg: preview-00-rg
-#          - name: preview-01-aks
-#            rg: preview-01-rg
+#          - name: cft-preview-00-aks
+#            rg: cft-preview-00-rg
+#          - name: cft-preview-01-aks
+#            rg: cft-preview-01-rg
 #        namespaces:
 #          - rpe
 #
