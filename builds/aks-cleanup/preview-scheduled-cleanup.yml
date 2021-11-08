@@ -30,11 +30,11 @@ jobs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-inactive-helm-releases.sh
-        arguments: preview-00-rg preview-00-aks $(cutoffDays)
+        arguments: cft-preview-00-rg cft-preview-00-aks $(cutoffDays)
     - task: AzureCLI@1
       displayName: 'Delete outdated helm releases preview-01'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-inactive-helm-releases.sh
-        arguments: preview-01-rg preview-01-aks $(cutoffDays)
+        arguments: cft-preview-01-rg cft-preview-01-aks $(cutoffDays)
