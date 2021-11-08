@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-azureResourceGroup=${1:-preview-00-rg}
-kubernetesCluster=${2:-preview-00-aks}
+azureResourceGroup=${1:cft-preview-00-rg}
+kubernetesCluster=${2:cft-preview-00-aks}
 inactiveDays=${3:-4}
 
 az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
