@@ -38,3 +38,27 @@ jobs:
         scriptLocation: scriptPath
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: cft-preview-01-rg cft-preview-01-aks $(cutoffDays)
+
+  - job: sds_delete_helm_release
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: sudo snap install yq
+    - task: HelmInstaller@1
+      displayName: 'Install Helm $(helmVersion)'
+      inputs:
+        helmVersionToInstall: $(helmVersion)
+    - task: AzureCLI@1
+      displayName: 'Delete outdated helm releases sds-dev-00'
+      inputs:
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/delete-inactive-helm-releases.sh
+        arguments: ss-dev-00-rg ss-dev-00-aks $(cutoffDays)
+    - task: AzureCLI@1
+      displayName: 'Delete outdated helm releases sds-dev-01'
+      inputs:
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/delete-inactive-helm-releases.sh
+        arguments: ss-dev-01-rg ss-dev-01-aks $(cutoffDays)
