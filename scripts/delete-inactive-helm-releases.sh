@@ -29,11 +29,10 @@ for ns in $(echo ${!namespaceMapping[*]}); do
 
   if [ ${inactiveDaysOverride[$ns]} ]
   then
-  cutoff=$((${inactiveDaysOverride[$ns]}*24*3600))
+    cutoffDays=${inactiveDaysOverride[$ns]}
   else
-  cutoff=$((defaultInactiveDays*24*3600))
+    cutoffDays=$(defaultInactiveDays)
   fi
-
 
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${helmreleases}" | jq -r '.[] | @base64'); do
@@ -45,6 +44,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       lastUpdated=$(date -d "${date}"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.name')
       currenttime=$(date +%s)
+      cutoff=$((cutoffDays*24*3600))
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then
          echo "Deleting helm release ${releaseName} as it is inactive for more than ${inactiveDays} days. Last updated : ${date} "
