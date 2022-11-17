@@ -42,7 +42,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       then
         cutoffDays=${inactiveDaysOverride[$ns]}
       else
-        cutoffDays=$(defaultInactiveDays)
+        cutoffDays=${defaultInactiveDays}
       fi
       cutoff=$((cutoffDays*24*3600))
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
