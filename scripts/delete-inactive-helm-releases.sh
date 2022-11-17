@@ -28,13 +28,6 @@ done
 for ns in $(echo ${!namespaceMapping[*]}); do
   helmreleases=$(helm ls --namespace=${ns} --output=json)
 
-  if [ ${inactiveDaysOverride[$ns]} ]
-  then
-    cutoffDays=${inactiveDaysOverride[$ns]}
-  else
-    cutoffDays=$(defaultInactiveDays)
-  fi
-
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${helmreleases}" | jq -r '.[] | @base64'); do
       fullDate=$(echo $release| base64 --decode | jq -r '.updated')
@@ -45,6 +38,12 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       lastUpdated=$(date -d "${date}"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.name')
       currenttime=$(date +%s)
+      if [ ${inactiveDaysOverride[$ns]} ]
+      then
+        cutoffDays=${inactiveDaysOverride[$ns]}
+      else
+        cutoffDays=$(defaultInactiveDays)
+      fi
       cutoff=$((cutoffDays*24*3600))
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then
