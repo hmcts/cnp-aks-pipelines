@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 azureResourceGroup=${1:cft-preview-00-rg}
 kubernetesCluster=${2:cft-preview-00-aks}
-inactiveDays=${3:-4}
+defaultInactiveDays=${3:-4}
+declare -A inactiveDaysOverride=(["civil"]=1)
 
 az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
 
@@ -25,7 +26,14 @@ done
 
 for ns in $(echo ${!namespaceMapping[*]}); do
   helmreleases=$(helm ls --namespace=${ns} --output=json)
-  
+
+  if [ ${inactiveDaysOverride[$ns]} ]
+  then
+  cutoff=$((${inactiveDaysOverride[$ns]}*24*3600))
+  else
+  cutoff=$((defaultInactiveDays*24*3600))
+  fi
+
 
   # Encoding and decoding to base64 is to handle spaces in updated field of helm ls command.
   for release in $(echo "${helmreleases}" | jq -r '.[] | @base64'); do
@@ -37,11 +45,10 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       lastUpdated=$(date -d "${date}"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.name')
       currenttime=$(date +%s)
-      cutoff=$((inactiveDays*24*3600))
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then
          echo "Deleting helm release ${releaseName} as it is inactive for more than ${inactiveDays} days. Last updated : ${date} "
-         helm delete --namespace "${ns}" "${releaseName}"
+        # helm delete --namespace "${ns}" "${releaseName}"
 #         Enable for debug if needed
 #        else
 #          echo "Skipping ${releaseName} as it is not inactive for ${inactiveDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
