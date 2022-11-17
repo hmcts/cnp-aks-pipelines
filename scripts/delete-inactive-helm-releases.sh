@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 azureResourceGroup=${1:cft-preview-00-rg}
 kubernetesCluster=${2:cft-preview-00-aks}
 defaultInactiveDays=${3:-4}
