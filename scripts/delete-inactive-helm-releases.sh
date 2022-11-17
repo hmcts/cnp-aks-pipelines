@@ -47,7 +47,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then
          echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
-        # helm delete --namespace "${ns}" "${releaseName}"
+         helm delete --namespace "${ns}" "${releaseName}"
 #         Enable for debug if needed
 #        else
 #          echo "Skipping ${releaseName} as it is not inactive for ${cutoffDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
