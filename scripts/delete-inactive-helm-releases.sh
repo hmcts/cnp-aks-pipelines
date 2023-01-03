@@ -4,6 +4,13 @@ kubernetesCluster=${2:cft-preview-00-aks}
 defaultInactiveDays=${3:-3}
 declare -A inactiveDaysOverride=(["civil"]=1) # Value should be less than defaultInactiveDays defined above
 
+declare -A repos
+
+repos["civil-service"]="civil-service"
+repos["civil-camunda"]="civil-camunda-bpmn-definition"
+repos["civil-ccd"]="civil-ccd-definition"
+
+
 az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
 
 #get team config
@@ -33,7 +40,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       # remove 'UTC' string, for some reason helm adds utc offset and timezone name which breaks parsing
       date=${fullDate%????}
 
-    # Uses gnu date to convert to epoch millis, install gdate while running on mac.
+      # Uses gnu date to convert to epoch millis, install gdate while running on mac.
       lastUpdated=$(date -d "${date}"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.name')
       currenttime=$(date +%s)
@@ -45,12 +52,23 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       fi
       cutoff=$((cutoffDays*24*3600))
       if [[ $((currenttime-lastUpdated)) -gt "$cutoff" && ${releaseName} = "*-pr-*" ]]
-       then
-         echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
-         helm delete --namespace "${ns}" "${releaseName}"
-#         Enable for debug if needed
-#        else
-#          echo "Skipping ${releaseName} as it is not inactive for ${cutoffDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
+      then
+          pr=$(echo "${releaseName##*-pr-}")
+          repo=${repos[$(echo "${releaseName%-pr-*}")]}
+
+          labels=$(curl -s https://api.github.com/repos/hmcts/${repo}/issues/${pr} | jq -r '.labels[]?.name')
+
+          if [[ " ${labels[*]} " =~ "enableHelm" ]]; then
+              echo "Inactive helm release ${releaseName} found with enableHelm label (PR ${pr} of repo ${repo}). It will NOT be deleted. Last updated : ${date} "
+          else
+              echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
+              helm delete --namespace "${ns}" "${releaseName}"
+              # Enable for debug if needed
+              # else
+              # echo "Skipping ${releaseName} as it is not inactive for ${cutoffDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
+          fi
+
+
       fi
   done
 done
