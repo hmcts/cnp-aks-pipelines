@@ -56,10 +56,22 @@ for ns in $(echo ${!namespaceMapping[*]}); do
           pr=$(echo "${releaseName##*-pr-}")
           repo=${repos[$(echo "${releaseName%-pr-*}")]}
 
-          labels=$(curl -s https://api.github.com/repos/hmcts/${repo}/issues/${pr} | jq -r '.labels[]?.name')
+          labels=""
+          if [[ -z "${repo}" ]]
+          then
+              labels=$(curl -s https://api.github.com/repos/hmcts/${repo}/issues/${pr} | jq -r '.labels[]?.name')
+          fi
 
-          if [[ " ${labels[*]} " =~ "enableHelm" ]]; then
-              echo "Inactive helm release ${releaseName} found with enableHelm label (PR ${pr} of repo ${repo}). It will NOT be deleted. Last updated : ${date} "
+          if [[ " ${labels[*]} " =~ "enableHelm" ]]
+          then
+              cutoff=$((defaultInactiveDays*24*3600))
+              if [[ $((currenttime-lastUpdated)) -gt "$cutoff" ]]
+              then
+                  echo "Deleting helm release ${releaseName} with enableHelm label (PR ${pr} of repo ${repo}) as it is inactive for more than ${defaultInactiveDays} days. Last updated : ${date} "
+                  helm delete --namespace "${ns}" "${releaseName}"
+              else
+                  echo "Helm release ${releaseName} with enableHelm label (PR ${pr} of repo ${repo}) found. Grace period extended to {defaultInactiveDays} days. Last updated : ${date} "
+              fi
           else
               echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
               helm delete --namespace "${ns}" "${releaseName}"
