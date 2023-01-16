@@ -51,10 +51,10 @@ for ns in $(echo ${!namespaceMapping[*]}); do
          echo "List helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
       if
 
-      if [[ $((currenttime-lastUpdated)) -gt "$cutoff" && ${releaseName} = "*-pr-*" ]]
-       then
-         echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
-         helm delete --namespace "${ns}" "${releaseName}"
+      #if [[ $((currenttime-lastUpdated)) -gt "$cutoff" && ${releaseName} = "*-pr-*" ]]
+       #then
+         #echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
+         #helm delete --namespace "${ns}" "${releaseName}"
 #         Enable for debug if needed
 #        else
 #          echo "Skipping ${releaseName} as it is not inactive for ${cutoffDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
