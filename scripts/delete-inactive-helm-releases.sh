@@ -44,6 +44,13 @@ for ns in $(echo ${!namespaceMapping[*]}); do
         cutoffDays=${defaultInactiveDays}
       fi
       cutoff=$((cutoffDays*24*3600))
+      
+      #Test inactive helm releases
+      if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
+       then
+        echo "List helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
+      if
+
       if [[ $((currenttime-lastUpdated)) -gt "$cutoff" && ${releaseName} = "*-pr-*" ]]
        then
          echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
