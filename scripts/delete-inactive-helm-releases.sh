@@ -48,7 +48,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       #Test inactive helm releases
       if [ $((currenttime-lastUpdated)) -gt "$cutoff" ]
        then
-        echo "List helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
+         echo "List helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
       if
 
       if [[ $((currenttime-lastUpdated)) -gt "$cutoff" && ${releaseName} = "*-pr-*" ]]
