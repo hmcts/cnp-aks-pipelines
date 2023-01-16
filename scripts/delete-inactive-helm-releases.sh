@@ -58,7 +58,7 @@ for ns in $(echo ${!namespaceMapping[*]}); do
 #         Enable for debug if needed
 #        else
 #          echo "Skipping ${releaseName} as it is not inactive for ${cutoffDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
-      fi
+      #fi
   done
 done
 
