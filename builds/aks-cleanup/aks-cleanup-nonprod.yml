@@ -25,5 +25,5 @@ jobs:
     - checkout: cnp-flux-config
     - task: Bash@3
       inputs:
-        filePath: cnp-flux-config/scripts/fix-image-policies.sh
+        filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
         arguments: $(release_name) $(product)
