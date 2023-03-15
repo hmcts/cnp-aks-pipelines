@@ -9,6 +9,8 @@ component=$(echo ${RELEASE_NAME} | sed -e "s/^${PRODUCT}-//" -e 's/-pr-.*//')
 REPOSITORY="${PRODUCT}/${component}"
 TAG=$(echo ${RELEASE_NAME} | sed "s/.*-pr-/pr-/")
 
+pwd
+ls
 cd ../cnp-flux-config
 
 for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$REPOSITORY" ); do
