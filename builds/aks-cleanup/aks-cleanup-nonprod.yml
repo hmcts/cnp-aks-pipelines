@@ -25,7 +25,3 @@ jobs:
       inputs:
         filePath: scripts/fix-image-policies.sh
         arguments: $(release_name) $(product)
-        workingDirectory: $(Build.SourcesDirectory)/cnp-flux-config
-        #failOnStderr: false # boolean. Fail on Standard Error. Default: false.
-        #bashEnvValue: # string. Set value for BASH_ENV environment variable.
-          
