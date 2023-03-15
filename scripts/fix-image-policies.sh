@@ -4,6 +4,7 @@ set -ex
 
 RELEASE_NAME=${1}
 PRODUCT=${2}
+GIT_TOKEN=${3}
 
 component=$(echo ${RELEASE_NAME} | sed -e "s/^${PRODUCT}-//" -e 's/-pr-.*//')
 REPOSITORY="${PRODUCT}/${component}"
@@ -45,7 +46,7 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
       git checkout -b testmychange
       git add .
       git commit -m "Removing $TAG image policy from $POLICY_FILE"
-      git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin testmychange
+      git -c http.extraheader="AUTHORIZATION: bearer $GIT_TOKEN" push --set-upstream origin testmychange
 
     fi
 
