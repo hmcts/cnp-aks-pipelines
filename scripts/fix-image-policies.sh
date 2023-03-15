@@ -12,6 +12,7 @@ TAG=$(echo ${RELEASE_NAME} | sed "s/.*-pr-/pr-/")
 echo $REPOSITORY
 echo $TAG
 
+cd ../cnp-flux-config
 
 for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$REPOSITORY" ); do
 
