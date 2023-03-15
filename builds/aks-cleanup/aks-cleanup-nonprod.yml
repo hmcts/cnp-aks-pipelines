@@ -21,6 +21,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - checkout: self
     - checkout: cnp-flux-config
     - task: Bash@3
       inputs:
