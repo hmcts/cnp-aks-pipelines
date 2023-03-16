@@ -48,10 +48,9 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
     if [[ -n $(git status -s) ]]
     then
       git config --global user.email github-platform-operations@HMCTS.NET & git config --global user.name "hmcts-platform-operations"
-      git checkout -b testmychange$TAG
       git add .
       git commit -m "Removing $TAG image policy from $POLICY_FILE"
-      git push --set-upstream origin testmychange$TAG
+      git push --set-upstream origin
 
     fi
 
