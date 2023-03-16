@@ -29,8 +29,10 @@ jobs:
     - checkout: self
     - checkout: cnp-flux-config
       persistCredentials: true
+      clean: true
     - checkout: sds-flux-config
       persistCredentials: true
+      clean: true
     - task: Bash@3
       inputs:
         filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
