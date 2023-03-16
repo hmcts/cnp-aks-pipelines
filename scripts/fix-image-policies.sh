@@ -46,7 +46,7 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
       git checkout -b testmychange$TAG
       git add .
       git commit -m "Removing $TAG image policy from $POLICY_FILE"
-      git -c http.extraheader="AUTHORIZATION: bearer $GIT_TOKEN" push --set-upstream origin testmychange
+      git -c http.extraheader="AUTHORIZATION: bearer $GIT_TOKEN" push --set-upstream origin testmychange$TAG
 
     fi
 
