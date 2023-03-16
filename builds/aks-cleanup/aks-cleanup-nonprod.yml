@@ -23,6 +23,7 @@ jobs:
     steps:
     - checkout: self
     - checkout: cnp-flux-config
+      persistCredentials: true
     - task: Bash@3
       inputs:
         filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
