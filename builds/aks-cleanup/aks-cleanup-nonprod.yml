@@ -16,6 +16,11 @@ resources:
       ref: refs/heads/master
       name: hmcts/cnp-flux-config
       endpoint: 'hmcts'
+    - repository: sds-flux-config
+      type: github
+      ref: refs/heads/master
+      name: hmcts/sds-flux-config
+      endpoint: 'hmcts'
 jobs:
   - job: untag_acr_image
     pool:
@@ -24,7 +29,13 @@ jobs:
     - checkout: self
     - checkout: cnp-flux-config
       persistCredentials: true
+    - checkout: sds-flux-config
+      persistCredentials: true
     - task: Bash@3
       inputs:
         filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
-        arguments: $(release_name) $(product)
+        arguments: $(release_name) $(product) cnp-flux-config
+    - task: Bash@3
+      inputs:
+        filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
+        arguments: $(release_name) $(product) sds-flux-config

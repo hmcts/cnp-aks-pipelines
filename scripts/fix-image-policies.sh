@@ -4,7 +4,7 @@ set -ex
 
 RELEASE_NAME=${1}
 PRODUCT=${2}
-GIT_TOKEN=${3}
+GIT_REPO=${3}
 
 component=$(echo ${RELEASE_NAME} | sed -e "s/^${PRODUCT}-//" -e 's/-pr-.*//')
 REPOSITORY="${PRODUCT}/${component}"
@@ -12,7 +12,12 @@ TAG=$(echo ${RELEASE_NAME} | sed "s/.*-pr-/pr-/")
 
 pwd
 ls
-cd cnp-flux-config
+cd "$GIT_REPO"
+
+if [[ $PRODUCT != "cnp" ]]; then
+  echo "Ignoring other products for now"
+  exit 0;
+fi
 
 for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$REPOSITORY" ); do
 
@@ -46,7 +51,7 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
       git checkout -b testmychange$TAG
       git add .
       git commit -m "Removing $TAG image policy from $POLICY_FILE"
-      git -c http.extraheader="AUTHORIZATION: bearer $GIT_TOKEN" push --set-upstream origin testmychange$TAG
+      git push --set-upstream origin testmychange$TAG
 
     fi
 
