@@ -39,13 +39,6 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - checkout: self
-    - checkout: cnp-flux-config
-      persistCredentials: true
-      clean: true
-    - checkout: sds-flux-config
-      persistCredentials: true
-      clean: true
     - task: HelmInstaller@1
       displayName: 'Install Helm $(helmVersion)'
       inputs:
@@ -78,13 +71,24 @@ jobs:
         scriptLocation: scriptPath
         scriptPath: scripts/clean-pr-release.sh
         arguments: ss-dev-01-rg ss-dev-01-aks $(namespace) $(release_name)
-    - task: Bash@3
-      displayName: 'CFT- Remove PR image policies'
-      inputs:
-        filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
-        arguments: $(release_name) $(product) cnp-flux-config
-    - task: Bash@3
-      displayName: 'SDS- Remove PR image policies'
-      inputs:
-        filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
-        arguments: $(release_name) $(product) sds-flux-config
+  - job: remove_pr_image_policy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - checkout: self
+      - checkout: cnp-flux-config
+        persistCredentials: true
+        clean: true
+      - checkout: sds-flux-config
+        persistCredentials: true
+        clean: true
+      - task: Bash@3
+        displayName: 'CFT- Remove PR image policies'
+        inputs:
+          filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
+          arguments: $(release_name) $(product) cnp-flux-config
+      - task: Bash@3
+        displayName: 'SDS- Remove PR image policies'
+        inputs:
+          filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
+          arguments: $(release_name) $(product) sds-flux-config
