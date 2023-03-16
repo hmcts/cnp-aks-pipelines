@@ -26,6 +26,19 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - task: AzureCLI@1
+      displayName: 'Untag ACR image'
+      enabled: true
+      inputs:
+        azureSubscription: $(registrySubscription)
+        scriptLocation: scriptPath
+        scriptPath: scripts/untag-acr-image.sh
+        arguments: $(release_name) $(product) $(containerRegistry)
+
+  - job: delete_helm_release
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
     - checkout: self
     - checkout: cnp-flux-config
       persistCredentials: true
@@ -33,11 +46,45 @@ jobs:
     - checkout: sds-flux-config
       persistCredentials: true
       clean: true
+    - task: HelmInstaller@1
+      displayName: 'Install Helm $(helmVersion)'
+      inputs:
+        helmVersionToInstall: $(helmVersion)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release on preview 00'
+      inputs:
+        azureSubscription:  '$(azureSubscription)'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
+        arguments: cft-preview-00-rg cft-preview-00-aks $(namespace) $(release_name)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release preview 01'
+      inputs:
+        azureSubscription:  '$(azureSubscription)'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
+        arguments: cft-preview-01-rg cft-preview-01-aks $(namespace) $(release_name)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release on sds dev 00'
+      inputs:
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
+        arguments: ss-dev-00-rg ss-dev-00-aks $(namespace) $(release_name)
+    - task: AzureCLI@1
+      displayName: 'Helm Delete Release sds dev 01'
+      inputs:
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        scriptLocation: scriptPath
+        scriptPath: scripts/clean-pr-release.sh
+        arguments: ss-dev-01-rg ss-dev-01-aks $(namespace) $(release_name)
     - task: Bash@3
+      displayName: 'CFT- Remove PR image policies'
       inputs:
         filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
         arguments: $(release_name) $(product) cnp-flux-config
     - task: Bash@3
+      displayName: 'SDS- Remove PR image policies'
       inputs:
         filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
         arguments: $(release_name) $(product) sds-flux-config
