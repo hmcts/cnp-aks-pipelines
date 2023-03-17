@@ -9,6 +9,18 @@ variables:
   azureSubscription: DCD-CFTAPPS-DEV  # azurerm-sandbox
   registrySubscription: azurerm-prod
 
+resources:
+  repositories:
+    - repository: cnp-flux-config
+      type: github
+      ref: refs/heads/master
+      name: hmcts/cnp-flux-config
+      endpoint: 'hmcts'
+    - repository: sds-flux-config
+      type: github
+      ref: refs/heads/master
+      name: hmcts/sds-flux-config
+      endpoint: 'hmcts'
 jobs:
   - job: untag_acr_image
     pool:
@@ -59,4 +71,26 @@ jobs:
         scriptLocation: scriptPath
         scriptPath: scripts/clean-pr-release.sh
         arguments: ss-dev-01-rg ss-dev-01-aks $(namespace) $(release_name)
-          
+  - job: remove_pr_image_policy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - checkout: self
+      - checkout: cnp-flux-config
+      - checkout: sds-flux-config
+      - task: AzureKeyVault@1
+        displayName: 'Get secrets from Keyvault'
+        inputs:
+          azureSubscription:  "DTS-CFTPTL-INTSVC"
+          keyVaultName:   "cftptl-intsvc"
+          secretsFilter: 'github-management-api-token'
+      - task: Bash@3
+        displayName: 'CFT- Remove PR image policies'
+        inputs:
+          filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
+          arguments: $(release_name) $(product) $(github-management-api-token)  cnp-flux-config
+      - task: Bash@3
+        displayName: 'SDS- Remove PR image policies'
+        inputs:
+          filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
+          arguments: $(release_name) $(product) $(github-management-api-token) sds-flux-config
