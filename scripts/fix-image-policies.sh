@@ -15,10 +15,6 @@ pwd
 ls
 cd "$GIT_REPO"
 
-if [[ $PRODUCT != "plum" ]]; then
-  echo "Ignoring products other than plum for now"
-  exit 0;
-fi
 
 for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$REPOSITORY" ); do
 
