@@ -48,11 +48,10 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
 
     if [[ -n $(git status -s) ]]
     then
-      git remote -v
       git config --global user.email github-platform-operations@HMCTS.NET
       git config --global user.name "hmcts-platform-operations"
       git add .
-      git commit -m "Removing $TAG image policy from $POLICY_FILE"
+      git commit -m "Removing $TAG image policy from $IMAGE_REPOSITORY"
       git remote set-url origin https://hmcts-platform-operations:"${GIT_TOKEN}"@github.com/hmcts/"$GIT_REPO".git
       git push --set-upstream origin HEAD:master
 
