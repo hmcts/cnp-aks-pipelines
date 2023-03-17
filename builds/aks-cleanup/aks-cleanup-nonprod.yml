@@ -92,7 +92,7 @@ jobs:
         displayName: 'CFT- Remove PR image policies'
         inputs:
           filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
-          arguments: $(release_name) $(product) cnp-flux-config
+          arguments: $(release_name) $(product) $(github-management-api-token)  cnp-flux-config
       - task: Bash@3
         displayName: 'SDS- Remove PR image policies'
         inputs:
