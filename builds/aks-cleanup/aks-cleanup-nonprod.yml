@@ -82,6 +82,12 @@ jobs:
       - checkout: sds-flux-config
         persistCredentials: true
         clean: true
+      - task: AzureKeyVault@1
+        displayName: 'Get secrets from Keyvault'
+        inputs:
+          azureSubscription:  "DTS-CFTPTL-INTSVC"
+          keyVaultName:   "cftptl-intsvc"
+          secretsFilter: 'github-management-api-token'
       - task: Bash@3
         displayName: 'CFT- Remove PR image policies'
         inputs:
@@ -91,4 +97,4 @@ jobs:
         displayName: 'SDS- Remove PR image policies'
         inputs:
           filePath: cnp-aks-pipelines/scripts/fix-image-policies.sh
-          arguments: $(release_name) $(product) sds-flux-config
+          arguments: $(release_name) $(product) $(github-management-api-token) sds-flux-config

@@ -4,7 +4,8 @@ set -ex
 
 RELEASE_NAME=${1}
 PRODUCT=${2}
-GIT_REPO=${3}
+GIT_TOKEN=${3}
+GIT_REPO=${4}
 
 component=$(echo ${RELEASE_NAME} | sed -e "s/^${PRODUCT}-//" -e 's/-pr-.*//')
 REPOSITORY="${PRODUCT}/${component}"
@@ -52,6 +53,7 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
       git config --global user.name "hmcts-platform-operations"
       git add .
       git commit -m "Removing $TAG image policy from $POLICY_FILE"
+      git remote set-url origin https://hmcts-platform-operations:"${GIT_TOKEN}"@github.com/hmcts/"$GIT_REPO".git
       git push --set-upstream origin HEAD:master
 
     fi
