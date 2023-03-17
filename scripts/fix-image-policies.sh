@@ -47,6 +47,7 @@ for REPO_FILE in $(grep -Elr "kind: ImageRepository"  apps/ | xargs grep -El "$R
 
     if [[ -n $(git status -s) ]]
     then
+      git remote -v
       git config --global user.email github-platform-operations@HMCTS.NET
       git config --global user.name "hmcts-platform-operations"
       git add .
