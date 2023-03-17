@@ -15,7 +15,7 @@ pwd
 ls
 cd "$GIT_REPO"
 
-if [[ $PRODUCT != "plum" ]]; then
+if [[ $PRODUCT != "toffee" ]]; then
   echo "Ignoring products other than plum for now"
   exit 0;
 fi
