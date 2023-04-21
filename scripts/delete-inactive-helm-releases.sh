@@ -2,6 +2,7 @@
 azureResourceGroup=${1:cft-preview-00-rg}
 kubernetesCluster=${2:cft-preview-00-aks}
 defaultInactiveDays=${3:-3}
+declare -A inactiveDaysOverride=() # Value should be less than defaultInactiveDays defined above
 
 az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
 
@@ -36,16 +37,21 @@ for ns in $(echo ${!namespaceMapping[*]}); do
       lastUpdated=$(date -d "${date}"  +%s)
       releaseName=$(echo $release| base64 --decode | jq -r '.name')
       currenttime=$(date +%s)
-
-      cutoff=$((defaultInactiveDays*24*3600))
+      if [ ${inactiveDaysOverride[$ns]} ]
+      then
+        cutoffDays=${inactiveDaysOverride[$ns]}
+      else
+        cutoffDays=${defaultInactiveDays}
+      fi
+      cutoff=$((cutoffDays*24*3600))
 
       if [[ $((currenttime-lastUpdated)) -gt "$cutoff" && ${releaseName} ==  *-pr-* ]]
        then
-         echo "Deleting helm release ${releaseName} as it is inactive for more than ${defaultInactiveDays} days. Last updated : ${date} "
+         echo "Deleting helm release ${releaseName} as it is inactive for more than ${cutoffDays} days. Last updated : ${date} "
          helm delete --namespace "${ns}" "${releaseName}"
 #         Enable for debug if needed
 #        else
-#          echo "Skipping ${releaseName} as it is not inactive for ${defaultInactiveDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
+#          echo "Skipping ${releaseName} as it is not inactive for ${cutoffDays}, Last updated: ${date}, cutoff=${cutoff}, result=$((currenttime-lastUpdated))"
       fi
   done
 done
