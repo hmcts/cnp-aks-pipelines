@@ -2,7 +2,7 @@
 azureResourceGroup=${1:cft-preview-00-rg}
 kubernetesCluster=${2:cft-preview-00-aks}
 defaultInactiveDays=${3:-3}
-declare -A inactiveDaysOverride=(["civil"]=1) # Value should be less than defaultInactiveDays defined above
+declare -A inactiveDaysOverride=() # Value should be less than defaultInactiveDays defined above
 
 az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernetesCluster} -a || echo "Cluster ${kubernetesCluster} not found in ${azureResourceGroup}"
 
