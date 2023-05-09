@@ -10,17 +10,82 @@ schedules:
         - master
     always: 'true'
 
+parameters:
+
+  - name: cleanup_patterns
+    type: object
+    default:
+#hmctspublic
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctspublic'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^prod.*"
+        keep: 5
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctspublic'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "2d"
+        tagFilter: "^staging-.*"
+        keep: 2
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctspublic'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "2d"
+        tagFilter: "^sandbox-.*"
+        keep: 2
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctspublic'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^pr-.*"
+        keep: 1
+# sdshmctspublic
+      - serviceConnection: DTS-SHAREDSERVICES-PROD
+        acrName: 'sdshmctspublic'
+        acrResourceGroup: 'sds-acr-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^prod.*"
+        keep: 5
+      - serviceConnection: DTS-SHAREDSERVICES-PROD
+        acrName: 'sdshmctspublic'
+        acrResourceGroup: 'sds-acr-rg'
+        repoRegex: '.*'
+        olderThan: "2d"
+        tagFilter: "^staging-.*"
+        keep: 2
+      - serviceConnection: DTS-SHAREDSERVICES-PROD
+        acrName: 'sdshmctspublic'
+        acrResourceGroup: 'sds-acr-rg'
+        repoRegex: '.*'
+        olderThan: "2d"
+        tagFilter: "^sandbox-.*"
+        keep: 2
+      - serviceConnection: DTS-SHAREDSERVICES-PROD
+        acrName: 'sdshmctspublic'
+        acrResourceGroup: 'sds-acr-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^pr-.*"
+        keep: 1
 
 jobs:
-  - template: template-image-cleanup.yaml
-    parameters:
-      serviceConnection: azurerm-prod
-      repoRegex: '.*'
-      acrName: 'hmctspublic'
-      acrResourceGroup: 'rpe-acr-prod-rg'
-  - template: template-image-cleanup.yaml
-    parameters:
-      serviceConnection: DTS-SHAREDSERVICES-PROD
-      repoRegex: '.*'
-      acrName: 'sdshmctspublic'
-      acrResourceGroup: 'sds-acr-rg'
+  - ${{ each cleanup_pattern in parameters.cleanup_patterns }}:
+    - job:
+      pool:
+        vmImage: 'ubuntu-latest'
+      timeoutInMinutes: 600
+      steps:
+        - task: AzureCLI@1
+          displayName: 'Deleting ${{cleanup_pattern.tagFilter}} images from ${{cleanup_pattern.acrName}} '
+          inputs:
+            scriptType: bash
+            azureSubscription: ${{ cleanup_pattern.serviceConnection }}
+            scriptLocation: scriptPath
+            scriptPath: scripts/cleanup-acr-old-images.sh
+            arguments: ${{cleanup_pattern.acrName}} ${{cleanup_pattern.repoRegex}} ${{cleanup_pattern.tagFilter}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}}
