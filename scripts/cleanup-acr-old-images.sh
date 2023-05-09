@@ -8,7 +8,7 @@ registry=${1:-hmctspublic}
 repo_regex="${2:-.*}"
 tag_filter="${3:-^ignore-.*}"
 older_than="${4:-30d}"
-keep_min_latest_num="${4:-5}"
+keep_min_latest_num="${5:-5}"
 
 
 echo "$(TERM=xterm tput setaf 2)Cleaning up $registry, deleting ${tag_filter} images older than $older_than abd keeping at least $keep_min_latest_num"
