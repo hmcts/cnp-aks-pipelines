@@ -15,7 +15,7 @@ parameters:
   - name: cleanup_patterns
     type: object
     default:
-#hmctspublic
+      #hmctspublic
       - serviceConnection: azurerm-prod
         acrName: 'hmctspublic'
         acrResourceGroup: 'rpe-acr-prod-rg'
@@ -29,13 +29,6 @@ parameters:
         repoRegex: '.*'
         olderThan: "2d"
         tagFilter: "^staging-.*"
-        keep: 2
-      - serviceConnection: azurerm-prod
-        acrName: 'hmctspublic'
-        acrResourceGroup: 'rpe-acr-prod-rg'
-        repoRegex: '.*'
-        olderThan: "2d"
-        tagFilter: "^sandbox-.*"
         keep: 2
       - serviceConnection: azurerm-prod
         acrName: 'hmctspublic'
@@ -44,7 +37,31 @@ parameters:
         olderThan: "5d"
         tagFilter: "^pr-.*"
         keep: 1
-# sdshmctspublic
+
+      #hmctsprivate
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctsprivate'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^prod.*"
+        keep: 5
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctsprivate'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "2d"
+        tagFilter: "^staging-.*"
+        keep: 2
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctsprivate'
+        acrResourceGroup: 'rpe-acr-prod-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^pr-.*"
+        keep: 1
+
+      # sdshmctspublic
       - serviceConnection: DTS-SHAREDSERVICES-PROD
         acrName: 'sdshmctspublic'
         acrResourceGroup: 'sds-acr-rg'
@@ -63,12 +80,29 @@ parameters:
         acrName: 'sdshmctspublic'
         acrResourceGroup: 'sds-acr-rg'
         repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^pr-.*"
+        keep: 1
+
+
+      # hmctssandbox
+      - serviceConnection: azurerm-sandbox
+        acrName: 'hmctssandbox'
+        acrResourceGroup: 'cnp-acr-rg'
+        repoRegex: '.*'
+        olderThan: "5d"
+        tagFilter: "^prod.*"
+        keep: 5
+      - serviceConnection: azurerm-sandbox
+        acrName: 'hmctssandbox'
+        acrResourceGroup: 'cnp-acr-rg'
+        repoRegex: '.*'
         olderThan: "2d"
-        tagFilter: "^sandbox-.*"
+        tagFilter: "^staging-.*"
         keep: 2
-      - serviceConnection: DTS-SHAREDSERVICES-PROD
-        acrName: 'sdshmctspublic'
-        acrResourceGroup: 'sds-acr-rg'
+      - serviceConnection: azurerm-sandbox
+        acrName: 'hmctssandbox'
+        acrResourceGroup: 'cnp-acr-rg'
         repoRegex: '.*'
         olderThan: "5d"
         tagFilter: "^pr-.*"
