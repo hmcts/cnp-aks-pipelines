@@ -3,7 +3,7 @@ name: AKS Cleanup Completed Pods
 trigger: none
 pr: none
 schedules:
-  - cron: '0 8-18 * * 1-5'
+  - cron: '0 12 * * 1-5'
     displayName: Every working hour
     branches:
       include:
