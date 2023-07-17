@@ -10,6 +10,14 @@ variables:
   registrySubscription: azurerm-prod
 
 resources:
+  webhooks:
+    # Listens for webhook PR event from GitHub - filtered by closure only
+    - webhook: PRClosure          
+      connection: PR-Closure
+      filters:    
+        - path: action
+          value: closed
+
   repositories:
     - repository: cnp-flux-config
       type: github
@@ -22,6 +30,16 @@ resources:
       name: hmcts/sds-flux-config
       endpoint: 'hmcts'
 jobs:
+  # Job to split labels and set them as job variables for use in folowing steps
+  - job: fetch_pr_labels
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Powershell@2
+      inputs:
+        filePath: scripts/pr-label-reader.ps1
+        arguments: -labels ${{ parameters.PRClosure.labels}}
+
   - job: untag_acr_image
     pool:
       vmImage: 'ubuntu-latest'
@@ -43,34 +61,37 @@ jobs:
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
+
+    # Delete PR helm release after PR is closed
     - task: AzureCLI@1
       displayName: 'Helm Delete Release on preview 00'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
-        scriptPath: scripts/clean-pr-release.sh
+        scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: cft-preview-00-rg cft-preview-00-aks $(namespace) $(release_name)
     - task: AzureCLI@1
       displayName: 'Helm Delete Release preview 01'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
-        scriptPath: scripts/clean-pr-release.sh
+        scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: cft-preview-01-rg cft-preview-01-aks $(namespace) $(release_name)
     - task: AzureCLI@1
       displayName: 'Helm Delete Release on sds dev 00'
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
         scriptLocation: scriptPath
-        scriptPath: scripts/clean-pr-release.sh
+        scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: ss-dev-00-rg ss-dev-00-aks $(namespace) $(release_name)
     - task: AzureCLI@1
       displayName: 'Helm Delete Release sds dev 01'
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
         scriptLocation: scriptPath
-        scriptPath: scripts/clean-pr-release.sh
+        scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: ss-dev-01-rg ss-dev-01-aks $(namespace) $(release_name)
+
   - job: remove_pr_image_policy
     pool:
       vmImage: 'ubuntu-latest'
