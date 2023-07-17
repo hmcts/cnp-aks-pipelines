@@ -8,5 +8,5 @@ az aks get-credentials --resource-group ${azureResourceGroup} --name ${kubernete
 if [ "$(helm get values --namespace "${namespace}" "${release_name}" 2>/dev/null)" ]; then
   helm delete --namespace ${namespace} ${release_name}
 else
-  echo "chart ${release_name} not found, doing nothing"
+  echo "Chart ${release_name} not found."
 fi
