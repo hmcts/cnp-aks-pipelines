@@ -13,6 +13,7 @@ resources:
   webhooks:
     # Listens for webhook PR event from GitHub - filtered by closure only
     - webhook: PRClosure          
+      # Uses PR-Closure SC
       connection: PR-Closure
       filters:    
         - path: action
