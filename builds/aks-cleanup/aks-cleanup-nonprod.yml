@@ -12,9 +12,9 @@ variables:
 resources:
   webhooks:
     # Listens for webhook PR event from GitHub - filtered by closure only
-    - webhook: PRClosedHook          
+    - webhook: GitPRClosed          
       # Uses PR-Closure SC
-      connection: PR-Closed-Webhook
+      connection: PR-Closed-Github
       filters:    
         - path: action
           value: closed
