@@ -39,7 +39,7 @@ jobs:
     - task: Powershell@2
       inputs:
         filePath: scripts/pr-label-reader.ps1
-        arguments: -labels ${{ parameters.PRClosedHook.pull_request.labels }}
+        arguments: -labels ${{ parameters.GitPRClosed.pull_request.labels }}
 
   - job: untag_acr_image
     pool:
