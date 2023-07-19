@@ -10,15 +10,6 @@ variables:
   registrySubscription: azurerm-prod
 
 resources:
-  webhooks:
-    # Listens for webhook PR event from GitHub - filtered by closure only
-    - webhook: GitPRClosed          
-      # Uses PR-Closure SC
-      connection: PR-Closed-Github
-      filters:    
-        - path: action
-          value: closed
-
   repositories:
     - repository: cnp-flux-config
       type: github
@@ -31,16 +22,6 @@ resources:
       name: hmcts/sds-flux-config
       endpoint: 'hmcts'
 jobs:
-  # Job to split labels and set them as job variables for use in folowing steps
-  - job: fetch_pr_labels
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: Powershell@2
-      inputs:
-        filePath: scripts/pr-label-reader.ps1
-        arguments: -labels ${{ parameters.GitPRClosed.pull_request.labels }}
-
   - job: untag_acr_image
     pool:
       vmImage: 'ubuntu-latest'
