@@ -36,7 +36,7 @@ parameters:
         tagFilter: "^staging-.*"
         keep: 2
       - repoRegex: '.*'
-        olderThan: "5d"
+        olderThan: "14d"
         tagFilter: "^pr-.*"
         keep: 1
 
