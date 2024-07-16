@@ -40,8 +40,8 @@ parameters:
         olderThan: "14d"
         tagFilter: "^pr-.*"
         keep: 1
-      - repoRegex: '^labs/endakelly-spring.*'
-        olderThan: "30d"
+      - repoRegex: '^labs/endakelly-test'
+        olderThan: "14d"
         tagFilter: ".*"
         keep: 1
 
