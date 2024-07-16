@@ -1,6 +1,7 @@
 ---
 name: Clean up old tags from ACR
-trigger: DTSPO-18162_cleanUpMoreACRRepos
+trigger:
+  - DTSPO-18162_cleanUpMoreACRRepos
 pr: none
 schedules:
   - cron: '12 5 * * Mon-Fri'
