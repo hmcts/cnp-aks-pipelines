@@ -1,6 +1,6 @@
 ---
 name: Clean up old tags from ACR
-trigger: none
+trigger: DTSPO-18162_cleanUpMoreACRRepos
 pr: none
 schedules:
   - cron: '12 5 * * Mon-Fri'
@@ -15,12 +15,12 @@ parameters:
     type: object
     default:
       #hmctspublic
-      - serviceConnection: azurerm-prod
-        acrName: 'hmctspublic'
-      - serviceConnection: azurerm-prod
-        acrName: 'hmctsprivate'
-      - serviceConnection: DTS-SHAREDSERVICES-PROD
-        acrName: 'sdshmctspublic'
+#      - serviceConnection: azurerm-prod
+#        acrName: 'hmctspublic'
+#      - serviceConnection: azurerm-prod
+#        acrName: 'hmctsprivate'
+#      - serviceConnection: DTS-SHAREDSERVICES-PROD
+#        acrName: 'sdshmctspublic'
       - serviceConnection: azurerm-sandbox
         acrName: 'hmctssandbox'
 
@@ -38,6 +38,10 @@ parameters:
       - repoRegex: '.*'
         olderThan: "14d"
         tagFilter: "^pr-.*"
+        keep: 1
+      - repoRegex: '^labs/endakelly-spring.*'
+        olderThan: "30d"
+        tagFilter: ".*"
         keep: 1
 
 jobs:
