@@ -40,7 +40,7 @@ parameters:
         olderThan: "14d"
         tagFilter: "^pr-.*"
         keep: 1
-      - repoRegex: '^labs/endakelly-test'
+      - repoRegex: '^labs/.*'
         olderThan: "14d"
         tagFilter: ".*"
         keep: 1
