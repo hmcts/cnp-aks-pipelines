@@ -36,10 +36,7 @@ parameters:
         repoTagFilters: [".*:^staging-.*"]
       - olderThan: "14d"
         keep: 1
-        repoTagFilters: [".*:^pr-.*"]
-      - olderThan: "14d"
-        keep: 1
-        repoTagFilters: ["^labs/.*:.*", "^toffee.*:.*", "^plum.*:.*"]
+        repoTagFilters: [".*:^pr-.*", "^labs/.*:.*", "^toffee.*:.*", "^plum.*:.*"]
 
 jobs:
   - ${{ each cleanup_registry in parameters.cleanup_registries }}:
