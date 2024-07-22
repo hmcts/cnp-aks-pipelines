@@ -4,65 +4,65 @@ trigger:
   - DTSPO-18162_cleanUpMoreACRRepos
 pr: none
 schedules:
-  - cron: '12 5 * * Mon-Fri'
+  - cron: "12 5 * * Mon-Fri"
     displayName: At 05:12 on every day-of-week from Monday through Friday
     branches:
       include:
         - master
-    always: 'true'
+    always: "true"
 
 parameters:
   - name: cleanup_registries
     type: object
     default:
       #hmctspublic
-#      - serviceConnection: azurerm-prod
-#        acrName: 'hmctspublic'
-#      - serviceConnection: azurerm-prod
-#        acrName: 'hmctsprivate'
-#      - serviceConnection: DTS-SHAREDSERVICES-PROD
-#        acrName: 'sdshmctspublic'
+      #      - serviceConnection: azurerm-prod
+      #        acrName: 'hmctspublic'
+      #      - serviceConnection: azurerm-prod
+      #        acrName: 'hmctsprivate'
+      #      - serviceConnection: DTS-SHAREDSERVICES-PROD
+      #        acrName: 'sdshmctspublic'
       - serviceConnection: azurerm-sandbox
-        acrName: 'hmctssandbox'
+        acrName: "hmctssandbox"
 
   - name: cleanup_patterns
     type: object
     default:
-      - repoRegex: '.*'
+      - repoRegex: ".*"
         olderThan: "5d"
         tagFilter: "^prod.*"
         keep: 5
-        repoTagFilters: ['.*:^prod.*']
-      - repoRegex: '.*'
+        repoTagFilters: [".*:^prod.*"]
+      - repoRegex: ".*"
         olderThan: "2d"
         tagFilter: "^staging-.*"
         keep: 2
-        repoTagFilters: ['.*:^staging-.*']
-      - repoRegex: '.*'
+        repoTagFilters: [".*:^staging-.*"]
+      - repoRegex: ".*"
         olderThan: "14d"
         tagFilter: "^pr-.*"
         keep: 1
-        repoTagFilters: ['.*:^pr-.*']
-      - repoRegex: '^labs/.*'
+        repoTagFilters: [".*:^pr-.*"]
+      - repoRegex: "^labs/.*"
         olderThan: "14d"
         tagFilter: ".*"
         keep: 1
-        repoTagFilters: ['^labs/ieuanb74:.*', '^labs/jordankainos:.*']
+        repoTagFilters: ["^labs/ieuanb74:.*", "^labs/jordankainos:.*"]
 
 jobs:
   - ${{ each cleanup_registry in parameters.cleanup_registries }}:
-    - ${{ each cleanup_pattern in parameters.cleanup_patterns }}:
-      - job:
-        displayName: "${{cleanup_registry.acrName}} - ${{cleanup_pattern.tagFilter}} " # Human-readable name for the job.
-        pool:
-          vmImage: 'ubuntu-latest'
-        timeoutInMinutes: 600
-        steps:
-          - task: AzureCLI@1
-            displayName: 'Deleting ${{cleanup_pattern.tagFilter}} images from ${{cleanup_registry.acrName}} '
-            inputs:
-              scriptType: bash
-              azureSubscription: ${{ cleanup_registry.serviceConnection }}
-              scriptLocation: scriptPath
-              scriptPath: scripts/cleanup-acr-old-images.sh
-              arguments: ${{cleanup_registry.acrName}} ${{cleanup_pattern.repoRegex}} ${{cleanup_pattern.tagFilter}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}} ${{cleanup_pattern.repoTagFilters}}
+      - ${{ each cleanup_pattern in parameters.cleanup_patterns }}:
+          - job:
+            displayName: "${{cleanup_registry.acrName}} - ${{cleanup_pattern.tagFilter}} " # Human-readable name for the job.
+            pool:
+              vmImage: "ubuntu-latest"
+            timeoutInMinutes: 600
+            steps:
+              - task: AzureCLI@1
+                displayName: "Deleting ${{cleanup_pattern.tagFilter}} images from ${{cleanup_registry.acrName}} "
+                inputs:
+                  scriptType: bash
+                  azureSubscription: ${{ cleanup_registry.serviceConnection }}
+                  scriptLocation: scriptPath
+                  scriptPath: scripts/cleanup-acr-old-images.sh
+                  arguments: ${{cleanup_registry.acrName}} ${{cleanup_pattern.repoRegex}} ${{cleanup_pattern.tagFilter}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}} ${{ join(',' cleanup_pattern.repoTagFilters) }}

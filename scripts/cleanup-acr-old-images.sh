@@ -9,16 +9,18 @@ repo_regex="${2:-.*}"
 tag_filter="${3:-^ignore-.*}"
 older_than="${4:-30d}"
 keep_min_latest_num="${5:-5}"
-repo_tag_filters="${6:['-.*:-^ignore-.*']}"
+repo_tag_filters="${6:-.*:-^ignore-.*}"
 
 
 echo "$(TERM=xterm tput setaf 2)Cleaning up $registry, deleting ${tag_filter} images older than $older_than and keeping at least $keep_min_latest_num"
 
-# iterate repo_tag_filters and build "--filter" arguments
+repo_tag_filters="^labs/ieuanb74:.*,^labs/jordankainos:.*"
+
+IFS=',' read -r -a repo_tag_array <<< "$repo_tag_filters"
+
 filter_args=""
-for repo_tag_filter in "${repo_tag_filters[@]}"
-do
-  filter_args="$filter_args --filter $repo_tag_filter"
+for repo_tag_filter in "${repo_tag_array[@]}"; do
+    filter_args="$filter_args --filter $repo_tag_filter"
 done
 
 echo "filter_args: $filter_args"
