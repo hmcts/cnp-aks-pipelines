@@ -45,7 +45,7 @@ jobs:
   - ${{ each cleanup_registry in parameters.cleanup_registries }}:
       - ${{ each cleanup_pattern in parameters.cleanup_patterns }}:
           - job:
-            displayName: "${{cleanup_registry.acrName}} - ${{cleanup_pattern.tagFilter}} " # Human-readable name for the job.
+            displayName: "${{cleanup_registry.acrName}} - OlderThan ${{cleanup_patterns.olderThan}} keep ${{cleanup_patterns.keep}}" # Human-readable name for the job.
             pool:
               vmImage: "ubuntu-latest"
             timeoutInMinutes: 600
