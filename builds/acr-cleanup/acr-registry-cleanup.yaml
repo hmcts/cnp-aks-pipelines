@@ -28,26 +28,18 @@ parameters:
   - name: cleanup_patterns
     type: object
     default:
-      - repoRegex: ".*"
-        olderThan: "5d"
-        tagFilter: "^prod.*"
+      - olderThan: "5d"
         keep: 5
         repoTagFilters: [".*:^prod.*"]
-      - repoRegex: ".*"
-        olderThan: "2d"
-        tagFilter: "^staging-.*"
+      - olderThan: "2d"
         keep: 2
         repoTagFilters: [".*:^staging-.*"]
-      - repoRegex: ".*"
-        olderThan: "14d"
-        tagFilter: "^pr-.*"
+      - olderThan: "14d"
         keep: 1
         repoTagFilters: [".*:^pr-.*"]
-      - repoRegex: "^labs/.*"
-        olderThan: "14d"
-        tagFilter: ".*"
+      - olderThan: "14d"
         keep: 1
-        repoTagFilters: ["^labs/ieuanb74:.*", "^labs/jordankainos:.*"]
+        repoTagFilters: ["^labs/.*:.*", "^toffee.*:.*", "^plum.*:.*"]
 
 jobs:
   - ${{ each cleanup_registry in parameters.cleanup_registries }}:
@@ -67,4 +59,4 @@ jobs:
                   azureSubscription: ${{ cleanup_registry.serviceConnection }}
                   scriptLocation: scriptPath
                   scriptPath: scripts/cleanup-acr-old-images.sh
-                  arguments: ${{cleanup_registry.acrName}} ${{cleanup_pattern.repoRegex}} ${{cleanup_pattern.tagFilter}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}} ${{variables.repoTagFiltersString}}
+                  arguments: ${{cleanup_registry.acrName}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}} ${{variables.repoTagFiltersString}}
