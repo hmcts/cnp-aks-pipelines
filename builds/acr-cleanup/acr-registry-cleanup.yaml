@@ -57,6 +57,8 @@ jobs:
             pool:
               vmImage: "ubuntu-latest"
             timeoutInMinutes: 600
+            variables:
+              repoTagFiltersString: ${{ join(',', cleanup_pattern.repoTagFilters) }}
             steps:
               - task: AzureCLI@1
                 displayName: "Deleting ${{cleanup_pattern.tagFilter}} images from ${{cleanup_registry.acrName}} "
@@ -65,4 +67,4 @@ jobs:
                   azureSubscription: ${{ cleanup_registry.serviceConnection }}
                   scriptLocation: scriptPath
                   scriptPath: scripts/cleanup-acr-old-images.sh
-                  arguments: ${{cleanup_registry.acrName}} ${{cleanup_pattern.repoRegex}} ${{cleanup_pattern.tagFilter}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}} ${{ join(',' cleanup_pattern.repoTagFilters) }}
+                  arguments: ${{cleanup_registry.acrName}} ${{cleanup_pattern.repoRegex}} ${{cleanup_pattern.tagFilter}} ${{cleanup_pattern.olderThan}} ${{cleanup_pattern.keep}} ${{variables.repoTagFiltersString}}
