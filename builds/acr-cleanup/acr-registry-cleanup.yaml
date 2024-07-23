@@ -1,7 +1,6 @@
 ---
 name: Clean up old tags from ACR
-trigger:
-  - DTSPO-18162_cleanUpMoreACRRepos
+trigger: none
 pr: none
 schedules:
   - cron: "12 5 * * Mon-Fri"
@@ -21,8 +20,8 @@ parameters:
         acrName: 'hmctsprivate'
       - serviceConnection: DTS-SHAREDSERVICES-PROD
         acrName: 'sdshmctspublic'
-#      - serviceConnection: azurerm-sandbox
-#        acrName: "hmctssandbox"
+      - serviceConnection: azurerm-sandbox
+        acrName: "hmctssandbox"
 
   - name: cleanup_patterns
     type: object

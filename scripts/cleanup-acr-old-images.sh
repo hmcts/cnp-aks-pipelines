@@ -18,5 +18,5 @@ done
 echo "$(TERM=xterm tput setaf 2)Cleaning up $registry, deleting [${filter_args}] images older than $older_than and keeping at least $keep_min_latest_num"
 
 az acr run --registry "$registry" \
- --cmd "acr purge --registry \$RegistryName ${filter_args} --ago ${older_than} --keep ${keep_min_latest_num} --dry-run --untagged --concurrency 5" \
+ --cmd "acr purge --registry \$RegistryName ${filter_args} --ago ${older_than} --keep ${keep_min_latest_num} --untagged --concurrency 5" \
  --timeout 10800  /dev/null
