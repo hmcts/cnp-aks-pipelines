@@ -15,15 +15,14 @@ parameters:
   - name: cleanup_registries
     type: object
     default:
-      #hmctspublic
-#      - serviceConnection: azurerm-prod
-#        acrName: 'hmctspublic'
-      #      - serviceConnection: azurerm-prod
-      #        acrName: 'hmctsprivate'
-      #      - serviceConnection: DTS-SHAREDSERVICES-PROD
-      #        acrName: 'sdshmctspublic'
-      - serviceConnection: azurerm-sandbox
-        acrName: "hmctssandbox"
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctspublic'
+      - serviceConnection: azurerm-prod
+        acrName: 'hmctsprivate'
+      - serviceConnection: DTS-SHAREDSERVICES-PROD
+        acrName: 'sdshmctspublic'
+#      - serviceConnection: azurerm-sandbox
+#        acrName: "hmctssandbox"
 
   - name: cleanup_patterns
     type: object
