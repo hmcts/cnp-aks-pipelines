@@ -16,8 +16,8 @@ parameters:
     type: object
     default:
       #hmctspublic
-      #      - serviceConnection: azurerm-prod
-      #        acrName: 'hmctspublic'
+#      - serviceConnection: azurerm-prod
+#        acrName: 'hmctspublic'
       #      - serviceConnection: azurerm-prod
       #        acrName: 'hmctsprivate'
       #      - serviceConnection: DTS-SHAREDSERVICES-PROD
