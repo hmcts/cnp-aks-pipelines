@@ -34,7 +34,7 @@ parameters:
         repoTagFilters: [".*:^staging-.*"]
       - olderThan: "14d"
         keep: 1
-        repoTagFilters: [".*:^pr-.*", "^toffee.*:^latest", "^plum.*:^latest"]
+        repoTagFilters: [".*:^pr-.*"]
       - olderThan: "14d"
         keep: 0
         repoTagFilters: ["^labs/.*:.*"]
