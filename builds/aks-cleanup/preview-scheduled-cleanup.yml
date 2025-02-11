@@ -29,6 +29,7 @@ jobs:
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
+        scriptType: bash
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: cft-preview-00-rg cft-preview-00-aks $(cutoffDays)
     - task: AzureCLI@2
@@ -36,6 +37,7 @@ jobs:
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
+        scriptType: bash
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: cft-preview-01-rg cft-preview-01-aks $(cutoffDays)
 
@@ -53,6 +55,7 @@ jobs:
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
         scriptLocation: scriptPath
+        scriptType: bash
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: ss-dev-00-rg ss-dev-00-aks $(cutoffDays)
     - task: AzureCLI@2
@@ -60,5 +63,6 @@ jobs:
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
         scriptLocation: scriptPath
+        scriptType: bash
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: ss-dev-01-rg ss-dev-01-aks $(cutoffDays)
