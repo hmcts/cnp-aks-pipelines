@@ -13,6 +13,8 @@ schedules:
 variables:
   helmVersion: '3.2.4'
   azureSubscription: DCD-CFTAPPS-DEV
+on:
+  workflow_dispatch:
 
 jobs:
   - job: delete_helm_release
