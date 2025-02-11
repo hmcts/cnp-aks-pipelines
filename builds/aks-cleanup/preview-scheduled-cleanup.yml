@@ -24,14 +24,14 @@ jobs:
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Delete outdated helm releases preview-00'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: cft-preview-00-rg cft-preview-00-aks $(cutoffDays)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Delete outdated helm releases preview-01'
       inputs:
         azureSubscription:  '$(azureSubscription)'
@@ -48,14 +48,14 @@ jobs:
       displayName: 'Install Helm $(helmVersion)'
       inputs:
         helmVersionToInstall: $(helmVersion)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Delete outdated helm releases sds-dev-00'
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-inactive-helm-releases.sh
         arguments: ss-dev-00-rg ss-dev-00-aks $(cutoffDays)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Delete outdated helm releases sds-dev-01'
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
