@@ -20,6 +20,8 @@ parameters:
         acrName: 'hmctsprivate'
       - serviceConnection: DTS-SHAREDSERVICES-PROD
         acrName: 'sdshmctspublic'
+      - serviceConnection: DTS-SHAREDSERVICES-SBOX
+        acrName: 'sdshmctspublicsbox'
       - serviceConnection: azurerm-sandbox
         acrName: "hmctssandbox"
 
