@@ -10,7 +10,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Login to AKS'
       inputs:
         azureSubscription: ${{ parameters.azureSubscription }}
