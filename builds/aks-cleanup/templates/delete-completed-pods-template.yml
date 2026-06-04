@@ -24,7 +24,7 @@ parameters:
 steps:
   - ${{ each sc in parameters.serviceConnection }}:
     - ${{ each c in sc.clusters }}:
-      - task: AzureCLI@1
+      - task: AzureCLI@2
         displayName: 'Delete Completed pods in ${{c.name}} [${{sc.name}}]'
         inputs:
           azureSubscription: ${{sc.name}}

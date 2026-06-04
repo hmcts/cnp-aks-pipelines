@@ -26,7 +26,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Untag ACR image'
       enabled: true
       inputs:
@@ -45,28 +45,28 @@ jobs:
         helmVersionToInstall: $(helmVersion)
 
     # Delete PR helm release after PR is closed
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Helm Delete Release on preview 00'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: cft-preview-00-rg cft-preview-00-aks $(namespace) $(release_name)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Helm Delete Release preview 01'
       inputs:
         azureSubscription:  '$(azureSubscription)'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: cft-preview-01-rg cft-preview-01-aks $(namespace) $(release_name)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Helm Delete Release on sds dev 00'
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
         scriptLocation: scriptPath
         scriptPath: scripts/delete-helm-release-on-pr-closure.sh
         arguments: ss-dev-00-rg ss-dev-00-aks $(namespace) $(release_name)
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Helm Delete Release sds dev 01'
       inputs:
         azureSubscription:  'DTS-SHAREDSERVICES-DEV'
