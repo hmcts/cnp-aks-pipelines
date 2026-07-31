@@ -56,7 +56,7 @@ jobs:
             variables:
               repoTagFiltersString: ${{ join(',', cleanup_pattern.repoTagFilters) }}
             steps:
-              - task: AzureCLI@1
+              - task: AzureCLI@2
                 displayName: "Deleting ${{cleanup_pattern.tagFilter}} images from ${{cleanup_registry.acrName}} "
                 inputs:
                   scriptType: bash
