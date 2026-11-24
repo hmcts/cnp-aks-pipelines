@@ -12,7 +12,7 @@ schedules:
     always: 'true'
 variables:
   helmVersion: '3.2.4'
-  azureSubscription: DCD-CFTAPPS-DEV
+  azureSubscription: DCD-CFTAPPS-DEV-WIF
 
 jobs:
   - job: delete_helm_release
@@ -53,7 +53,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Delete outdated helm releases sds-dev-00'
       inputs:
-        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV-WIF'
         scriptLocation: scriptPath
         scriptType: bash
         scriptPath: scripts/delete-inactive-helm-releases.sh
@@ -61,7 +61,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Delete outdated helm releases sds-dev-01'
       inputs:
-        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV-WIF'
         scriptLocation: scriptPath
         scriptType: bash
         scriptPath: scripts/delete-inactive-helm-releases.sh
