@@ -17,6 +17,7 @@ jobs:
       displayName: 'Delete Failed Helm Releases preview 00'
       inputs:
         azureSubscription:  'DCD-CFTAPPS-DEV-WIF'
+        scriptType: bash
         scriptLocation: scriptPath
         scriptPath: scripts/clean-failed-release.sh
         arguments: cft-preview-00-rg cft-preview-00-aks
@@ -24,6 +25,7 @@ jobs:
       displayName: 'Delete Failed Helm Releases preview 01'
       inputs:
         azureSubscription:  'DCD-CFTAPPS-DEV-WIF'
+        scriptType: bash
         scriptLocation: scriptPath
         scriptPath: scripts/clean-failed-release.sh
         arguments: cft-preview-01-rg cft-preview-01-aks 
