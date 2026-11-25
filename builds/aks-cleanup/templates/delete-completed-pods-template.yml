@@ -28,6 +28,7 @@ steps:
         displayName: 'Delete Completed pods in ${{c.name}} [${{sc.name}}]'
         inputs:
           azureSubscription: ${{sc.name}}
+          scriptType: bash
           scriptLocation: scriptPath
           scriptPath: scripts/delete-completed-pods.sh
           arguments: ${{sc.name}} ${{c.rg}} ${{c.name}} ${{ join(' ', sc.namespaces) }}
