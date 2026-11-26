@@ -6,8 +6,8 @@ variables:
   connectionType: 'Azure Resource Manager'
   containerRegistry: 'hmctspublic'  # hmctssandbox
   helmVersion: '3.2.4'
-  azureSubscription: DCD-CFTAPPS-DEV  # azurerm-sandbox
-  registrySubscription: azurerm-prod
+  azureSubscription: DCD-CFTAPPS-DEV-WIF  # DCD-CFT-Sandbox-WIF
+  registrySubscription: DCD-CNP-Prod-WIF
 
 resources:
   repositories:
@@ -65,7 +65,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Helm Delete Release on sds dev 00'
       inputs:
-        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV-WIF'
         scriptType: bash
         scriptLocation: scriptPath
         scriptPath: scripts/delete-helm-release-on-pr-closure.sh
@@ -73,7 +73,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Helm Delete Release sds dev 01'
       inputs:
-        azureSubscription:  'DTS-SHAREDSERVICES-DEV'
+        azureSubscription:  'DTS-SHAREDSERVICES-DEV-WIF'
         scriptType: bash
         scriptLocation: scriptPath
         scriptPath: scripts/delete-helm-release-on-pr-closure.sh
@@ -89,7 +89,7 @@ jobs:
       - task: AzureKeyVault@1
         displayName: 'Get secrets from Keyvault'
         inputs:
-          azureSubscription:  "DTS-CFTPTL-INTSVC"
+          azureSubscription:  "DTS-CFTPTL-INTSVC-WIF"
           keyVaultName:   "cftptl-intsvc"
           secretsFilter: 'github-management-api-token'
       - task: Bash@3

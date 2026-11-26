@@ -3,7 +3,8 @@ parameters:
   - name: serviceConnection
     type: object
 #    default:
-#      - name: DCD-CFTAPPS-DEV
+#      - name: DCD-CFTAPPS-DEV-WIF
+#        subscription: DCD-CFTAPPS-DEV
 #        clusters:
 #          - name: cft-preview-00-aks
 #            rg: cft-preview-00-rg
@@ -12,7 +13,8 @@ parameters:
 #        namespaces:
 #          - rpe
 #
-#      - name: DCD-CFTAPPS-STG
+#      - name: DCD-CFTAPPS-STG-WIF
+#        subscription: DCD-CFTAPPS-STG
 #        clusters:
 #          - name: cft-aat-00-aks
 #            rg: cft-aat-00-rg
@@ -31,5 +33,5 @@ steps:
           scriptType: bash
           scriptLocation: scriptPath
           scriptPath: scripts/delete-completed-pods.sh
-          arguments: ${{sc.name}} ${{c.rg}} ${{c.name}} ${{ join(' ', sc.namespaces) }}
+          arguments: ${{sc.subscription}} ${{c.rg}} ${{c.name}} ${{ join(' ', sc.namespaces) }}
           failOnStandardError: false

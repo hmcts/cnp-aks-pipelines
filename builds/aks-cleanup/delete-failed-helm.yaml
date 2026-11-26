@@ -16,7 +16,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Delete Failed Helm Releases preview 00'
       inputs:
-        azureSubscription:  'DCD-CFTAPPS-DEV'
+        azureSubscription:  'DCD-CFTAPPS-DEV-WIF'
         scriptType: bash
         scriptLocation: scriptPath
         scriptPath: scripts/clean-failed-release.sh
@@ -24,7 +24,7 @@ jobs:
     - task: AzureCLI@2
       displayName: 'Delete Failed Helm Releases preview 01'
       inputs:
-        azureSubscription:  'DCD-CFTAPPS-DEV'
+        azureSubscription:  'DCD-CFTAPPS-DEV-WIF'
         scriptType: bash
         scriptLocation: scriptPath
         scriptPath: scripts/clean-failed-release.sh

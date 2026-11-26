@@ -14,19 +14,19 @@ parameters:
   - name: cleanup_registries
     type: object
     default:
-      - serviceConnection: azurerm-prod
+      - serviceConnection: DCD-CNP-Prod-WIF
         acrName: 'hmctspublic'
-      - serviceConnection: azurerm-prod
+      - serviceConnection: DCD-CNP-Prod-WIF
         acrName: 'hmctsprod'
-      - serviceConnection: azurerm-prod
+      - serviceConnection: DCD-CNP-Prod-WIF
         acrName: 'hmctsprivate'
-      - serviceConnection: DTS-SHAREDSERVICES-PROD
+      - serviceConnection: DTS-SHAREDSERVICES-PROD-WIF
         acrName: 'sdshmctspublic'
-      - serviceConnection: DTS-SHAREDSERVICES-SBOX
+      - serviceConnection: DTS-SHAREDSERVICES-SBOX-WIF
         acrName: 'sdshmctspublicsbox'
-      - serviceConnection: azurerm-sandbox
+      - serviceConnection: DCD-CFT-Sandbox-WIF
         acrName: "hmctssandbox"
-      - serviceConnection: azurerm-sandbox
+      - serviceConnection: DCD-CFT-Sandbox-WIF
         acrName: "hmctssbox"
 
   - name: cleanup_patterns

@@ -17,7 +17,8 @@ jobs:
       - template: ./templates/delete-completed-pods-template.yml
         parameters:
           serviceConnection:
-            - name: DCD-CFTAPPS-DEV
+            - name: DCD-CFTAPPS-DEV-WIF
+              subscription: DCD-CFTAPPS-DEV
               clusters:
                 - name: cft-preview-00-aks
                   rg: cft-preview-00-rg
@@ -26,7 +27,8 @@ jobs:
               namespaces:
                 - rpe
                 - fees-pay
-            - name: DCD-CFTAPPS-STG
+            - name: DCD-CFTAPPS-STG-WIF
+              subscription: DCD-CFTAPPS-STG
               clusters:
                 - name: cft-aat-00-aks
                   rg: cft-aat-00-rg
@@ -35,7 +37,8 @@ jobs:
               namespaces:
                 - rpe
                 - fees-pay
-            - name: DCD-CFTAPPS-ITHC
+            - name: DCD-CFTAPPS-ITHC-WIF
+              subscription: DCD-CFTAPPS-ITHC
               clusters:
                 - name: cft-ithc-00-aks
                   rg: cft-ithc-00-rg
@@ -44,7 +47,8 @@ jobs:
               namespaces:
                 - rpe
                 - fees-pay
-            - name: DCD-CFTAPPS-DEMO
+            - name: DCD-CFTAPPS-DEMO-WIF
+              subscription: DCD-CFTAPPS-DEMO
               clusters:
                 - name: demo-00-aks
                   rg: demo-00-rg
@@ -53,7 +57,8 @@ jobs:
               namespaces:
                 - rpe
                 - fees-pay
-            - name: DCD-CFTAPPS-TEST
+            - name: DCD-CFTAPPS-TEST-WIF
+              subscription: DCD-CFTAPPS-TEST
               clusters:
                 - name: cft-perftest-00-aks
                   rg: cft-perftest-00-rg
@@ -62,7 +67,8 @@ jobs:
               namespaces:
                 - rpe
                 - fees-pay
-            - name: DCD-CFTAPPS-PROD
+            - name: DCD-CFTAPPS-PROD-WIF
+              subscription: DCD-CFTAPPS-PROD
               clusters:
                 - name: prod-00-aks
                   rg: prod-00-rg
